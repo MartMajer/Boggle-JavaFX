@@ -1,0 +1,8 @@
+module com.boggle.game.boggle {
+    requires javafx.controls;
+    requires javafx.fxml;
+
+
+    opens com.boggle.game.boggle to javafx.fxml;
+    exports com.boggle.game.boggle;
+}
