@@ -24,12 +24,6 @@ public class HelloController implements Initializable {
     @FXML
     private TextField playerTwoNameTextField;
 
-    @FXML
-    private RadioButton xRadioButton;
-
-    @FXML
-    private RadioButton oRadioButton;
-
     private static PlayerDetails playerOneDetails;
 
     private static PlayerDetails playerTwoDetails;

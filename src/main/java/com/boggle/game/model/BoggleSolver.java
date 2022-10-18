@@ -2,7 +2,6 @@ package com.boggle.game.model;
 
 
 import java.io.*;
-import java.net.URL;
 import java.util.*;
 
 /**
@@ -16,6 +15,8 @@ public class BoggleSolver {
     private ArrayList<String> _wordsFound;
     private boolean[][] _isVisited;
     private char[][] _boggle;
+
+    private static final String EMPTY_STRING = "";
 
     /*
      * The constructor for BoggleSolver. It sets up the solver by setting up the trie structure, taking in the array
@@ -31,32 +32,46 @@ public class BoggleSolver {
         _wordsFound = new ArrayList<>();
         ArrayList<String> dictionary = new ArrayList<>();
 
-        /*
-         * This is where the dictionary file is imported. Originally, the dictionary was a text file in the same
-         * directory as the other java files, but there wer problems with getting the relative path of the file
-         * to be read correctly. To fix this and insure that the file is able to be read by any windows/mac/linux user
-         * with no issues, the file was uploaded to github and is accessed from there.
-         */
-        URL url = new URL("https://raw.githubusercontent.com/ilyabodo/boggle/master/dictionary.txt");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+
+
+        File file = new File("src/main/resources/HR_DIC_UPC.txt");
+        BufferedReader br  = new BufferedReader(new FileReader(file));
+
         String line;
 
         //an arraylist of all words in the dictionary is created by reading each line of the txt file
-        while ((line = reader.readLine()) != null) {
-            dictionary.add(line);
+        while ((line = br.readLine()) != null) {
+            if(line != null && !line.trim().isEmpty())
+            {
+                line = line.replace("\uFEFF","");
+                dictionary.add(line);
+            }
+
         }
-        reader.close();
+        // for ( var l : dictionary) {
+        //    System.out.println( l);
+        // }
 
         //the initial trienode is created
         TrieNode root = new TrieNode();
 
         //each string is added to the trienode network
         for (String string : dictionary) {
-            add(root, string);
+            if (string.length()>2){
+                add(root, string);
+            }
+
+
         }
 
         //calls method that searches the boggle grid for all words using the words input into the trie as reference
         this.findWords(root);
+
+        for (var  s : _wordsFound
+             ) {
+            System.out.println(s);
+
+        }
     }
 
     /*
@@ -87,12 +102,24 @@ public class BoggleSolver {
 
         for (int i = 0; i < s.length(); i++) {
             //the character is converted into an int. 'A' is subtracted due to the default int values with characters
+            //int p = s.charAt(i);
             int j = s.charAt(i) - 'A';
 
-            if (trie.getChild(j) == null) {
-                trie.setChild(j, new TrieNode());
-            }
-            trie = trie.getChild(j);
+                //if (j > 26 || j < 0){
+                //    System.out.println(s.charAt(i));
+                //    System.out.println(p);
+                //    System.out.println(j);
+                //   System.out.println();
+                //}
+
+                if (trie.getChild(j) == null ) {
+                    trie.setChild(j, new TrieNode());
+                }
+                trie = trie.getChild(j);
+
+
+
+
         }
         //once each letter is added, the isLeaf boolean is set to true to indicate a full complete word.
         trie.setLeaf(true);
@@ -120,9 +147,12 @@ public class BoggleSolver {
      */
     private void search(int i, int j, TrieNode root, String string) {
         // if word is found in trie, and not already found: adds to list of found words
-        if (root.getLeaf() && !_wordsFound.contains(string)) {
-            _wordsFound.add(string);
-        }
+
+           if (root.getLeaf() &&  !_wordsFound.contains(string)) {
+               _wordsFound.add(string);
+           }
+
+
 
         // If both I and j in  range and we visited
         // that element of matrix first time
@@ -131,7 +161,7 @@ public class BoggleSolver {
             _isVisited[i][j] = true;
 
             // This loops through all childs of the current node
-            for (int n = 0; n < 30; n++) {
+            for (int n = 0; n < 26; n++) {
                 if (root.getChild(n) != null) {
                     // 'A' is  added because of numbering system for characters
                     char letter = (char) (n + 'A');
@@ -151,5 +181,4 @@ public class BoggleSolver {
             _isVisited[i][j] = false;
         }
     }
-
 }
