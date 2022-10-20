@@ -1,5 +1,6 @@
 package com.boggle.game.boggle;
 
+import com.boggle.game.model.AddPoints;
 import com.boggle.game.model.BoggleSolver;
 import com.boggle.game.model.EndRound;
 
@@ -7,27 +8,27 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-
 import java.io.IOException;
 import java.net.URL;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Stack;
 
 import static com.boggle.game.boggle.HelloController.getPlayerOneDetails;
+import static com.boggle.game.boggle.HelloController.getPlayerTwoDetails;
 
 public class GameScreenController implements Initializable {
 
@@ -74,9 +75,17 @@ public class GameScreenController implements Initializable {
     @FXML
     private Label _player_2;
     @FXML
-    private ScrollPane scrollPane;
-    @FXML
     private Label chosenLetter;
+    @FXML
+    private Label _currentWordLabel;
+    @FXML
+    private Button buttonCheckWord_btn;
+    @FXML
+    private VBox _vBox;
+    @FXML
+    private Label _lbScore;
+    @FXML
+    private Label _notAWord;
 
 
 
@@ -101,18 +110,24 @@ public class GameScreenController implements Initializable {
     private ArrayList<Rectangle> _rectangles;
     private Stack<Integer> _iStack;
     private Stack<Integer> _jStack;
-    private Label _scoreLabel;
 
-    private Label _statusLabel;
-    @FXML
-    private Label _currentWordLabel;
+
+
     private boolean _gameOver;
     private int _size = 4;
     private int _time;
     private int _score;
-    private String _currentWord;
+    private String _currentWord = "";
 
     private Timeline _timeline;
+
+    private static List<String> _listOfCheckedWords;
+
+    private AddPoints _addPoints;
+
+    private static int controlInt = 1;
+
+
 
 
     @Override
@@ -122,6 +137,7 @@ public class GameScreenController implements Initializable {
         _charArray = new char[GAME_BOARD_WIDTH][GAME_BOARD_HEIGHT];
 
         _player_1.setText(getPlayerOneDetails().getPlayerName());
+
         //_player_2.setText(getPlayerTwoDetails().getPlayerName());
 
         gameBoard[0][0] = mat_0_0;
@@ -215,11 +231,12 @@ public class GameScreenController implements Initializable {
         _score = 0;
         _gameOver = false;
         _isClicked = new boolean[_size][_size];
-        _userFoundWords = new ArrayList<>();
         _gridPane = new GridPane();
         _iStack = new Stack<>();
         _jStack = new Stack<>();
         _gridPane.setFocusTraversable(true);
+        _addPoints = new AddPoints();
+        _listOfCheckedWords = new ArrayList<>();
 
         this.clearBoolArray();
 
@@ -254,8 +271,6 @@ public class GameScreenController implements Initializable {
      */
     private class TimeHandler implements EventHandler<ActionEvent> {
 
-
-
         @Override
         public void handle(ActionEvent event) {
 
@@ -272,126 +287,119 @@ public class GameScreenController implements Initializable {
         }
     }
     private void endGame() {
-        _statusLabel.setText("Game ending...");
-        //Timeline is stopped
-        _timeline.stop();
+
+
+
+        //////////////// store player 1 details and start player 2 game! //////////////
+        ///////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+        switch (controlInt)
+        {
+            case 1:
+
+                getPlayerOneDetails().setRoundDetails(_listOfCheckedWords, _solver._wordsFound);
+
+
+                _player_1.setText("");
+                _player_2.setText(getPlayerTwoDetails().getPlayerName());
+                _listOfCheckedWords.clear();
+                setUpTimeline();
+
+
+                //reset labels
+                _currentWord = "";
+                _currentWordLabel.setText("Current word: ");
+                _vBox.getChildren().clear();
+
+                //Timeline is stopped
+                _timeline.stop();
+
+                controlInt = 2;
+
+            case 2:
+
+                ///////////////// store player 2 details ////////////////////////////////////////
+
+                getPlayerTwoDetails().setRoundDetails(_listOfCheckedWords, _solver._wordsFound);
+
+
+        }
+
+
+
         //boolean is set to true to the key and click handlers and buttons know to not respond to inputs
         _gameOver = true;
-        //the postpane is created which displays all the found words
-        new EndRound(_userFoundWords, _solver.getWords());
-    }
-    private boolean canAdd(int row, int col) {
-        //handles the case there is nothing currently selected
-        if (_iStack.empty() && _jStack.empty()) {
-            return true;
-        }
-        //Checks if the row and col of the clicked letter is within 1 row/column of the last selected letter
-        else if (!(_iStack.peek()-row == 0 && _jStack.peek()-col == 0) && (((_iStack.peek()-row == -1) || (_iStack.peek()-row == 0) || (_iStack.peek()-row == 1)) && ((_jStack.peek()-col == -1) || (_jStack.peek()-col == 0) || (_jStack.peek()-col == 1)))) {
-            return true;
-        }
-        else {
-            return false;
-        }
 
+
+        new EndRoundController(_listOfCheckedWords, _solver.getWords());
     }
+
 
     private void addLetterToLabel(int i, int j) {
-        _currentWord = _currentWord + _charArray[j][i];
-        _currentWordLabel.setText("Current Word: " + _currentWord);
+
+        _currentWord = _currentWord + _charArray[i][j];
+        _currentWordLabel.setText("Current word: " + _currentWord);
+
     }
-    private boolean canRemove (int row, int col) {
-        if ((_iStack.peek() == row) && (_jStack.peek() == col)) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    private void removeLetterFromLabel() {
-        _currentWordLabel.setText("Current word: " + _currentWord.substring(0, _currentWord.length() - 1));
-        _currentWord = _currentWord.substring(0, _currentWord.length() - 1);
-    }
-    public void buttonPressed(ActionEvent actionEvent) {
 
+    public void buttonPressed(Event q) {
 
+        //adds clicked button to label and stores it for later comparing
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j <4 ; j++) {
 
-        mat_0_0.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-
-            addLetterToLabel(0, 0);
-
-        });
-
-        mat_0_1.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-
-            addLetterToLabel(0, 1);
-
-        });
-
-        mat_0_2.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-
-            addLetterToLabel(0, 0);
-
-        });
-
-        mat_0_3.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-
-            addLetterToLabel(0, 1);
-
-        });
-
-
-
-
-
-
-
-
-
-
-        _gridPane.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->{
-            //event handler does not respond if the game is over
-            if (!_gameOver) {
-                //gets the location of the rectangle that was clicked
-                Node clicked = e.getPickResult().getIntersectedNode();
-                int row = GridPane.getRowIndex(clicked);
-                int col = GridPane.getColumnIndex(clicked);
-
-                //checks if the clicked rectangle is already clicked and if its adjacent to an already clicked rectangle
-                if (!_isClicked[row][col] && this.canAdd(row, col)) {
-                    //sets color to red to indicate to the player that they have selected it
-                    ((Rectangle) clicked).setStroke(Color.ORANGE);
-                    _isClicked[row][col] = true;
-                    //adds the location to the two Stacks so the game knows what the last selected rectangle is
-                    _iStack.push(row);
-                    _jStack.push(col);
-                    //updates the label and string with the new letter
-                    this.addLetterToLabel(row, col);
-
-                }
-                //if an already clicked rectangle is clicked
-                else if (_isClicked[row][col] && this.canRemove(row, col)) {
-                    //resets the color
-                    ((Rectangle) clicked).setStroke(Color.WHITE);
-                    //removes its location for the stack
-                    _iStack.pop();
-                    _jStack.pop();
-                    _isClicked[row][col] = false;
-                    //removes the letter from the current word
-                    this.removeLetterFromLabel();
-                }
-                else {
-                    return;
+                if (q.getSource() == gameBoard[i][j])
+                {
+                    addLetterToLabel(i, j);
                 }
             }
-            e.consume();
-        });
+        }
+    }
 
+    public void buttonCheckWord(ActionEvent actionEvent)
+    {
+
+        if (_solver._wordsFound.contains(_currentWord))
+        {
+            _notAWord.setText("");
+
+            if (!_listOfCheckedWords.contains(_currentWord))
+            {
+                //add points to player and display on board
+                _addPoints.setPoints(_currentWord);
+                Integer score  = _addPoints.getPoints();
+                _lbScore.setText(score.toString() );
+
+                //add found words to pane
+                _vBox.getChildren().add(new Label(_currentWord));
+                _listOfCheckedWords.add(_currentWord);
+
+                //reset labels
+                _currentWord = "";
+                _currentWordLabel.setText("Current word: ");
+            }
+        }
+        else
+        {
+            _notAWord.setText( "NOT A WORD! - " + _currentWord);
+
+            //reset labels
+            _currentWord = "";
+            _currentWordLabel.setText("Current word: ");
+        }
 
 
 
     }
 
-    }
+
+
+
+}
 
 
 

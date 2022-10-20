@@ -12,7 +12,7 @@ import java.util.*;
 public class BoggleSolver {
 
     private int _size;
-    private ArrayList<String> _wordsFound;
+    public static ArrayList<String> _wordsFound;
     private boolean[][] _isVisited;
     private char[][] _boggle;
 
@@ -102,15 +102,20 @@ public class BoggleSolver {
 
         for (int i = 0; i < s.length(); i++) {
             //the character is converted into an int. 'A' is subtracted due to the default int values with characters
-            //int p = s.charAt(i);
+            int p = s.charAt(i);
             int j = s.charAt(i) - 'A';
 
                 //if (j > 26 || j < 0){
                 //    System.out.println(s.charAt(i));
-                //    System.out.println(p);
+                //   System.out.println(p);
                 //    System.out.println(j);
                 //   System.out.println();
-                //}
+                // }
+
+            //if (j > 26 || j < 0){
+            //    System.out.print(s.charAt(i));
+            //
+            // }
 
                 if (trie.getChild(j) == null ) {
                     trie.setChild(j, new TrieNode());

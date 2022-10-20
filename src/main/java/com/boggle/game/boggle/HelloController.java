@@ -59,10 +59,12 @@ public class HelloController implements Initializable {
     }
 
     public static PlayerDetails getPlayerOneDetails() {
+
         return playerOneDetails;
     }
 
     public static PlayerDetails getPlayerTwoDetails() {
+
         return playerTwoDetails;
     }
 }
