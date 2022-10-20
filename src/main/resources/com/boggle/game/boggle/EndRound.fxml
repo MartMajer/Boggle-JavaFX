@@ -1,14 +1,255 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.boggle.game.boggle.EndRoundController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.boggle.game.boggle.EndRoundController">
+   <children>
+      <GridPane layoutX="135.0" layoutY="84.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="194.0" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="372.0" minHeight="10.0" prefHeight="280.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="346.0" minHeight="10.0" prefHeight="55.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label alignment="CENTER_RIGHT" prefHeight="37.0" prefWidth="448.0" text="End of round: ">
+               <font>
+                  <Font name="System Bold" size="26.0" />
+               </font>
+               <padding>
+                  <Insets left="20.0" top="5.0" />
+               </padding>
+            </Label>
+            <GridPane GridPane.rowIndex="1">
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="157.0" minWidth="10.0" prefWidth="149.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="154.0" minWidth="10.0" prefWidth="151.0" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints maxHeight="167.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="167.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="302.0" minHeight="10.0" prefHeight="276.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="64.0" prefWidth="149.0" text="Player 1: ">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                     <padding>
+                        <Insets left="20.0" />
+                     </padding>
+                  </Label>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="122.0" prefWidth="149.0" text="Found words:" textAlignment="CENTER" GridPane.rowIndex="1" />
+                  <Label fx:id="_player_1_name" text="Martin" GridPane.columnIndex="1">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="122.0" prefWidth="149.0" text="Possible words:" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="291.0" prefWidth="102.0">
+                           <children>
+                              <VBox fx:id="__player_1_Pane_Found" prefHeight="621.0" prefWidth="100.0" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                     <GridPane.margin>
+                        <Insets bottom="20.0" left="20.0" right="10.0" />
+                     </GridPane.margin>
+                  </ScrollPane>
+                  <ScrollPane layoutX="30.0" layoutY="81.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="291.0" prefWidth="102.0">
+                           <children>
+                              <VBox fx:id="__player_1_Pane_Possible" prefHeight="624.0" prefWidth="100.0" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                     <GridPane.margin>
+                        <Insets bottom="20.0" left="10.0" right="20.0" />
+                     </GridPane.margin>
+                  </ScrollPane>
+               </children>
+            </GridPane>
+            <GridPane GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="157.0" minWidth="10.0" prefWidth="149.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="154.0" minWidth="10.0" prefWidth="151.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="167.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="167.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="302.0" minHeight="10.0" prefHeight="276.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="64.0" prefWidth="149.0" text="Player 2: ">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                     <padding>
+                        <Insets left="20.0" />
+                     </padding>
+                  </Label>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="122.0" prefWidth="149.0" text="Found words:" textAlignment="CENTER" GridPane.rowIndex="1" />
+                  <Label fx:id="_player_2_name" text="Martin" GridPane.columnIndex="1">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="122.0" prefWidth="149.0" text="Possible words:" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="291.0" prefWidth="95.0">
+                           <children>
+                              <VBox fx:id="__player_2_Pane_Found" prefHeight="620.0" prefWidth="100.0" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                     <GridPane.margin>
+                        <Insets bottom="20.0" left="20.0" right="10.0" />
+                     </GridPane.margin>
+                  </ScrollPane>
+                  <ScrollPane layoutX="30.0" layoutY="81.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="291.0" prefWidth="94.0">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <children>
+                              <VBox fx:id="__player_2_Pane_Possible" prefHeight="571.0" prefWidth="100.0" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                     <GridPane.margin>
+                        <Insets bottom="20.0" left="10.0" right="20.0" />
+                     </GridPane.margin>
+                  </ScrollPane>
+               </children>
+            </GridPane>
+            <GridPane GridPane.rowIndex="2">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="94.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="209.0" minWidth="10.0" prefWidth="206.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="Round score:">
+                     <padding>
+                        <Insets left="20.0" />
+                     </padding>
+                  </Label>
+                  <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="194.0" text="OVERALL:" GridPane.rowIndex="1">
+                     <padding>
+                        <Insets bottom="5.0" left="20.0" />
+                     </padding>
+                     <GridPane.margin>
+                        <Insets bottom="5.0" right="5.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label fx:id="_player_1_RoundScore" text="Label" GridPane.columnIndex="1" />
+                  <Label fx:id="_player_1_Overall" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets bottom="5.0" />
+                     </GridPane.margin>
+                     <padding>
+                        <Insets bottom="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <GridPane.margin>
+                  <Insets bottom="10.0" />
+               </GridPane.margin>
+            </GridPane>
+            <GridPane GridPane.columnIndex="1">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="10.0" prefWidth="81.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="290.0" minWidth="10.0" prefWidth="155.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="242.0" minWidth="0.0" prefWidth="135.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label fx:id="_roundNumber" prefHeight="37.0" prefWidth="448.0" text="1">
+                     <font>
+                        <Font name="System Bold" size="34.0" />
+                     </font>
+                     <padding>
+                        <Insets left="5.0" top="5.0" />
+                     </padding>
+                  </Label>
+                  <Button fx:id="_startNewRound" mnemonicParsing="false" onAction="#startNewRound" prefHeight="25.0" prefWidth="125.0" text="Start new round!" GridPane.columnIndex="1">
+                     <GridPane.margin>
+                        <Insets top="5.0" />
+                     </GridPane.margin>
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="_highscore" layoutX="67.0" layoutY="34.0" mnemonicParsing="false" onAction="#highscore" prefHeight="25.0" prefWidth="96.0" text="Highscores" GridPane.columnIndex="2">
+                     <GridPane.margin>
+                        <Insets right="20.0" top="5.0" />
+                     </GridPane.margin>
+                  </Button>
+               </children>
+            </GridPane>
+            <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="94.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="209.0" minWidth="10.0" prefWidth="206.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label text="Round score:">
+                     <padding>
+                        <Insets left="20.0" />
+                     </padding>
+                  </Label>
+                  <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="194.0" text="OVERALL:" GridPane.rowIndex="1">
+                     <padding>
+                        <Insets bottom="10.0" left="20.0" />
+                     </padding>
+                     <GridPane.margin>
+                        <Insets right="5.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label fx:id="_player_2_RoundScore" text="Label" GridPane.columnIndex="1" />
+                  <Label fx:id="_player_2_Overall" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <padding>
+                        <Insets bottom="5.0" />
+                     </padding>
+                     <GridPane.margin>
+                        <Insets bottom="5.0" />
+                     </GridPane.margin>
+                  </Label>
+               </children>
+               <GridPane.margin>
+                  <Insets bottom="5.0" />
+               </GridPane.margin>
+               <padding>
+                  <Insets bottom="5.0" />
+               </padding>
+            </GridPane>
+         </children>
+      </GridPane>
+   </children>
 </AnchorPane>

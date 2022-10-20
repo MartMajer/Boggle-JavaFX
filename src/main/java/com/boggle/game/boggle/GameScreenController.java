@@ -27,8 +27,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Stack;
 
-import static com.boggle.game.boggle.HelloController.getPlayerOneDetails;
-import static com.boggle.game.boggle.HelloController.getPlayerTwoDetails;
+import static com.boggle.game.boggle.HelloController.*;
 
 public class GameScreenController implements Initializable {
 
@@ -88,9 +87,6 @@ public class GameScreenController implements Initializable {
     private Label _notAWord;
 
 
-
-
-
     private Button gameBoard[][];
 
 
@@ -116,17 +112,24 @@ public class GameScreenController implements Initializable {
     private boolean _gameOver;
     private int _size = 4;
     private int _time;
-    private int _score;
+
     private String _currentWord = "";
 
     private Timeline _timeline;
 
     private static List<String> _listOfCheckedWords;
+    private static List<String> _listOfCheckedWords_temp;
 
     private AddPoints _addPoints;
 
-    private static int controlInt = 1;
+    public int controlInt = 1;
 
+    private EndRound endRound;
+
+
+    private  Integer score = 0;
+
+    public Integer _roundNumber;
 
 
 
@@ -228,7 +231,7 @@ public class GameScreenController implements Initializable {
 
 
     public void boggle() throws IOException {
-        _score = 0;
+
         _gameOver = false;
         _isClicked = new boolean[_size][_size];
         _gridPane = new GridPane();
@@ -237,6 +240,9 @@ public class GameScreenController implements Initializable {
         _gridPane.setFocusTraversable(true);
         _addPoints = new AddPoints();
         _listOfCheckedWords = new ArrayList<>();
+        _listOfCheckedWords_temp = new ArrayList<>();
+
+
 
         this.clearBoolArray();
 
@@ -259,7 +265,7 @@ public class GameScreenController implements Initializable {
 
     private void setUpTimeline() {
         //Official boggle game time is set at 2 minutes
-        _time = 12;
+        _time = 120;
         KeyFrame kf = new KeyFrame(Duration.seconds(1), new  TimeHandler());
         _timeline = new Timeline(kf);
         _timeline.setCycleCount(Animation.INDEFINITE);
@@ -290,10 +296,6 @@ public class GameScreenController implements Initializable {
 
 
 
-        //////////////// store player 1 details and start player 2 game! //////////////
-        ///////////////////////////////////////////////////////////////////////////////
-
-
 
 
 
@@ -301,7 +303,14 @@ public class GameScreenController implements Initializable {
         {
             case 1:
 
-                getPlayerOneDetails().setRoundDetails(_listOfCheckedWords, _solver._wordsFound);
+                //////////////// store player 1 details and start player 2 game! //////////////
+                ///////////////////////////////////////////////////////////////////////////////
+
+                    _listOfCheckedWords_temp = new ArrayList<String>(_listOfCheckedWords);
+                    getPlayerOneDetails().setRoundDetails(_listOfCheckedWords_temp, _solver._wordsFound, score  );
+
+
+
 
 
                 _player_1.setText("");
@@ -309,33 +318,56 @@ public class GameScreenController implements Initializable {
                 _listOfCheckedWords.clear();
                 setUpTimeline();
 
-
                 //reset labels
                 _currentWord = "";
+                _lbScore.setText("");
+                score=0;
+                _addPoints.setPoints();
+
                 _currentWordLabel.setText("Current word: ");
                 _vBox.getChildren().clear();
 
                 //Timeline is stopped
                 _timeline.stop();
 
-                controlInt = 2;
+
+
+                break;
 
             case 2:
 
                 ///////////////// store player 2 details ////////////////////////////////////////
 
-                getPlayerTwoDetails().setRoundDetails(_listOfCheckedWords, _solver._wordsFound);
+                getPlayerTwoDetails().setRoundDetails(_listOfCheckedWords, _solver._wordsFound,score);
+
+                //reset labels
+                _currentWord = "";
+                _lbScore.setText("");
+                score=0;
+                _addPoints.setPoints();
+
+                _currentWordLabel.setText("Current word: ");
+                _vBox.getChildren().clear();
+
+                //Timeline is stopped
+                _timeline.stop();
 
 
+                //boolean is set to true to the key and click handlers and buttons know to not respond to inputs
+                _gameOver = true;
+
+
+                new EndRound();
         }
 
 
 
-        //boolean is set to true to the key and click handlers and buttons know to not respond to inputs
-        _gameOver = true;
+        controlInt++;
 
+        if (controlInt>50000){
+            controlInt=5;
+        }
 
-        new EndRoundController(_listOfCheckedWords, _solver.getWords());
     }
 
 
@@ -371,12 +403,14 @@ public class GameScreenController implements Initializable {
             {
                 //add points to player and display on board
                 _addPoints.setPoints(_currentWord);
-                Integer score  = _addPoints.getPoints();
+                score  = _addPoints.getPoints();
                 _lbScore.setText(score.toString() );
 
                 //add found words to pane
                 _vBox.getChildren().add(new Label(_currentWord));
                 _listOfCheckedWords.add(_currentWord);
+
+
 
                 //reset labels
                 _currentWord = "";

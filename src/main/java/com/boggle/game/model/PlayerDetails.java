@@ -8,20 +8,27 @@ public class PlayerDetails {
 
     private String playerName;
 
-    private boolean isPlaying;
 
     private List<String> _listOfCheckedWords;
-    private List<String> _words;
 
-    public void setRoundDetails(List<String> listOfCheckedWords, List<String> words) {
+    private ArrayList<String> _possibleWords;
 
+
+    private Integer _score = 0;
+
+    public void setRoundDetails(List<String> listOfCheckedWords, ArrayList<String> possibleWords, Integer score) {
+
+        _possibleWords = possibleWords;
         _listOfCheckedWords=listOfCheckedWords;
-        _words=words;
+        _score=score;
     }
 
+    /////// getters for player
     public List<String> get_listOfCheckedWords(){ return _listOfCheckedWords;}
-    public List<String> get_words(){ return _words;}
 
+    public ArrayList<String> get_PossibleWords(){ return _possibleWords;}
+    public String get_score(){return  _score.toString();}
+    public Integer get_score_int(){return  _score;}
 
     public PlayerDetails(String playerName) {
         this.playerName = playerName;
@@ -29,12 +36,6 @@ public class PlayerDetails {
 
     }
 
-    public boolean IsPlaying()
-    {
-        isPlaying = true ;
-
-       return isPlaying;
-    }
 
     public String getPlayerName() {
         return playerName;

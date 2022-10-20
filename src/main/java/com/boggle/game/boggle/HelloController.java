@@ -1,6 +1,7 @@
 package com.boggle.game.boggle;
 
 
+import com.boggle.game.model.Highscore;
 import com.boggle.game.model.PlayerDetails;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +17,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static com.boggle.game.boggle.HighscoreController.arrayList_Highscore;
+import static com.boggle.game.model.StoredDetails.*;
+
+
 public class HelloController implements Initializable {
 
     @FXML
@@ -28,14 +33,49 @@ public class HelloController implements Initializable {
 
     private static PlayerDetails playerTwoDetails;
 
+    public static Integer roundCounter = 1;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ToggleGroup radioButtonGroup = new ToggleGroup();
     }
 
     public void startGame() {
-        String playerOneName = playerOneNameTextField.getText();
-        String playerTwoName = playerTwoNameTextField.getText();
+
+        roundCounter += 1;
+
+
+
+        String playerOneName;
+        String playerTwoName;
+
+        if (roundCounter == 2){
+
+            //// Load those only once in program
+
+            overall_P1 = 0;
+            overall_P2 = 0;
+
+            arrayList_Highscore.add(new Highscore(25,"Pero"));
+            arrayList_Highscore.add(new Highscore(20,"Ivana"));
+            arrayList_Highscore.add(new Highscore(15,"Marko"));
+            arrayList_Highscore.add(new Highscore(10,"Loko"));
+            arrayList_Highscore.add(new Highscore(7,"Robi"));
+            arrayList_Highscore.add(new Highscore(3,"Toni"));
+            arrayList_Highscore.add(new Highscore(15,"xXXx"));
+            arrayList_Highscore.add(new Highscore(32,"Miludin"));
+
+
+            playerOneName = playerOneNameTextField.getText();
+            playerTwoName = playerTwoNameTextField.getText();
+        }
+        else {
+            playerOneName = P1;
+            playerTwoName = P2;
+
+
+        }
+
 
         playerOneDetails = new PlayerDetails(playerOneName);
 
@@ -44,6 +84,7 @@ public class HelloController implements Initializable {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("gameScreen.fxml"));
 
         Scene scene = null;
+
         try {
             scene = new Scene(fxmlLoader.load(), 600, 400);
         } catch (IOException e) {

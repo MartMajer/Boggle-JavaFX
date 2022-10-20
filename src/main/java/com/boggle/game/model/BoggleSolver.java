@@ -12,11 +12,12 @@ import java.util.*;
 public class BoggleSolver {
 
     private int _size;
-    public static ArrayList<String> _wordsFound;
+    public ArrayList<String> _wordsFound;
     private boolean[][] _isVisited;
     private char[][] _boggle;
 
-    private static final String EMPTY_STRING = "";
+    public ArrayList<String> dictionary;
+
 
     /*
      * The constructor for BoggleSolver. It sets up the solver by setting up the trie structure, taking in the array
@@ -30,7 +31,7 @@ public class BoggleSolver {
         _size = _boggle.length;
         _isVisited = new boolean[_size][_size];
         _wordsFound = new ArrayList<>();
-        ArrayList<String> dictionary = new ArrayList<>();
+        dictionary = new ArrayList<>();
 
 
 
@@ -186,4 +187,8 @@ public class BoggleSolver {
             _isVisited[i][j] = false;
         }
     }
+
+
+
+
 }

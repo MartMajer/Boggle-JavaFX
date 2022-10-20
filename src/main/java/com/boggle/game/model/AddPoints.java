@@ -37,5 +37,5 @@ public class AddPoints {
     }
 
     public int getPoints(){ return _gameScore;}
-
+    public void setPoints(){ _gameScore=0;}
 }
