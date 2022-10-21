@@ -4,11 +4,7 @@ package com.boggle.game.model;
 import java.io.*;
 import java.util.*;
 
-/**
- * This is the BoggleSolver class. It contains the algorithm that is able to take in the array of characters and solve
- * for all possible words that can be formed by the boggle rules. It uses a trie data structure to efficiently check
- * if certain combinations of letters can form a word according to a supplied dictionary
- */
+
 public class BoggleSolver {
 
     private int _size;
@@ -19,11 +15,6 @@ public class BoggleSolver {
     public ArrayList<String> dictionary;
 
 
-    /*
-     * The constructor for BoggleSolver. It sets up the solver by setting up the trie structure, taking in the array
-     * of characters. It also reads the dictionary file using the URL and adds each string of dictionary words to
-     * the trie data structure.
-     */
     public BoggleSolver(char[][] boggle) throws IOException {
 
         _boggle = boggle;
@@ -32,7 +23,6 @@ public class BoggleSolver {
         _isVisited = new boolean[_size][_size];
         _wordsFound = new ArrayList<>();
         dictionary = new ArrayList<>();
-
 
 
         File file = new File("src/main/resources/HR_DIC_UPC.txt");
@@ -61,8 +51,6 @@ public class BoggleSolver {
             if (string.length()>2){
                 add(root, string);
             }
-
-
         }
 
         //calls method that searches the boggle grid for all words using the words input into the trie as reference
@@ -71,21 +59,6 @@ public class BoggleSolver {
         for (var  s : _wordsFound
              ) {
             System.out.println(s);
-
-        }
-    }
-
-    /*
-     * This method is called by the Boggle class and checks if the word that a user input is actually a real english
-     * word located within this boggle game grid
-     */
-    public boolean validWord(String word) {
-        if (_wordsFound.contains(word)) {
-            return true;
-        }
-
-        else {
-            return false;
         }
     }
 
@@ -122,9 +95,6 @@ public class BoggleSolver {
                     trie.setChild(j, new TrieNode());
                 }
                 trie = trie.getChild(j);
-
-
-
 
         }
         //once each letter is added, the isLeaf boolean is set to true to indicate a full complete word.
@@ -187,8 +157,4 @@ public class BoggleSolver {
             _isVisited[i][j] = false;
         }
     }
-
-
-
-
 }

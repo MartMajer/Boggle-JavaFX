@@ -32,14 +32,10 @@ public class PlayerDetails {
 
     public PlayerDetails(String playerName) {
         this.playerName = playerName;
-
-
     }
-
 
     public String getPlayerName() {
         return playerName;
     }
-
 
 }

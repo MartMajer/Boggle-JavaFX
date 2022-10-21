@@ -10,8 +10,6 @@ public class Highscore implements Comparable<Highscore> {
         this.name=name;
         this.index=index;
 
-
-
     }
 
     public int getIndex(){
@@ -22,7 +20,7 @@ public class Highscore implements Comparable<Highscore> {
     @Override
     public int compareTo(Highscore name) {
         int compareIndex=((Highscore)name).getIndex();
-        /* For Ascending order*/
+
         return compareIndex - this.index;
 
     }

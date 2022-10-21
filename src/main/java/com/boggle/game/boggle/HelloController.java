@@ -56,14 +56,17 @@ public class HelloController implements Initializable {
             overall_P1 = 0;
             overall_P2 = 0;
 
-            arrayList_Highscore.add(new Highscore(25,"Pero"));
+            arrayList_Highscore.add(new Highscore(25,"Jozefina"));
             arrayList_Highscore.add(new Highscore(20,"Ivana"));
             arrayList_Highscore.add(new Highscore(15,"Marko"));
-            arrayList_Highscore.add(new Highscore(10,"Loko"));
+            arrayList_Highscore.add(new Highscore(10,"Lana"));
             arrayList_Highscore.add(new Highscore(7,"Robi"));
-            arrayList_Highscore.add(new Highscore(3,"Toni"));
-            arrayList_Highscore.add(new Highscore(15,"xXXx"));
+            arrayList_Highscore.add(new Highscore(3,"Lovorka"));
+            arrayList_Highscore.add(new Highscore(15,"Svemir"));
             arrayList_Highscore.add(new Highscore(32,"Miludin"));
+            arrayList_Highscore.add(new Highscore(1,"Damira"));
+            arrayList_Highscore.add(new Highscore(0,"Ognjen"));
+
 
 
             playerOneName = playerOneNameTextField.getText();

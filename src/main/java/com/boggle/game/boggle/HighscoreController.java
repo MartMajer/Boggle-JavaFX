@@ -40,7 +40,7 @@ public class HighscoreController implements Initializable {
             int index = arrayList_Highscore.size() - 1;
 
             arrayList_Highscore.remove(index);
-            arrayList_Highscore.remove(index);
+            arrayList_Highscore.remove(index - 1);
         }
 
 

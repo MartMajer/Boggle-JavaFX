@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.boggle.game.boggle.GameScreenController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.boggle.game.boggle.GameScreenController">
    <children>
       <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -150,7 +150,7 @@
                                 <content>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="394.0" prefWidth="91.0">
                                        <children>
-                                          <VBox fx:id="_vBox" layoutX="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="391.0" prefWidth="100.0" />
+                                          <VBox fx:id="_vBox" layoutX="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="468.0" prefWidth="100.0" />
                                        </children>
                                     </AnchorPane>
                                 </content>
@@ -229,6 +229,11 @@
                         </Label>
                      </children>
                   </GridPane>
+                  <Button fx:id="_endRound" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#buttonPressed_end_round" prefHeight="25.0" prefWidth="137.0" text="End round" GridPane.columnIndex="1">
+                     <GridPane.margin>
+                        <Insets left="20.0" />
+                     </GridPane.margin>
+                  </Button>
                </children>
             </GridPane>
          </children>

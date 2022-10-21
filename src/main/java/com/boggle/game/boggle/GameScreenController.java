@@ -85,6 +85,8 @@ public class GameScreenController implements Initializable {
     private Label _lbScore;
     @FXML
     private Label _notAWord;
+    @FXML
+    private Button _endRound;
 
 
     private Button gameBoard[][];
@@ -97,13 +99,8 @@ public class GameScreenController implements Initializable {
     private static final int GAME_BOARD_HEIGHT = 4;
     public char[][] _charArray;
 
-
-
-
     private GridPane _gridPane;
     private boolean[][] _isClicked;
-    private ArrayList<String> _userFoundWords;
-    private ArrayList<Rectangle> _rectangles;
     private Stack<Integer> _iStack;
     private Stack<Integer> _jStack;
 
@@ -111,7 +108,7 @@ public class GameScreenController implements Initializable {
 
     private boolean _gameOver;
     private int _size = 4;
-    private int _time;
+    static int _time;
 
     private String _currentWord = "";
 
@@ -120,16 +117,15 @@ public class GameScreenController implements Initializable {
     private static List<String> _listOfCheckedWords;
     private static List<String> _listOfCheckedWords_temp;
 
+    StartPlayerTwo_modal modal = new StartPlayerTwo_modal();
+
     private AddPoints _addPoints;
 
     public int controlInt = 1;
 
-    private EndRound endRound;
-
 
     private  Integer score = 0;
 
-    public Integer _roundNumber;
 
 
 
@@ -244,6 +240,7 @@ public class GameScreenController implements Initializable {
 
 
 
+
         this.clearBoolArray();
 
 
@@ -311,25 +308,21 @@ public class GameScreenController implements Initializable {
 
 
 
-
-
                 _player_1.setText("");
                 _player_2.setText(getPlayerTwoDetails().getPlayerName());
+
                 _listOfCheckedWords.clear();
+
                 setUpTimeline();
 
-                //reset labels
-                _currentWord = "";
-                _lbScore.setText("");
-                score=0;
-                _addPoints.setPoints();
-
-                _currentWordLabel.setText("Current word: ");
-                _vBox.getChildren().clear();
+                reset_states();
 
                 //Timeline is stopped
                 _timeline.stop();
 
+
+                ///////modal for mid round pause
+                modal.StartPlayerTwo_modal();
 
 
                 break;
@@ -340,14 +333,7 @@ public class GameScreenController implements Initializable {
 
                 getPlayerTwoDetails().setRoundDetails(_listOfCheckedWords, _solver._wordsFound,score);
 
-                //reset labels
-                _currentWord = "";
-                _lbScore.setText("");
-                score=0;
-                _addPoints.setPoints();
-
-                _currentWordLabel.setText("Current word: ");
-                _vBox.getChildren().clear();
+                reset_states();
 
                 //Timeline is stopped
                 _timeline.stop();
@@ -377,6 +363,13 @@ public class GameScreenController implements Initializable {
         _currentWordLabel.setText("Current word: " + _currentWord);
 
     }
+
+    public void buttonPressed_end_round(Event q) {
+
+        _time = 0;
+
+    }
+
 
     public void buttonPressed(Event q) {
 
@@ -428,6 +421,21 @@ public class GameScreenController implements Initializable {
 
 
 
+    }
+
+
+    private void reset_states(){
+
+
+        _currentWord = "";
+        _lbScore.setText("");
+
+        _addPoints.setPoints();
+
+        _currentWordLabel.setText("Current word: ");
+        _vBox.getChildren().clear();
+
+        score=0;
     }
 
 
