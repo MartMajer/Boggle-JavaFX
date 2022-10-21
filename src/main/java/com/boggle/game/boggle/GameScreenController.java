@@ -28,6 +28,7 @@ import java.util.ResourceBundle;
 import java.util.Stack;
 
 import static com.boggle.game.boggle.HelloController.*;
+import static com.boggle.game.boggle.StartPlayerTwo_modal._startPlayerTwo;
 
 public class GameScreenController implements Initializable {
 
@@ -97,7 +98,7 @@ public class GameScreenController implements Initializable {
 
     private static final int GAME_BOARD_WIDTH = 4;
     private static final int GAME_BOARD_HEIGHT = 4;
-    public char[][] _charArray;
+    public static char[][] _charArray;
 
     private GridPane _gridPane;
     private boolean[][] _isClicked;
@@ -108,7 +109,7 @@ public class GameScreenController implements Initializable {
 
     private boolean _gameOver;
     private int _size = 4;
-    static int _time;
+    private int _time;
 
     private String _currentWord = "";
 
@@ -212,12 +213,14 @@ public class GameScreenController implements Initializable {
                     String s = Character.toString(letter);
                     gameBoard[i][j].setText(s);
 
+
+
                     //finally the character is added to the array of characters in the correct location
                     _charArray[i][j] = letter;
 
                 }
             }
-
+            new PreviewBoard();
             _solver = new BoggleSolver(_charArray);
 
 
@@ -262,7 +265,7 @@ public class GameScreenController implements Initializable {
 
     private void setUpTimeline() {
         //Official boggle game time is set at 2 minutes
-        _time = 120;
+        _time = 121;
         KeyFrame kf = new KeyFrame(Duration.seconds(1), new  TimeHandler());
         _timeline = new Timeline(kf);
         _timeline.setCycleCount(Animation.INDEFINITE);
@@ -280,6 +283,7 @@ public class GameScreenController implements Initializable {
             //When the timer reaches zero, the game will stop and the endGame method is called.
             if (_time == 0) {
                 endGame();
+
             }
             else {
                 _time = _time - 1;
@@ -323,6 +327,10 @@ public class GameScreenController implements Initializable {
 
                 ///////modal for mid round pause
                 modal.StartPlayerTwo_modal();
+
+                if (_startPlayerTwo == true){
+                    _time = 121;
+                }
 
 
                 break;
@@ -438,6 +446,11 @@ public class GameScreenController implements Initializable {
         score=0;
     }
 
+    public char[][] getBoardLetters(){
+
+       return  _charArray;
+
+    }
 
 
 

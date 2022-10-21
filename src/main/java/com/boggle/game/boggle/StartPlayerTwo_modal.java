@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ResourceBundle;
 
-import static com.boggle.game.boggle.GameScreenController._time;
+
 
 
 public class StartPlayerTwo_modal implements Initializable {
@@ -33,6 +33,7 @@ public class StartPlayerTwo_modal implements Initializable {
     private int time;
     private Stage stage;
 
+    public static boolean _startPlayerTwo;
 
 
     @Override
@@ -72,7 +73,7 @@ public class StartPlayerTwo_modal implements Initializable {
 
     @FXML
     public void handleCloseButtonAction(ActionEvent event) {
-        _time = 120;
+        _startPlayerTwo = true;
         Stage stage = (Stage) _start.getScene().getWindow();
         stage.close();
 

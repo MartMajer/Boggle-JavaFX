@@ -60,7 +60,7 @@
                   <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="122.0" prefWidth="149.0" text="Possible words:" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="291.0" prefWidth="102.0">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="443.0" prefWidth="102.0">
                            <children>
                               <VBox fx:id="__player_1_Pane_Found" prefHeight="621.0" prefWidth="100.0" />
                            </children>
@@ -72,7 +72,7 @@
                   </ScrollPane>
                   <ScrollPane layoutX="30.0" layoutY="81.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="291.0" prefWidth="102.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="6000.0" prefWidth="102.0">
                            <children>
                               <VBox fx:id="__player_1_Pane_Possible" prefHeight="624.0" prefWidth="100.0" />
                            </children>
@@ -112,7 +112,7 @@
                   <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="122.0" prefWidth="149.0" text="Possible words:" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
                      <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="291.0" prefWidth="95.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="441.0" prefWidth="95.0">
                            <children>
                               <VBox fx:id="__player_2_Pane_Found" prefHeight="620.0" prefWidth="100.0" />
                            </children>
@@ -124,7 +124,7 @@
                   </ScrollPane>
                   <ScrollPane layoutX="30.0" layoutY="81.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="291.0" prefWidth="94.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="6000.0" prefWidth="94.0">
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
@@ -249,6 +249,11 @@
                   <Insets bottom="5.0" />
                </padding>
             </GridPane>
+            <Button fx:id="_board" mnemonicParsing="false" onAction="#board" prefHeight="25.0" prefWidth="79.0" text="Board">
+               <GridPane.margin>
+                  <Insets left="20.0" />
+               </GridPane.margin>
+            </Button>
          </children>
       </GridPane>
    </children>
