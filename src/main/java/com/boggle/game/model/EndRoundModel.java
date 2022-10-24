@@ -7,9 +7,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 
-public class EndRound {
+public class EndRoundModel {
 
-    public EndRound() {
+    public EndRoundModel() {
 
 
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("EndRound.fxml"));

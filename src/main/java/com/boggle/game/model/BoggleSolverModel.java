@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.*;
 
 
-public class BoggleSolver {
+public class BoggleSolverModel {
 
     private int _size;
     public ArrayList<String> _wordsFound;
@@ -15,7 +15,7 @@ public class BoggleSolver {
     public ArrayList<String> dictionary;
 
 
-    public BoggleSolver(char[][] boggle) throws IOException {
+    public BoggleSolverModel(char[][] boggle) throws IOException {
 
         _boggle = boggle;
         //size of board is determined by checking length of one side of the 2d array
@@ -44,7 +44,7 @@ public class BoggleSolver {
         // }
 
         //the initial trienode is created
-        TrieNode root = new TrieNode();
+        TrieNodeModel root = new TrieNodeModel();
 
         //each string is added to the trienode network
         for (String string : dictionary) {
@@ -72,7 +72,7 @@ public class BoggleSolver {
     /*
      * This method is used to add each word from the dictionary to the trie
      */
-    public void add(TrieNode trie, String s) {
+    public void add(TrieNodeModel trie, String s) {
 
         for (int i = 0; i < s.length(); i++) {
             //the character is converted into an int. 'A' is subtracted due to the default int values with characters
@@ -92,7 +92,7 @@ public class BoggleSolver {
             // }
 
                 if (trie.getChild(j) == null ) {
-                    trie.setChild(j, new TrieNode());
+                    trie.setChild(j, new TrieNodeModel());
                 }
                 trie = trie.getChild(j);
 
@@ -104,7 +104,7 @@ public class BoggleSolver {
     /*
      * This method is the top method of the actual solving algorithm and is able to solve the boggle board
      */
-    private void findWords(TrieNode root) {
+    private void findWords(TrieNodeModel root) {
 
         StringBuilder str = new StringBuilder();
 
@@ -121,7 +121,7 @@ public class BoggleSolver {
     /*
      * This method finds all of the words within the boggle board.
      */
-    private void search(int i, int j, TrieNode root, String string) {
+    private void search(int i, int j, TrieNodeModel root, String string) {
         // if word is found in trie, and not already found: adds to list of found words
 
            if (root.getLeaf() &&  !_wordsFound.contains(string)) {

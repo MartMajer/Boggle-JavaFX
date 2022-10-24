@@ -1,9 +1,7 @@
 package com.boggle.game.boggle;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import java.net.URL;
@@ -11,7 +9,7 @@ import java.util.ResourceBundle;
 
 import static com.boggle.game.boggle.GameScreenController._charArray;
 
-public class PreviewBoard implements Initializable {
+public class PreviewBoardController implements Initializable {
 
     @FXML
     private Label mat_0_01;
@@ -84,7 +82,4 @@ public class PreviewBoard implements Initializable {
 
     }
 
-
-    public void buttonPressed(ActionEvent actionEvent) {
-    }
 }

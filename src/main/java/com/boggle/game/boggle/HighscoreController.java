@@ -1,6 +1,6 @@
 package com.boggle.game.boggle;
 
-import com.boggle.game.model.Highscore;
+import com.boggle.game.model.HighscoreModel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -25,7 +25,7 @@ public class HighscoreController implements Initializable {
     @FXML
     private VBox _highScore_score;
 
-    public static ArrayList<Highscore> arrayList_Highscore = new ArrayList<Highscore>();
+    public static ArrayList<HighscoreModel> arrayList_Highscore = new ArrayList<HighscoreModel>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -46,6 +46,8 @@ public class HighscoreController implements Initializable {
 
         for (var item :
                 arrayList_Highscore ) {
+
+
             _highScore_score.getChildren().add(new Label(item.toString()));
         }
 

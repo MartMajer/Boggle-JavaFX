@@ -1,12 +1,13 @@
 package com.boggle.game.boggle;
 
-import com.boggle.game.model.AddPoints;
-import com.boggle.game.model.BoggleSolver;
-import com.boggle.game.model.EndRound;
+import com.boggle.game.model.AddPointsModel;
+import com.boggle.game.model.BoggleSolverModel;
+import com.boggle.game.model.EndRoundModel;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -14,10 +15,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import java.io.IOException;
 import java.net.URL;
@@ -29,6 +28,7 @@ import java.util.Stack;
 
 import static com.boggle.game.boggle.HelloController.*;
 import static com.boggle.game.boggle.StartPlayerTwo_modal._startPlayerTwo;
+import static com.boggle.game.boggle.StartPlayerTwo_modal.stage_m;
 
 public class GameScreenController implements Initializable {
 
@@ -93,7 +93,7 @@ public class GameScreenController implements Initializable {
     private Button gameBoard[][];
 
 
-    private BoggleSolver _solver;
+    private BoggleSolverModel _solver;
 
 
     private static final int GAME_BOARD_WIDTH = 4;
@@ -109,18 +109,18 @@ public class GameScreenController implements Initializable {
 
     private boolean _gameOver;
     private int _size = 4;
-    private int _time;
-
+    public int _time;
+    private static int time_const = 121;
     private String _currentWord = "";
 
-    private Timeline _timeline;
+    public Timeline _timeline;
 
     private static List<String> _listOfCheckedWords;
     private static List<String> _listOfCheckedWords_temp;
 
     StartPlayerTwo_modal modal = new StartPlayerTwo_modal();
 
-    private AddPoints _addPoints;
+    private AddPointsModel _addPoints;
 
     public int controlInt = 1;
 
@@ -139,6 +139,8 @@ public class GameScreenController implements Initializable {
         _player_1.setText(getPlayerOneDetails().getPlayerName());
 
         //_player_2.setText(getPlayerTwoDetails().getPlayerName());
+
+
 
         gameBoard[0][0] = mat_0_0;
         gameBoard[0][1] = mat_0_1;
@@ -220,8 +222,8 @@ public class GameScreenController implements Initializable {
 
                 }
             }
-            new PreviewBoard();
-            _solver = new BoggleSolver(_charArray);
+            new PreviewBoardController();
+            _solver = new BoggleSolverModel(_charArray);
 
 
         }
@@ -237,7 +239,7 @@ public class GameScreenController implements Initializable {
         _iStack = new Stack<>();
         _jStack = new Stack<>();
         _gridPane.setFocusTraversable(true);
-        _addPoints = new AddPoints();
+        _addPoints = new AddPointsModel();
         _listOfCheckedWords = new ArrayList<>();
         _listOfCheckedWords_temp = new ArrayList<>();
 
@@ -247,7 +249,11 @@ public class GameScreenController implements Initializable {
         this.clearBoolArray();
 
 
-        this.setUpTimeline();
+        if (_startPlayerTwo == false)
+        {
+            this.setUpTimeline();
+        }
+
 
 
     }
@@ -263,13 +269,16 @@ public class GameScreenController implements Initializable {
         }
     }
 
-    private void setUpTimeline() {
+    public void setUpTimeline() {
         //Official boggle game time is set at 2 minutes
         _time = 121;
         KeyFrame kf = new KeyFrame(Duration.seconds(1), new  TimeHandler());
         _timeline = new Timeline(kf);
         _timeline.setCycleCount(Animation.INDEFINITE);
         _timeline.play();
+
+
+
     }
 
     /*
@@ -282,6 +291,7 @@ public class GameScreenController implements Initializable {
 
             //When the timer reaches zero, the game will stop and the endGame method is called.
             if (_time == 0) {
+
                 endGame();
 
             }
@@ -294,11 +304,6 @@ public class GameScreenController implements Initializable {
         }
     }
     private void endGame() {
-
-
-
-
-
 
         switch (controlInt)
         {
@@ -324,13 +329,16 @@ public class GameScreenController implements Initializable {
                 //Timeline is stopped
                 _timeline.stop();
 
+                _startPlayerTwo = true;
 
                 ///////modal for mid round pause
                 modal.StartPlayerTwo_modal();
 
-                if (_startPlayerTwo == true){
-                    _time = 121;
-                }
+                delay(1, () -> _time=121);// _timeLabel.setText("Time remaining: 120 seconds") );
+                delay(1, () -> _timeLabel.setVisible(false));
+
+                stage_m.setOnHidden(e -> _time=121);
+                stage_m.setOnHidden(e -> _timeLabel.setVisible(true));
 
 
                 break;
@@ -351,7 +359,7 @@ public class GameScreenController implements Initializable {
                 _gameOver = true;
 
 
-                new EndRound();
+                new EndRoundModel();
         }
 
 
@@ -372,7 +380,8 @@ public class GameScreenController implements Initializable {
 
     }
 
-    public void buttonPressed_end_round(Event q) {
+
+    public void buttonPressed_end_round(ActionEvent event) {
 
         _time = 0;
 
@@ -453,6 +462,18 @@ public class GameScreenController implements Initializable {
     }
 
 
+    public static void delay(long millis, Runnable continuation) {
+        Task<Void> sleeper = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try { Thread.sleep(millis); }
+                catch (InterruptedException e) { }
+                return null;
+            }
+        };
+        sleeper.setOnSucceeded(event -> continuation.run());
+        new Thread(sleeper).start();
+    }
 
 }
 

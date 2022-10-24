@@ -1,11 +1,11 @@
 package com.boggle.game.model;
 
-public class Highscore implements Comparable<Highscore> {
+public class HighscoreModel implements Comparable<HighscoreModel> {
 
     private String name;
     private Integer index;
 
-    public Highscore(int index, String name){
+    public HighscoreModel(int index, String name){
 
         this.name=name;
         this.index=index;
@@ -18,8 +18,8 @@ public class Highscore implements Comparable<Highscore> {
 
 
     @Override
-    public int compareTo(Highscore name) {
-        int compareIndex=((Highscore)name).getIndex();
+    public int compareTo(HighscoreModel name) {
+        int compareIndex=((HighscoreModel)name).getIndex();
 
         return compareIndex - this.index;
 
