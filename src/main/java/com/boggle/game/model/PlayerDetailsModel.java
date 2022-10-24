@@ -4,7 +4,7 @@ package com.boggle.game.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerDetails {
+public class PlayerDetailsModel {
 
     private String playerName;
 
@@ -30,7 +30,7 @@ public class PlayerDetails {
     public String get_score(){return  _score.toString();}
     public Integer get_score_int(){return  _score;}
 
-    public PlayerDetails(String playerName) {
+    public PlayerDetailsModel(String playerName) {
         this.playerName = playerName;
     }
 

@@ -1,7 +1,7 @@
 package com.boggle.game.boggle;
 
-import com.boggle.game.model.Highscore;
-import com.boggle.game.model.StoredDetails;
+import com.boggle.game.model.HighscoreModel;
+import com.boggle.game.model.StoredDetailsModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -22,8 +21,8 @@ import static com.boggle.game.boggle.HelloController.*;
 import static com.boggle.game.boggle.HelloController.getPlayerOneDetails;
 import static com.boggle.game.boggle.HighscoreController.arrayList_Highscore;
 import static com.boggle.game.boggle.StartPlayerTwo_modal._startPlayerTwo;
-import static com.boggle.game.model.StoredDetails.overall_P1;
-import static com.boggle.game.model.StoredDetails.overall_P2;
+import static com.boggle.game.model.StoredDetailsModel.overall_P1;
+import static com.boggle.game.model.StoredDetailsModel.overall_P2;
 
 
 public class EndRoundController implements Initializable {
@@ -63,7 +62,7 @@ public class EndRoundController implements Initializable {
     @FXML
     private Label _roundNumber;
 
-    private StoredDetails store;
+    private StoredDetailsModel store;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -78,8 +77,8 @@ public class EndRoundController implements Initializable {
         Integer temp = roundCounter - 1;
         _roundNumber.setText(temp.toString());
 
-        arrayList_Highscore.add(new Highscore(getPlayerOneDetails().get_score_int(),getPlayerOneDetails().getPlayerName()));
-        arrayList_Highscore.add(new Highscore(getPlayerTwoDetails().get_score_int(),getPlayerTwoDetails().getPlayerName()));
+        arrayList_Highscore.add(new HighscoreModel(getPlayerOneDetails().get_score_int(),getPlayerOneDetails().getPlayerName()));
+        arrayList_Highscore.add(new HighscoreModel(getPlayerTwoDetails().get_score_int(),getPlayerTwoDetails().getPlayerName()));
 
 
 
@@ -126,7 +125,7 @@ public class EndRoundController implements Initializable {
 
         HelloController hello = new HelloController();
 
-        store = new StoredDetails(_player_1_name.getText(),_player_2_name.getText(), getPlayerOneDetails().get_score_int(), getPlayerTwoDetails().get_score_int(),_roundNumber.getText());
+        store = new StoredDetailsModel(_player_1_name.getText(),_player_2_name.getText(), getPlayerOneDetails().get_score_int(), getPlayerTwoDetails().get_score_int(),_roundNumber.getText());
 
 
         _startPlayerTwo = false;

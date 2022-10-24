@@ -4,6 +4,9 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.effect.Shadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -13,6 +16,11 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.boggle.game.boggle.GameScreenController">
    <children>
+      <ImageView fitHeight="400.0" fitWidth="600.0">
+         <image>
+            <Image url="@../../../../Assets/bg_2.jpg" />
+         </image>
+      </ImageView>
       <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <GridPane layoutX="-247.0" layoutY="-151.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -123,6 +131,86 @@
                               <Font size="24.0" />
                            </font>
                         </Button>
+                        <ImageView fitHeight="62.0" fitWidth="74.0">
+                           <image>
+                              <Image url="@../../../../Assets/dice-22-256.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="61.0" fitWidth="74.0" layoutX="10.0" layoutY="9.0" GridPane.columnIndex="1">
+                           <image>
+                              <Image url="@../../../../Assets/dice-22-256.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="62.0" fitWidth="74.0" layoutX="10.0" layoutY="9.0" GridPane.columnIndex="2">
+                           <image>
+                              <Image url="@../../../../Assets/dice-22-256.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="62.0" fitWidth="74.0" layoutX="158.0" layoutY="9.0" GridPane.columnIndex="3">
+                           <image>
+                              <Image url="@../../../../Assets/dice-22-256.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="62.0" fitWidth="74.0" layoutX="232.0" layoutY="9.0" GridPane.rowIndex="1">
+                           <image>
+                              <Image url="@../../../../Assets/dice-22-256.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="62.0" fitWidth="74.0" layoutX="10.0" layoutY="71.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <image>
+                              <Image url="@../../../../Assets/dice-22-256.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="62.0" fitWidth="74.0" layoutX="84.0" layoutY="71.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                           <image>
+                              <Image url="@../../../../Assets/dice-22-256.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="62.0" fitWidth="74.0" layoutX="158.0" layoutY="71.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                           <image>
+                              <Image url="@../../../../Assets/dice-22-256.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="62.0" fitWidth="74.0" layoutX="232.0" layoutY="71.0" GridPane.rowIndex="2">
+                           <image>
+                              <Image url="@../../../../Assets/dice-22-256.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="62.0" fitWidth="74.0" layoutX="10.0" layoutY="131.0" GridPane.rowIndex="3">
+                           <image>
+                              <Image url="@../../../../Assets/dice-22-256.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="62.0" fitWidth="74.0" layoutX="10.0" layoutY="193.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <image>
+                              <Image url="@../../../../Assets/dice-22-256.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="62.0" fitWidth="74.0" layoutX="84.0" layoutY="131.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <image>
+                              <Image url="@../../../../Assets/dice-22-256.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="62.0" fitWidth="74.0" layoutX="84.0" layoutY="193.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                           <image>
+                              <Image url="@../../../../Assets/dice-22-256.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="62.0" fitWidth="74.0" layoutX="158.0" layoutY="131.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                           <image>
+                              <Image url="@../../../../Assets/dice-22-256.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="62.0" fitWidth="74.0" layoutX="158.0" layoutY="193.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                           <image>
+                              <Image url="@../../../../Assets/dice-22-256.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="62.0" fitWidth="74.0" layoutX="232.0" layoutY="131.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                           <image>
+                              <Image url="@../../../../Assets/dice-22-256.png" />
+                           </image>
+                        </ImageView>
                      </children>
                      <GridPane.margin>
                         <Insets bottom="20.0" left="20.0" />
@@ -141,7 +229,7 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label fx:id="_currentWordLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="138.0" text="Current word:" GridPane.rowIndex="1">
+                              <Label fx:id="_currentWordLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="138.0" text="Current word:" textFill="WHITE" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="11.0" />
                                  </font>
@@ -155,7 +243,7 @@
                                     </AnchorPane>
                                 </content>
                               </ScrollPane>
-                              <Label fx:id="_notAWord" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="138.0" textFill="#ff3030" GridPane.rowIndex="2">
+                              <Label fx:id="_notAWord" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="138.0" textFill="#ff3f3f" GridPane.rowIndex="2">
                                  <font>
                                     <Font name="System Bold" size="10.0" />
                                  </font>
@@ -168,7 +256,7 @@
                         </GridPane>
                      </children>
                   </AnchorPane>
-                  <Label fx:id="_timeLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="62.0" prefWidth="267.0" text="Time remaining: 120 seconds" wrapText="true" GridPane.rowIndex="1">
+                  <Label fx:id="_timeLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="62.0" prefWidth="267.0" text="Time remaining: 120 seconds" textFill="WHITE" wrapText="true" GridPane.rowIndex="1">
                      <font>
                         <Font name="System Bold" size="19.0" />
                      </font>
@@ -178,24 +266,43 @@
                   </Label>
                   <GridPane GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.0" minWidth="10.0" prefWidth="96.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="179.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="166.33332061767578" minWidth="10.0" prefWidth="142.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="144.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="64.0" prefWidth="76.0" text="Score: ">
+                        <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="78.0" prefWidth="85.0" text="Score: " textFill="WHITE">
                            <font>
-                              <Font name="System Bold" size="20.0" />
+                              <Font name="System Bold" size="22.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets left="20.0" />
+                           </GridPane.margin>
+                           <effect>
+                              <Shadow />
+                           </effect>
+                        </Label>
+                        <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="78.0" prefWidth="112.0" text="Score: " textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="21.0" />
                            </font>
                            <GridPane.margin>
                               <Insets left="20.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label fx:id="_lbScore" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="42.0" GridPane.columnIndex="1">
+                        <Label fx:id="_lbScore1" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="42.0" text="40" textFill="WHITE" GridPane.columnIndex="1">
                            <font>
-                              <Font name="System Bold" size="16.0" />
+                              <Font name="System Bold" size="23.0" />
+                           </font>
+                           <effect>
+                              <Shadow />
+                           </effect>
+                        </Label>
+                        <Label fx:id="_lbScore" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="42.0" textFill="WHITE" GridPane.columnIndex="1">
+                           <font>
+                              <Font name="System Bold" size="21.0" />
                            </font>
                         </Label>
                      </children>
@@ -209,7 +316,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Playing: ">
+                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Playing: " textFill="WHITE">
                            <font>
                               <Font size="13.0" />
                            </font>
@@ -217,12 +324,12 @@
                               <Insets left="20.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label fx:id="_player_1" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="19.0" prefWidth="82.0" GridPane.columnIndex="1">
+                        <Label fx:id="_player_1" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="19.0" prefWidth="82.0" textFill="WHITE" GridPane.columnIndex="1">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="_player_2" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="20.0" prefWidth="72.0" GridPane.columnIndex="1">
+                        <Label fx:id="_player_2" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="20.0" prefWidth="72.0" textFill="WHITE" GridPane.columnIndex="1">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>

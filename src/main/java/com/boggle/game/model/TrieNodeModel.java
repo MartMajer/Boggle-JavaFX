@@ -1,15 +1,15 @@
 package com.boggle.game.model;
 
 
-public class TrieNode{
+public class TrieNodeModel {
     private boolean isLeaf;
 
-    public static final int alphabet_size = 317;
-    private TrieNode[] child;
+    public static final int alphabet_size = 350;
+    private TrieNodeModel[] child;
 
-    public TrieNode() {
+    public TrieNodeModel() {
         isLeaf = false;
-        child = new TrieNode[alphabet_size];
+        child = new TrieNodeModel[alphabet_size];
 
         for (int i = 0; i < alphabet_size; i++) {
             child[i] = null;
@@ -24,12 +24,12 @@ public class TrieNode{
         isLeaf = t;
     }
 
-    public TrieNode getChild(int i) {
+    public TrieNodeModel getChild(int i) {
 
         return child[i];
     }
 
-    public void setChild(int i, TrieNode node) {
+    public void setChild(int i, TrieNodeModel node) {
 
         child[i] = node;
     }

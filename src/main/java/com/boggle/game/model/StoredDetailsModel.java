@@ -1,6 +1,6 @@
 package com.boggle.game.model;
 
-public class StoredDetails {
+public class StoredDetailsModel {
 
     public static String P1;
     public static String P2;
@@ -10,7 +10,7 @@ public class StoredDetails {
 
 
 
-    public StoredDetails(String P1, String P2, Integer score_P1, Integer  score_P2, String round){
+    public StoredDetailsModel(String P1, String P2, Integer score_P1, Integer  score_P2, String round){
 
         this.P1 = P1;
         this.P2 = P2;
