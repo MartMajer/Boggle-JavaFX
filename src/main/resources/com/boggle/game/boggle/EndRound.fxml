@@ -7,261 +7,232 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.boggle.game.boggle.EndRoundController">
+<AnchorPane prefHeight="400.0" prefWidth="601.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.boggle.game.boggle.EndRoundController">
    <children>
-      <ImageView fitHeight="400.0" fitWidth="600.0">
+      <ImageView fitHeight="410.0" fitWidth="620.0">
          <image>
             <Image url="@../../../../Assets/bg_1.jpg" />
          </image>
       </ImageView>
-      <GridPane layoutX="135.0" layoutY="84.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints maxHeight="194.0" minHeight="10.0" prefHeight="70.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="372.0" minHeight="10.0" prefHeight="280.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="346.0" minHeight="10.0" prefHeight="55.0" vgrow="SOMETIMES" />
-        </rowConstraints>
+      <AnchorPane fx:id="ap_multiplayer_2" prefHeight="410.0" prefWidth="620.0" visible="false">
          <children>
-            <Label alignment="CENTER_RIGHT" prefHeight="37.0" prefWidth="448.0" text="End of round: " textFill="WHITE">
+            <ScrollPane layoutX="321.0" layoutY="109.0" prefHeight="200.0" prefWidth="125.0">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="443.0" prefWidth="102.0">
+                     <children>
+                        <VBox fx:id="__player_1_Pane_Found2" prefHeight="621.0" prefWidth="100.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
+            <ScrollPane layoutX="157.0" layoutY="109.0" prefHeight="200.0" prefWidth="125.0">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="6000.0" prefWidth="102.0">
+                     <children>
+                        <VBox fx:id="__player_1_Pane_Possible2" prefHeight="624.0" prefWidth="100.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
+            <Label alignment="CENTER_RIGHT" layoutX="221.0" layoutY="6.0" prefHeight="43.0" prefWidth="252.0" text="End of round: " textFill="WHITE">
                <font>
                   <Font name="System Bold" size="26.0" />
                </font>
                <padding>
-                  <Insets left="20.0" top="5.0" />
+                  <Insets left="20.0" right="20.0" top="5.0" />
                </padding>
             </Label>
-            <GridPane GridPane.rowIndex="1">
-              <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="157.0" minWidth="10.0" prefWidth="149.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="154.0" minWidth="10.0" prefWidth="151.0" />
-              </columnConstraints>
-              <rowConstraints>
-                  <RowConstraints maxHeight="167.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="167.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="302.0" minHeight="10.0" prefHeight="276.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="64.0" prefWidth="149.0" text="Player 1: " textFill="WHITE">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </Label>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="122.0" prefWidth="149.0" text="Found words:" textAlignment="CENTER" textFill="WHITE" GridPane.rowIndex="1" />
-                  <Label fx:id="_player_1_name" text="Martin" textFill="WHITE" GridPane.columnIndex="1">
-                     <font>
-                        <Font name="System Bold" size="13.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="122.0" prefWidth="149.0" text="Possible words:" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="443.0" prefWidth="102.0">
-                           <children>
-                              <VBox fx:id="__player_1_Pane_Found" prefHeight="621.0" prefWidth="100.0" />
-                           </children>
-                        </AnchorPane>
-                    </content>
-                     <GridPane.margin>
-                        <Insets bottom="20.0" left="20.0" right="10.0" />
-                     </GridPane.margin>
-                  </ScrollPane>
-                  <ScrollPane layoutX="30.0" layoutY="81.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="6000.0" prefWidth="102.0">
-                           <children>
-                              <VBox fx:id="__player_1_Pane_Possible" prefHeight="624.0" prefWidth="100.0" />
-                           </children>
-                        </AnchorPane>
-                     </content>
-                     <GridPane.margin>
-                        <Insets bottom="20.0" left="10.0" right="20.0" />
-                     </GridPane.margin>
-                  </ScrollPane>
-               </children>
-            </GridPane>
-            <GridPane GridPane.columnIndex="1" GridPane.rowIndex="1">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="157.0" minWidth="10.0" prefWidth="149.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="154.0" minWidth="10.0" prefWidth="151.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints maxHeight="167.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="167.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="302.0" minHeight="10.0" prefHeight="276.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="64.0" prefWidth="149.0" text="Player 2: " textFill="WHITE">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </Label>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="122.0" prefWidth="149.0" text="Found words:" textAlignment="CENTER" textFill="WHITE" GridPane.rowIndex="1" />
-                  <Label fx:id="_player_2_name" text="Martin" textFill="WHITE" GridPane.columnIndex="1">
-                     <font>
-                        <Font name="System Bold" size="13.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="122.0" prefWidth="149.0" text="Possible words:" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="441.0" prefWidth="95.0">
-                           <children>
-                              <VBox fx:id="__player_2_Pane_Found" prefHeight="620.0" prefWidth="100.0" />
-                           </children>
-                        </AnchorPane>
-                     </content>
-                     <GridPane.margin>
-                        <Insets bottom="20.0" left="20.0" right="10.0" />
-                     </GridPane.margin>
-                  </ScrollPane>
-                  <ScrollPane layoutX="30.0" layoutY="81.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="6000.0" prefWidth="94.0">
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <children>
-                              <VBox fx:id="__player_2_Pane_Possible" prefHeight="571.0" prefWidth="100.0" />
-                           </children>
-                        </AnchorPane>
-                     </content>
-                     <GridPane.margin>
-                        <Insets bottom="20.0" left="10.0" right="20.0" />
-                     </GridPane.margin>
-                  </ScrollPane>
-               </children>
-            </GridPane>
-            <GridPane GridPane.rowIndex="2">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="94.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="209.0" minWidth="10.0" prefWidth="206.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label text="Round score:" textFill="WHITE">
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </Label>
-                  <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="194.0" text="OVERALL:" textFill="WHITE" GridPane.rowIndex="1">
-                     <padding>
-                        <Insets bottom="5.0" left="20.0" />
-                     </padding>
-                     <GridPane.margin>
-                        <Insets bottom="5.0" right="5.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label fx:id="_player_1_RoundScore" text="Label" textFill="WHITE" GridPane.columnIndex="1" />
-                  <Label fx:id="_player_1_Overall" text="Label" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets bottom="5.0" />
-                     </GridPane.margin>
-                     <padding>
-                        <Insets bottom="5.0" />
-                     </padding>
-                  </Label>
-               </children>
-               <GridPane.margin>
-                  <Insets bottom="10.0" />
-               </GridPane.margin>
-            </GridPane>
-            <GridPane GridPane.columnIndex="1">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="10.0" prefWidth="81.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="290.0" minWidth="10.0" prefWidth="155.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="242.0" minWidth="0.0" prefWidth="135.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label fx:id="_roundNumber" prefHeight="37.0" prefWidth="448.0" text="1" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="34.0" />
-                     </font>
-                     <padding>
-                        <Insets left="5.0" top="5.0" />
-                     </padding>
-                  </Label>
-                  <Button fx:id="_startNewRound" mnemonicParsing="false" onAction="#startNewRound" prefHeight="25.0" prefWidth="125.0" text="Start new round!" GridPane.columnIndex="1">
-                     <GridPane.margin>
-                        <Insets top="5.0" />
-                     </GridPane.margin>
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="_highscore" layoutX="67.0" layoutY="34.0" mnemonicParsing="false" onAction="#highscore" prefHeight="25.0" prefWidth="96.0" text="Highscores" GridPane.columnIndex="2">
-                     <GridPane.margin>
-                        <Insets right="20.0" top="5.0" />
-                     </GridPane.margin>
-                  </Button>
-               </children>
-            </GridPane>
-            <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="94.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="209.0" minWidth="10.0" prefWidth="206.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <Label text="Round score:" textFill="WHITE">
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </Label>
-                  <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="194.0" text="OVERALL:" textFill="WHITE" GridPane.rowIndex="1">
-                     <padding>
-                        <Insets bottom="10.0" left="20.0" />
-                     </padding>
-                     <GridPane.margin>
-                        <Insets right="5.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label fx:id="_player_2_RoundScore" text="Label" textFill="WHITE" GridPane.columnIndex="1" />
-                  <Label fx:id="_player_2_Overall" text="Label" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                     <padding>
-                        <Insets bottom="5.0" />
-                     </padding>
-                     <GridPane.margin>
-                        <Insets bottom="5.0" />
-                     </GridPane.margin>
-                  </Label>
-               </children>
-               <GridPane.margin>
-                  <Insets bottom="5.0" />
-               </GridPane.margin>
+            <Label fx:id="_roundNumber2" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="444.0" maxWidth="1.7976931348623157E308" prefHeight="55.0" prefWidth="21.0" text="1" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="34.0" />
+               </font>
                <padding>
-                  <Insets bottom="5.0" />
+                  <Insets left="5.0" top="5.0" />
                </padding>
-            </GridPane>
-            <Button fx:id="_board" mnemonicParsing="false" onAction="#board" prefHeight="25.0" prefWidth="79.0" text="Board">
-               <GridPane.margin>
-                  <Insets left="20.0" />
-               </GridPane.margin>
+            </Label>
+            <Label contentDisplay="RIGHT" layoutX="322.0" layoutY="315.0" prefHeight="19.0" prefWidth="145.0" text="Player 1: " textFill="WHITE">
+               <font>
+                  <Font size="13.0" />
+               </font>
+               <graphic>
+                  <Label fx:id="_player_1_name2" prefHeight="19.0" prefWidth="66.0" text="Martin" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
+               </graphic>
+            </Label>
+            <Button fx:id="_board2" layoutX="14.0" layoutY="15.0" mnemonicParsing="false" onAction="#board" text="Show board" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="157.0" layoutY="76.0" text="Possible words:" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="322.0" layoutY="76.0" text="Found words:" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Button fx:id="_highscore2" layoutX="14.0" layoutY="49.0" mnemonicParsing="false" onAction="#highscore" prefHeight="25.0" prefWidth="80.0" text="Highscores" />
+            <Button fx:id="_startNewRound2" layoutX="480.0" layoutY="14.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#startNewRound" prefHeight="35.0" prefWidth="125.0" text="Start new round!">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
             </Button>
+            <Label fx:id="_player_1_RoundScore2" layoutX="322.0" layoutY="334.0" prefHeight="35.0" prefWidth="117.0" text="21" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <graphic>
+                  <Label prefHeight="35.0" prefWidth="91.0" text="Round score:" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </graphic>
+            </Label>
+            <Label fx:id="_player_1_Overall2" layoutX="321.0" layoutY="369.0" prefHeight="20.0" prefWidth="125.0" text="212" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <graphic>
+                  <Label prefHeight="27.0" prefWidth="88.0" text="Overall sum:" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </graphic>
+            </Label>
+            <Label contentDisplay="RIGHT" layoutX="465.0" layoutY="315.0" prefHeight="19.0" prefWidth="145.0" text="Player 2:" textFill="WHITE">
+               <font>
+                  <Font size="13.0" />
+               </font>
+               <graphic>
+                  <Label fx:id="_player_2_name" prefHeight="19.0" prefWidth="66.0" text="Martin" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
+               </graphic>
+            </Label>
+            <ScrollPane layoutX="461.0" layoutY="109.0" prefHeight="200.0" prefWidth="125.0">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="441.0" prefWidth="95.0">
+                     <children>
+                        <VBox fx:id="__player_2_Pane_Found1" prefHeight="620.0" prefWidth="100.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
+            <Label fx:id="_player_2_RoundScore" layoutX="465.0" layoutY="334.0" prefHeight="35.0" prefWidth="117.0" text="21" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <graphic>
+                  <Label prefHeight="35.0" prefWidth="91.0" text="Round score:" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </graphic>
+            </Label>
+            <Label fx:id="_player_2_Overall" layoutX="467.0" layoutY="369.0" prefHeight="20.0" prefWidth="125.0" text="212" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <graphic>
+                  <Label prefHeight="27.0" prefWidth="88.0" text="Overall sum:" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </graphic>
+            </Label>
          </children>
-      </GridPane>
+      </AnchorPane>
+      <AnchorPane fx:id="ap_singleplayer" prefHeight="400.0" prefWidth="600.0" visible="false">
+         <children>
+            <ScrollPane layoutX="303.0" layoutY="137.0" prefHeight="200.0" prefWidth="125.0">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="443.0" prefWidth="102.0">
+                     <children>
+                        <VBox fx:id="__player_1_Pane_Found" prefHeight="621.0" prefWidth="100.0" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </ScrollPane>
+            <ScrollPane layoutX="452.0" layoutY="137.0" prefHeight="200.0" prefWidth="125.0">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="6000.0" prefWidth="102.0">
+                     <children>
+                        <VBox fx:id="__player_1_Pane_Possible" prefHeight="624.0" prefWidth="100.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
+            <Label alignment="CENTER_RIGHT" layoutX="95.0" layoutY="14.0" prefHeight="43.0" prefWidth="252.0" text="End of round: " textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="26.0" />
+               </font>
+               <padding>
+                  <Insets left="20.0" right="20.0" top="5.0" />
+               </padding>
+            </Label>
+            <Label fx:id="_roundNumber" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="321.0" layoutY="8.0" maxWidth="1.7976931348623157E308" prefHeight="55.0" prefWidth="21.0" text="1" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="34.0" />
+               </font>
+               <padding>
+                  <Insets left="5.0" top="5.0" />
+               </padding>
+            </Label>
+            <Label contentDisplay="RIGHT" layoutX="300.0" layoutY="80.0" prefHeight="19.0" prefWidth="149.0" text="Player name: " textFill="WHITE">
+               <font>
+                  <Font size="13.0" />
+               </font>
+               <graphic>
+                  <Label fx:id="_player_1_name" prefHeight="19.0" prefWidth="66.0" text="Martin" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
+               </graphic>
+            </Label>
+            <Button fx:id="_board" layoutX="156.0" layoutY="80.0" mnemonicParsing="false" onAction="#board" text="Show board" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="452.0" layoutY="111.0" text="Possible words:" textAlignment="CENTER" textFill="WHITE" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="303.0" layoutY="111.0" text="Found words:" textAlignment="CENTER" textFill="WHITE" />
+            <Button fx:id="_highscore" layoutX="156.0" layoutY="116.0" mnemonicParsing="false" onAction="#highscore" prefHeight="25.0" prefWidth="80.0" text="Highscores" />
+            <Button fx:id="_startNewRound" layoutX="453.0" layoutY="23.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#startNewRound" prefHeight="35.0" prefWidth="125.0" text="Start new round!">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Label layoutX="104.0" layoutY="168.0" prefHeight="35.0" prefWidth="154.0" text="Round score:" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="_player_1_RoundScore" layoutX="249.0" layoutY="168.0" prefHeight="35.0" prefWidth="41.0" text="21" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="_player_1_Overall" layoutX="134.0" layoutY="203.0" text="212" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <graphic>
+                  <Label prefHeight="27.0" prefWidth="111.0" text="Overall sum:" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </graphic>
+            </Label>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

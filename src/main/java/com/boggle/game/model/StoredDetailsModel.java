@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.boggle.game.boggle.GameScreenController._charArray;
-import static com.boggle.game.boggle.HelloController.getPlayerOneDetails;
-import static com.boggle.game.boggle.HelloController.getPlayerTwoDetails;
+import static com.boggle.game.boggle.HelloController.getPlayerDetails;
 import static com.boggle.game.model.BoggleSolverModel._wordsFound;
 
 public class StoredDetailsModel implements Serializable {
@@ -30,12 +29,11 @@ public class StoredDetailsModel implements Serializable {
     public static List<String> _P2_checked_words;
 
 
-    public StoredDetailsModel(String P1, String P2, Integer score_P1, Integer  score_P2, String round){
+    public StoredDetailsModel(String P1, Integer score_P1, String round){
 
         this.P1 = P1;
-        this.P2 = P2;
+
         overall_P1 += score_P1;
-        overall_P2 += score_P2;
         round_stored = round;
 
 
@@ -59,8 +57,7 @@ public class StoredDetailsModel implements Serializable {
 
         _wordsFound_stored = (ArrayList<String>) _wordsFound.clone();
 
-        _P1_checked_words = getPlayerOneDetails().get_listOfCheckedWords();
-        _P2_checked_words = getPlayerTwoDetails().get_listOfCheckedWords();
+        _P1_checked_words = getPlayerDetails().get_listOfCheckedWords();
 
 
 

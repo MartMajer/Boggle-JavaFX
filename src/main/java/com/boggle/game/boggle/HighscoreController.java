@@ -67,7 +67,7 @@ public class HighscoreController implements Initializable {
             Parent root = FXMLLoader.load(HelloApplication.class.getResource("HighScore.fxml"));
             scene = new Scene(root);
             Stage stage = new Stage();
-
+            stage.setResizable(false);
             stage.setTitle("Hello!");
             stage.setScene(scene);
 

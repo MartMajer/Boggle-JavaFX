@@ -8,10 +8,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
@@ -29,11 +31,17 @@ public class HelloController implements Initializable {
     private TextField playerOneNameTextField;
 
     @FXML
-    private TextField playerTwoNameTextField;
+    private GridPane gp_mode;
 
-    public static PlayerDetailsModel playerOneDetails;
+    @FXML
+    private GridPane gp_singleplayer;
 
-    public static PlayerDetailsModel playerTwoDetails;
+    @FXML
+    private Button btn_back_singleplayer;
+
+    public static PlayerDetailsModel playerDetails;
+
+    public static boolean singleplayer_game=false;
 
     public static Integer roundCounter = 1;
 
@@ -42,21 +50,31 @@ public class HelloController implements Initializable {
         ToggleGroup radioButtonGroup = new ToggleGroup();
     }
 
-    public void startGame() {
+    public void singleplayer_btn(){
+        gp_mode.setVisible(false);
+        gp_singleplayer.setVisible(true);
+    }
+
+    public void singleplayer_back_btn(){
+        gp_mode.setVisible(true);
+        gp_singleplayer.setVisible(false);
+    }
+
+    public void startgame() {
 
         roundCounter += 1;
 
+        singleplayer_game=true;
 
+        String playerName;
 
-        String playerOneName;
-        String playerTwoName;
 
         if (roundCounter == 2){
 
             //// Load those only once in program
 
             overall_P1 = 0;
-            overall_P2 = 0;
+
 
             arrayList_Highscore.add(new HighscoreModel(25,"Marac"));
             arrayList_Highscore.add(new HighscoreModel(20,"Ivana"));
@@ -70,20 +88,20 @@ public class HelloController implements Initializable {
             arrayList_Highscore.add(new HighscoreModel(0,"Ognjen"));
 
 
-            playerOneName = playerOneNameTextField.getText();
-            playerTwoName = playerTwoNameTextField.getText();
+            playerName = playerOneNameTextField.getText();
+
         }
         else {
 
-            playerOneName = P1;
-            playerTwoName = P2;
+            playerName = P1;
+
 
         }
 
 
-        playerOneDetails = new PlayerDetailsModel(playerOneName);
+        playerDetails = new PlayerDetailsModel(playerName);
 
-        playerTwoDetails = new PlayerDetailsModel(playerTwoName);
+
 
 
 
@@ -120,19 +138,17 @@ public class HelloController implements Initializable {
 
         stage.setTitle("Hello!");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
 
     }
 
-    public static PlayerDetailsModel getPlayerOneDetails() {
+    public static PlayerDetailsModel getPlayerDetails() {
 
-        return playerOneDetails;
+        return playerDetails;
     }
 
-    public static PlayerDetailsModel getPlayerTwoDetails() {
 
-        return playerTwoDetails;
-    }
 
 
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -18,7 +19,7 @@
             <Image url="@../../../../Assets/image.jpg" />
          </image>
       </ImageView>
-      <GridPane layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+      <GridPane fx:id="gp_mode" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -35,7 +36,7 @@
             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" text="Multiplayer" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
-      <GridPane prefHeight="400.0" prefWidth="600.0" visible="false">
+      <GridPane fx:id="gp_singleplayer" prefHeight="400.0" prefWidth="600.0" visible="false">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -50,13 +51,18 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" text="Start" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#startgame" prefHeight="50.0" text="Start" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label alignment="BOTTOM_CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Nickname:" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <TextField alignment="TOP_CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="playerOneNameTextField" alignment="TOP_CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Button fx:id="btn_back_singleplayer" mnemonicParsing="false" onAction="#singleplayer_back_btn" prefHeight="32.0" prefWidth="45.0" text="Back" GridPane.rowIndex="5">
+               <GridPane.margin>
+                  <Insets left="20.0" />
+               </GridPane.margin>
+            </Button>
          </children>
       </GridPane>
    </children>

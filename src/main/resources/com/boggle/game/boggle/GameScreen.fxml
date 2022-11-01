@@ -28,8 +28,8 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#btn_save" text="Save" />
-                <MenuItem mnemonicParsing="false" onAction="#btn_load" text="Load" />
+              <MenuItem mnemonicParsing="false" text="Save" />
+                <MenuItem mnemonicParsing="false" text="Load" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
@@ -47,10 +47,10 @@
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="330.0" minWidth="10.0" prefWidth="261.0" />
               </columnConstraints>
               <rowConstraints>
-                  <RowConstraints maxHeight="161.0" minHeight="10.0" prefHeight="55.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="161.0" minHeight="0.0" prefHeight="55.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="271.0" minHeight="10.0" prefHeight="73.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="355.0" minHeight="0.0" prefHeight="258.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="161.0" minHeight="10.0" prefHeight="42.00000508626302" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="161.0" minHeight="0.0" prefHeight="31.33332824707032" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="271.0" minHeight="10.0" prefHeight="41.66664632161457" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="355.0" minHeight="0.0" prefHeight="267.66668701171875" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
                   <GridPane gridLinesVisible="true" prefHeight="235.0" prefWidth="286.0" GridPane.rowIndex="3">
@@ -343,12 +343,7 @@
                               <Insets left="20.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label fx:id="_player_1" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="19.0" prefWidth="82.0" textFill="WHITE" GridPane.columnIndex="1">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="_player_2" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="20.0" prefWidth="72.0" textFill="WHITE" GridPane.columnIndex="1">
+                        <Label fx:id="_player_nickname" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="19.0" prefWidth="82.0" textFill="WHITE" GridPane.columnIndex="1">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
