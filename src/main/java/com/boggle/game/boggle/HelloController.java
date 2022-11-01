@@ -31,9 +31,9 @@ public class HelloController implements Initializable {
     @FXML
     private TextField playerTwoNameTextField;
 
-    private static PlayerDetailsModel playerOneDetails;
+    public static PlayerDetailsModel playerOneDetails;
 
-    private static PlayerDetailsModel playerTwoDetails;
+    public static PlayerDetailsModel playerTwoDetails;
 
     public static Integer roundCounter = 1;
 
@@ -58,26 +58,25 @@ public class HelloController implements Initializable {
             overall_P1 = 0;
             overall_P2 = 0;
 
-            arrayList_Highscore.add(new HighscoreModel(25,"Jozefina"));
+            arrayList_Highscore.add(new HighscoreModel(25,"Marac"));
             arrayList_Highscore.add(new HighscoreModel(20,"Ivana"));
             arrayList_Highscore.add(new HighscoreModel(15,"Marko"));
             arrayList_Highscore.add(new HighscoreModel(10,"Lana"));
             arrayList_Highscore.add(new HighscoreModel(7,"Robi"));
             arrayList_Highscore.add(new HighscoreModel(3,"Lovorka"));
-            arrayList_Highscore.add(new HighscoreModel(15,"Svemir"));
-            arrayList_Highscore.add(new HighscoreModel(32,"Miludin"));
+            arrayList_Highscore.add(new HighscoreModel(15,"Miro"));
+            arrayList_Highscore.add(new HighscoreModel(32,"Koko"));
             arrayList_Highscore.add(new HighscoreModel(1,"Damira"));
             arrayList_Highscore.add(new HighscoreModel(0,"Ognjen"));
-
 
 
             playerOneName = playerOneNameTextField.getText();
             playerTwoName = playerTwoNameTextField.getText();
         }
         else {
+
             playerOneName = P1;
             playerTwoName = P2;
-
 
         }
 
@@ -134,4 +133,7 @@ public class HelloController implements Initializable {
 
         return playerTwoDetails;
     }
+
+
+
 }

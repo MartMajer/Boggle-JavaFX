@@ -125,7 +125,9 @@ public class EndRoundController implements Initializable {
 
         HelloController hello = new HelloController();
 
-        store = new StoredDetailsModel(_player_1_name.getText(),_player_2_name.getText(), getPlayerOneDetails().get_score_int(), getPlayerTwoDetails().get_score_int(),_roundNumber.getText());
+        Integer temp = roundCounter - 1;
+
+        store = new StoredDetailsModel(_player_1_name.getText(),_player_2_name.getText(), getPlayerOneDetails().get_score_int(), getPlayerTwoDetails().get_score_int(),temp.toString());
 
 
         _startPlayerTwo = false;

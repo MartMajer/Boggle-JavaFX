@@ -8,7 +8,7 @@ import java.util.*;
 public class BoggleSolverModel {
 
     private int _size;
-    public ArrayList<String> _wordsFound;
+    public static ArrayList<String> _wordsFound;
     private boolean[][] _isVisited;
     private char[][] _boggle;
 
@@ -137,7 +137,7 @@ public class BoggleSolverModel {
             _isVisited[i][j] = true;
 
             // This loops through all childs of the current node
-            for (int n = 0; n < 26; n++) {
+            for (int n = 0; n < 330; n++) {
                 if (root.getChild(n) != null) {
                     // 'A' is  added because of numbering system for characters
                     char letter = (char) (n + 'A');

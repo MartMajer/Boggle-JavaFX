@@ -6,7 +6,7 @@ import java.util.List;
 
 public class PlayerDetailsModel {
 
-    private String playerName;
+    public String playerName;
 
 
     private List<String> _listOfCheckedWords;
