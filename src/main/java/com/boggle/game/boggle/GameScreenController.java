@@ -19,16 +19,17 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Stack;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import static com.boggle.game.boggle.EndRoundController.static_overall;
 import static com.boggle.game.boggle.HelloController.*;
-import static com.boggle.game.boggle.StartPlayerTwo_modal._startPlayerTwo;
-import static com.boggle.game.boggle.StartPlayerTwo_modal.stage_m;
+import static com.boggle.game.boggle.HighscoreController.arrayList_Highscore;
 import static com.boggle.game.model.StoredDetailsModel.*;
 
 public class GameScreenController implements Initializable {
@@ -72,9 +73,8 @@ public class GameScreenController implements Initializable {
     @FXML
     private Label _timeLabel;
     @FXML
-    private Label _player_1;
-    @FXML
-    private Label _player_2;
+    private Label _player_nickname;
+
     @FXML
     private Label chosenLetter;
     @FXML
@@ -122,11 +122,10 @@ public class GameScreenController implements Initializable {
     private static List<String> _listOfCheckedWords;
     private static List<String> _listOfCheckedWords_temp;
 
-    StartPlayerTwo_modal modal = new StartPlayerTwo_modal();
+
 
     private AddPointsModel _addPoints;
 
-    public int controlInt = 1;
 
 
     private Integer score = 0;
@@ -138,9 +137,9 @@ public class GameScreenController implements Initializable {
         gameBoard = new Button[GAME_BOARD_HEIGHT][GAME_BOARD_WIDTH];
         _charArray = new char[GAME_BOARD_WIDTH][GAME_BOARD_HEIGHT];
 
-        _player_1.setText(getPlayerOneDetails().getPlayerName());
+        _player_nickname.setText(getPlayerDetails().getPlayerName());
 
-        //_player_2.setText(getPlayerTwoDetails().getPlayerName());
+
 
 
         gameBoard[0][0] = mat_0_0;
@@ -243,11 +242,7 @@ public class GameScreenController implements Initializable {
 
         this.clearBoolArray();
 
-
-        if (_startPlayerTwo == false) {
-            this.setUpTimeline();
-        }
-
+        setUpTimeline();
 
     }
 
@@ -264,7 +259,7 @@ public class GameScreenController implements Initializable {
 
     public void setUpTimeline() {
         //Official boggle game time is set at 2 minutes
-        _time = 121;
+        _time = 140;
         KeyFrame kf = new KeyFrame(Duration.seconds(1), new TimeHandler());
         _timeline = new Timeline(kf);
         _timeline.setCycleCount(Animation.INDEFINITE);
@@ -297,67 +292,19 @@ public class GameScreenController implements Initializable {
 
     private void endGame() {
 
-        switch (controlInt) {
-            case 1:
-
                 //////////////// store player 1 details and start player 2 game! //////////////
-                ///////////////////////////////////////////////////////////////////////////////
 
                 _listOfCheckedWords_temp = new ArrayList<String>(_listOfCheckedWords);
-                getPlayerOneDetails().setRoundDetails(_listOfCheckedWords_temp, _solver._wordsFound, score);
-
-
-                _player_1.setText("");
-                _player_2.setText(getPlayerTwoDetails().getPlayerName());
+                getPlayerDetails().setRoundDetails(_listOfCheckedWords_temp, _solver._wordsFound, score, roundCounter, static_overall);
 
                 _listOfCheckedWords.clear();
-
-                setUpTimeline();
-
                 reset_states();
-
-                //Timeline is stopped
-                _timeline.stop();
-
-                _startPlayerTwo = true;
-
-                ///////modal for mid round pause
-                modal.StartPlayerTwo_modal();
-
-                delay(1, () -> _time = 121);// _timeLabel.setText("Time remaining: 120 seconds") );
-                delay(1, () -> _timeLabel.setVisible(false));
-
-                stage_m.setOnHidden(e -> _time = 121);
-                stage_m.setOnHidden(e -> _timeLabel.setVisible(true));
-
-
-                break;
-
-            case 2:
-
-                ///////////////// store player 2 details ////////////////////////////////////////
-
-                getPlayerTwoDetails().setRoundDetails(_listOfCheckedWords, _solver._wordsFound, score);
-
-                reset_states();
-
-                //Timeline is stopped
-                _timeline.stop();
-
 
                 //boolean is set to true to the key and click handlers and buttons know to not respond to inputs
                 _gameOver = true;
-
+                _timeline.stop();
 
                 new EndRoundModel();
-        }
-
-
-        controlInt++;
-
-        if (controlInt > 50000) {
-            controlInt = 5;
-        }
 
     }
 
@@ -392,8 +339,11 @@ public class GameScreenController implements Initializable {
 
     public void buttonCheckWord(ActionEvent actionEvent) {
 
+
+
         if (_solver._wordsFound.contains(_currentWord)) {
             _notAWord.setText("");
+
 
             if (!_listOfCheckedWords.contains(_currentWord)) {
                 //add points to player and display on board
@@ -409,11 +359,19 @@ public class GameScreenController implements Initializable {
                 //reset labels
                 _currentWord = "";
                 _currentWordLabel.setText("Current word: ");
+
+
             }
         } else {
             _notAWord.setText("NOT A WORD! - " + _currentWord);
 
             //reset labels
+            _currentWord = "";
+            _currentWordLabel.setText("Current word: ");
+        }
+
+        if (_listOfCheckedWords.contains(_currentWord))
+        {
             _currentWord = "";
             _currentWordLabel.setText("Current word: ");
         }
@@ -459,46 +417,7 @@ public class GameScreenController implements Initializable {
     }
 
 
-    public void btn_save() {
 
-        StoredDetailsModel model = new StoredDetailsModel(
-                getPlayerOneDetails().getPlayerName(),
-                getPlayerTwoDetails().getPlayerName(),
-                getPlayerOneDetails().get_score_int(),
-                getPlayerTwoDetails().get_score_int(),
-                roundCounter.toString(),
-                _time);
-
-
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("boggle-board.ser"))) {
-            oos.writeObject(model);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-
-    }
-
-    public void btn_load() throws IOException, ClassNotFoundException {
-
-
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("boggle-board.ser"))) {
-            StoredDetailsModel model = (StoredDetailsModel) ois.readObject();
-
-            _solver._wordsFound.clear();
-            _solver._wordsFound = _wordsFound_stored;
-
-            _player_1.setText(P1);
-            _player_2.setText(P2);
-
-            playerOneDetails.playerName = P1;
-            playerTwoDetails.playerName = P2;
-
-            _time = _time_stored;
-
-
-        }
-    }
 }
 
 
