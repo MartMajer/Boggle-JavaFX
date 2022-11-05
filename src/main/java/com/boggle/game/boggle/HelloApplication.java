@@ -21,6 +21,7 @@ public class HelloApplication extends Application {
         stage.setResizable(false);
         stage.show();
         mainStage = stage;
+
     }
 
     public static Stage getMainStage() {

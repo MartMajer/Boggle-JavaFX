@@ -1,6 +1,8 @@
 package com.boggle.game.model;
 
-public class HighscoreModel implements Comparable<HighscoreModel> {
+import java.io.Serializable;
+
+public class HighscoreModel implements Comparable<HighscoreModel>, Serializable {
 
     private String name;
     private Integer index;

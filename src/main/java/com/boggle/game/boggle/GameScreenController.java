@@ -19,14 +19,17 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Stack;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import static com.boggle.game.boggle.EndRoundController.static_overall;
 import static com.boggle.game.boggle.HelloController.*;
+import static com.boggle.game.boggle.HighscoreController.arrayList_Highscore;
 import static com.boggle.game.model.StoredDetailsModel.*;
 
 public class GameScreenController implements Initializable {
@@ -123,7 +126,6 @@ public class GameScreenController implements Initializable {
 
     private AddPointsModel _addPoints;
 
-    public int controlInt = 1;
 
 
     private Integer score = 0;
@@ -257,7 +259,7 @@ public class GameScreenController implements Initializable {
 
     public void setUpTimeline() {
         //Official boggle game time is set at 2 minutes
-        _time = 5;
+        _time = 140;
         KeyFrame kf = new KeyFrame(Duration.seconds(1), new TimeHandler());
         _timeline = new Timeline(kf);
         _timeline.setCycleCount(Animation.INDEFINITE);
@@ -292,17 +294,16 @@ public class GameScreenController implements Initializable {
 
                 //////////////// store player 1 details and start player 2 game! //////////////
 
-
                 _listOfCheckedWords_temp = new ArrayList<String>(_listOfCheckedWords);
-                getPlayerDetails().setRoundDetails(_listOfCheckedWords_temp, _solver._wordsFound, score);
+                getPlayerDetails().setRoundDetails(_listOfCheckedWords_temp, _solver._wordsFound, score, roundCounter, static_overall);
 
                 _listOfCheckedWords.clear();
                 reset_states();
 
                 //boolean is set to true to the key and click handlers and buttons know to not respond to inputs
                 _gameOver = true;
-
                 _timeline.stop();
+
                 new EndRoundModel();
 
     }
@@ -338,8 +339,11 @@ public class GameScreenController implements Initializable {
 
     public void buttonCheckWord(ActionEvent actionEvent) {
 
+
+
         if (_solver._wordsFound.contains(_currentWord)) {
             _notAWord.setText("");
+
 
             if (!_listOfCheckedWords.contains(_currentWord)) {
                 //add points to player and display on board
@@ -355,11 +359,19 @@ public class GameScreenController implements Initializable {
                 //reset labels
                 _currentWord = "";
                 _currentWordLabel.setText("Current word: ");
+
+
             }
         } else {
             _notAWord.setText("NOT A WORD! - " + _currentWord);
 
             //reset labels
+            _currentWord = "";
+            _currentWordLabel.setText("Current word: ");
+        }
+
+        if (_listOfCheckedWords.contains(_currentWord))
+        {
             _currentWord = "";
             _currentWordLabel.setText("Current word: ");
         }
@@ -405,46 +417,7 @@ public class GameScreenController implements Initializable {
     }
 
 
-  /*  public void btn_save() {
 
-        StoredDetailsModel model = new StoredDetailsModel(
-                getPlayerOneDetails().getPlayerName(),
-                getPlayerTwoDetails().getPlayerName(),
-                getPlayerOneDetails().get_score_int(),
-                getPlayerTwoDetails().get_score_int(),
-                roundCounter.toString(),
-                _time);
-
-
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("boggle-board.ser"))) {
-            oos.writeObject(model);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-
-    }
-
-    public void btn_load() throws IOException, ClassNotFoundException {
-
-
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("boggle-board.ser"))) {
-            StoredDetailsModel model = (StoredDetailsModel) ois.readObject();
-
-            _solver._wordsFound.clear();
-            _solver._wordsFound = _wordsFound_stored;
-
-            _player_nickname.setText(P1);
-
-
-            playerDetails.playerName = P1;
-
-
-            _time = _time_stored;
-
-
-        }
-    }*/
 }
 
 
