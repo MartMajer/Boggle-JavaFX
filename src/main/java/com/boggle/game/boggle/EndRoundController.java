@@ -118,7 +118,7 @@ public class EndRoundController implements Initializable {
 
         arrayList_Highscore.add(new HighscoreModel(getPlayerDetails().get_score_int(), getPlayerDetails().getPlayerName()));
 
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("boggle-board1.txt"))) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("highscore.ser"))) {
 
                 oos.writeObject(arrayList_Highscore);
 
@@ -156,7 +156,7 @@ public class EndRoundController implements Initializable {
         roundCounter += 1;
 
 
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("playerdetails.txt"))) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("playerdetails.ser"))) {
 
             oos.writeObject(playerDetails);
 
@@ -176,7 +176,7 @@ public class EndRoundController implements Initializable {
     }
 
 
-        public void startNewRound(ActionEvent actionEvent) {
+    public void startNewRound(ActionEvent actionEvent) {
 
         HelloController hello = new HelloController();
 
@@ -188,7 +188,7 @@ public class EndRoundController implements Initializable {
 
 
 
-        if (singleplayer_game = true)
+        if (singleplayer_game == true)
         {
             hello.startgame();
 
@@ -199,14 +199,7 @@ public class EndRoundController implements Initializable {
 
 
     public void highscore(ActionEvent actionEvent) {
-
-
-
         highscoreController.highScoreCont();
-
-
-
-
     }
 
     public void board(ActionEvent actionEvent) {

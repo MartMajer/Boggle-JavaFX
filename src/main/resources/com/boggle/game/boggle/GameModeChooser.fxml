@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.boggle.game.boggle.HelloController">
    <children>
@@ -21,9 +22,9 @@
             <Image url="@../../../../Assets/image.jpg" />
          </image>
       </ImageView>
-      <AnchorPane fx:id="gp_multiplayer_new_room" prefHeight="400.0" prefWidth="600.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="gp_multiplayer_new_room_server" prefHeight="400.0" prefWidth="600.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button layoutX="241.0" layoutY="298.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#startgame" prefHeight="50.0" text="Start game">
+            <Button fx:id="start_game_multiplayer" layoutX="113.0" layoutY="344.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#startgame" prefHeight="30.0" prefWidth="200.0" text="Start game">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -33,13 +34,14 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Label alignment="BOTTOM_CENTER" contentDisplay="CENTER" layoutX="206.0" layoutY="22.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Create room" textFill="WHITE">
+            <TextArea fx:id="textAreaChatS" editable="false" layoutX="209.0" layoutY="41.0" prefHeight="264.0" prefWidth="208.0" wrapText="true" />
+            <ListView fx:id="listViewUsersS" layoutX="21.0" layoutY="41.0" prefHeight="294.0" prefWidth="183.0" style="-fx-text-fill: black;" />
+            <TextField fx:id="textFieldChatS" layoutX="209.0" layoutY="311.0" prefHeight="25.0" prefWidth="151.0" />
+            <Button layoutX="362.0" layoutY="311.0" mnemonicParsing="false" onAction="#sendMessageS" prefHeight="25.0" prefWidth="55.0" text="Send">
                <font>
-                  <Font name="System Bold" size="32.0" />
+                  <Font name="System Bold" size="12.0" />
                </font>
-            </Label>
-            <TextArea layoutX="300.0" layoutY="69.0" prefHeight="200.0" prefWidth="200.0" />
-            <ListView layoutX="100.0" layoutY="69.0" prefHeight="200.0" prefWidth="200.0" />
+            </Button>
          </children>
       </AnchorPane>
       <GridPane fx:id="gp_mode" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -96,7 +98,27 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#startgame" prefHeight="50.0" text="Start" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <TextFlow fx:id="labelErrorNicknameSP" prefHeight="30.0" prefWidth="210.0" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <children>
+                  <Label prefHeight="18.0" prefWidth="200.0" text="Nickname must be" textFill="RED">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label prefHeight="18.0" prefWidth="200.0" text="3 to 15 char long." textFill="RED">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets top="15.0" />
+               </GridPane.margin>
+            </TextFlow>
+            <Button fx:id="singleplayer_start" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#startgame" prefHeight="50.0" text="Start" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -106,7 +128,7 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <TextField fx:id="playerOneNameTextField" alignment="TOP_CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="playerOneNameTextField" alignment="TOP_CENTER" onKeyTyped="#validateNicknameS" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Button fx:id="btn_back_singleplayer" mnemonicParsing="false" onAction="#back_btn" prefHeight="32.0" prefWidth="45.0" text="Back" GridPane.rowIndex="5">
                <GridPane.margin>
                   <Insets left="20.0" />
@@ -133,7 +155,7 @@
             <RowConstraints maxHeight="73.66668701171875" minHeight="10.0" prefHeight="66.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#startgame" prefHeight="50.0" text="Join" GridPane.columnIndex="1" GridPane.rowIndex="5">
+            <Button fx:id="buttonJER" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#joinExistingRoom" prefHeight="50.0" text="Join" GridPane.columnIndex="1" GridPane.rowIndex="5">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -143,7 +165,7 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <TextField fx:id="playerOneNameTextField1" alignment="TOP_CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="textFieldNicknameC" alignment="TOP_CENTER" onKeyTyped="#validateNicknameAddressC" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Button fx:id="btn_back_singleplayer1" mnemonicParsing="false" onAction="#back_btn" prefHeight="32.0" prefWidth="45.0" text="Back" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets left="20.0" />
@@ -157,11 +179,33 @@
                   <Font name="System Bold" size="32.0" />
                </font>
             </Label>
-            <TextField fx:id="playerOneNameTextField12" alignment="TOP_CENTER" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="textFieldIP" alignment="TOP_CENTER" onKeyTyped="#validateNicknameAddressC" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label alignment="BOTTOM_CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="IP address:" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <font>
                   <Font size="24.0" />
                </font>
+            </Label>
+            <TextFlow fx:id="labelErrorNicknameC" prefHeight="30.0" prefWidth="210.0" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <children>
+                  <Label prefHeight="18.0" prefWidth="200.0" text="Nickname must be" textFill="RED">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label prefHeight="18.0" prefWidth="200.0" text="3 to 15 char long." textFill="RED">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </TextFlow>
+            <Label fx:id="labelErrorIP" prefHeight="30.0" prefWidth="150.0" text="Invalid IP address." textFill="RED" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="4">
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
             </Label>
          </children>
       </GridPane>
@@ -176,20 +220,19 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#create_new_room_btn" prefHeight="50.0" text="Create new room" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#create_new_room_btn" prefHeight="50.0" text="Create new room" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <font>
                   <Font name="System Bold" size="17.0" />
                </font>
             </Button>
-            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#join_room_btn" prefHeight="50.0" text="Join room" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#join_room_btn" prefHeight="50.0" text="Join room" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <font>
                   <Font name="System Bold" size="17.0" />
                </font>
             </Button>
-            <Button fx:id="btn_back_singleplayer2" mnemonicParsing="false" onAction="#back_btn" prefHeight="32.0" prefWidth="45.0" text="Back" GridPane.rowIndex="4">
+            <Button fx:id="btn_back_singleplayer2" mnemonicParsing="false" onAction="#back_btn" prefHeight="32.0" prefWidth="45.0" text="Back" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets bottom="20.0" left="20.0" top="30.0" />
                </GridPane.margin>
@@ -197,13 +240,87 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Label alignment="BOTTOM_CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Nickname:" textFill="WHITE" GridPane.columnIndex="1">
+         </children>
+      </GridPane>
+      <GridPane fx:id="gp_create_room" layoutX="10.0" layoutY="10.0" prefHeight="400.0" prefWidth="600.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="70.33332443237305" minHeight="10.0" prefHeight="59.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="72.99998474121094" minHeight="10.0" prefHeight="46.33333333333334" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="86.33333587646484" minHeight="10.0" prefHeight="37.66668192545575" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="79.66665649414062" minHeight="10.0" prefHeight="30.333330790201842" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="135.99998982747394" minHeight="10.0" prefHeight="116.33334350585938" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="94.33331298828125" minHeight="10.0" prefHeight="83.66665649414062" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Button fx:id="btn_create_newLobby" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#create_lobby_btn" prefHeight="50.0" text="Create" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Button>
+            <Label alignment="BOTTOM_CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Nickname:" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <TextField fx:id="playerOneNameTextField11" alignment="TOP_CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="textFieldNicknameS" alignment="TOP_CENTER" onKeyTyped="#validateNicknameS" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Button fx:id="btn_back_singleplayer12" mnemonicParsing="false" onAction="#back_btn" prefHeight="32.0" prefWidth="45.0" text="Back" GridPane.rowIndex="5">
+               <GridPane.margin>
+                  <Insets left="20.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Label alignment="BOTTOM_CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Create room" textFill="WHITE" GridPane.columnIndex="1">
+               <font>
+                  <Font name="System Bold" size="32.0" />
+               </font>
+            </Label>
+            <TextFlow fx:id="labelErrorNicknameS" prefHeight="30.0" prefWidth="210.0" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="3">
+               <children>
+                  <Label prefHeight="18.0" prefWidth="200.0" text="Nickname must be" textFill="RED">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label prefHeight="18.0" prefWidth="200.0" text="3 to 15 char long." textFill="RED">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </TextFlow>
          </children>
       </GridPane>
+      <AnchorPane fx:id="gp_multiplayer_new_room_client" layoutX="10.0" layoutY="10.0" prefHeight="400.0" prefWidth="600.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Button fx:id="btn_back_singleplayer111" layoutX="21.0" layoutY="348.0" mnemonicParsing="false" onAction="#back_btn" prefHeight="32.0" prefWidth="45.0" text="Back">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <TextArea fx:id="textAreaChatC" editable="false" layoutX="209.0" layoutY="41.0" prefHeight="264.0" prefWidth="208.0" wrapText="true" />
+            <ListView fx:id="listViewUsersC" layoutX="21.0" layoutY="41.0" prefHeight="294.0" prefWidth="183.0" style="-fx-background-color: transparent; -fx-text-fill: white;" />
+            <TextField fx:id="textFieldChatC" layoutX="209.0" layoutY="311.0" prefHeight="25.0" prefWidth="151.0" />
+            <Button layoutX="362.0" layoutY="311.0" mnemonicParsing="false" onAction="#sendMessageC" prefHeight="25.0" prefWidth="55.0" text="Send">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+      <Label fx:id="labelServerIP" layoutX="10.0" layoutY="10.0" prefHeight="20.0" prefWidth="590.0" text="IP address: X.X.X.X" textFill="WHITE" visible="false">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
