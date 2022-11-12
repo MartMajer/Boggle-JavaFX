@@ -15,20 +15,12 @@ public class StoredDetailsModel implements Serializable {
     public static Integer overall_P1 = 0;
 
 
-    public static Integer score_P1_stored = 0;
-
-
-    public static String round_stored;
-
-
-
-
     public StoredDetailsModel(String P1, Integer score_P1, String round){
 
         this.P1 = P1;
 
         overall_P1 += score_P1;
-        //round_stored = round;
+
 
 
 
