@@ -19,18 +19,14 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.io.*;
-import java.lang.reflect.*;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.rmi.AlreadyBoundException;
 import java.security.SecureRandom;
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 import static com.boggle.game.boggle.EndRoundController.static_overall;
 import static com.boggle.game.boggle.HelloController.*;
-import static com.boggle.game.boggle.HighscoreController.arrayList_Highscore;
-import static com.boggle.game.model.StoredDetailsModel.*;
 
 public class GameScreenController implements Initializable {
 
@@ -100,6 +96,8 @@ public class GameScreenController implements Initializable {
     private BoggleSolverModel _solver;
 
 
+
+
     private static final int GAME_BOARD_WIDTH = 4;
     private static final int GAME_BOARD_HEIGHT = 4;
     public static char[][] _charArray;
@@ -131,8 +129,15 @@ public class GameScreenController implements Initializable {
     private Integer score = 0;
 
 
+
+
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+
+
 
         gameBoard = new Button[GAME_BOARD_HEIGHT][GAME_BOARD_WIDTH];
         _charArray = new char[GAME_BOARD_WIDTH][GAME_BOARD_HEIGHT];
@@ -163,23 +168,35 @@ public class GameScreenController implements Initializable {
         gameBoard[3][3] = mat_3_3;
 
 
-        try {
-            setUpBoard();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (CLIENT){
+
+        //  try {
+        //      _solver = new BoggleSolverModel(rmi.getBoardArray());
+        //  } catch (IOException e) {
+        //      throw new RuntimeException(e);
+        //  }
+
         }
+        else {
 
 
-        try {
-            boggle();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            try {
+                setUpBoard();
+            } catch (IOException | AlreadyBoundException e) {
+                throw new RuntimeException(e);
+            }
+
         }
+            try {
+                boggle();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
 
     }
 
-    public void setUpBoard() throws IOException {
+    public void setUpBoard() throws IOException, AlreadyBoundException {
 
         SecureRandom r = new SecureRandom();
 
@@ -214,7 +231,6 @@ public class GameScreenController implements Initializable {
                 String s = Character.toString(letter);
                 gameBoard[i][j].setText(s);
 
-
                 //finally the character is added to the array of characters in the correct location
                 _charArray[i][j] = letter;
 
@@ -225,6 +241,9 @@ public class GameScreenController implements Initializable {
 
 
     }
+
+
+
 
 
     public void boggle() throws IOException {
@@ -249,7 +268,7 @@ public class GameScreenController implements Initializable {
     /*
      * This method loops through and clears the isClicked boolean array
      */
-    private void clearBoolArray() {
+    public void clearBoolArray() {
         for (int i = 0; i < _size; i++) {
             for (int j = 0; j < _size; j++) {
                 _isClicked[i][j] = false;
@@ -259,7 +278,7 @@ public class GameScreenController implements Initializable {
 
     public void setUpTimeline() {
         //Official boggle game time is set at 2 minutes
-        _time = 140;
+        _time = 120;
         KeyFrame kf = new KeyFrame(Duration.seconds(1), new TimeHandler());
         _timeline = new Timeline(kf);
         _timeline.setCycleCount(Animation.INDEFINITE);
@@ -271,7 +290,7 @@ public class GameScreenController implements Initializable {
     /*
      * This is the private inner class that is the timehandler.
      */
-    private class TimeHandler implements EventHandler<ActionEvent> {
+    public class TimeHandler implements EventHandler<ActionEvent> {
 
         @Override
         public void handle(ActionEvent event) {
@@ -290,7 +309,7 @@ public class GameScreenController implements Initializable {
         }
     }
 
-    private void endGame() {
+    public void endGame() {
 
                 //////////////// store player 1 details and start player 2 game! //////////////
 
@@ -300,7 +319,6 @@ public class GameScreenController implements Initializable {
                 _listOfCheckedWords.clear();
                 reset_states();
 
-                //boolean is set to true to the key and click handlers and buttons know to not respond to inputs
                 _gameOver = true;
                 _timeline.stop();
 
@@ -309,7 +327,7 @@ public class GameScreenController implements Initializable {
     }
 
 
-    private void addLetterToLabel(int i, int j) {
+    public void addLetterToLabel(int i, int j) {
 
         _currentWord = _currentWord + _charArray[i][j];
         _currentWordLabel.setText("Current word: " + _currentWord);
@@ -380,7 +398,7 @@ public class GameScreenController implements Initializable {
     }
 
 
-    private void reset_states() {
+    public void reset_states() {
 
 
         _currentWord = "";

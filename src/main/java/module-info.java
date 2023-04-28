@@ -6,4 +6,6 @@ module com.boggle.game.boggle {
 
     opens com.boggle.game.boggle to javafx.fxml;
     exports com.boggle.game.boggle;
+    exports com.boggle.game.network;
+    opens com.boggle.game.network to javafx.fxml;
 }

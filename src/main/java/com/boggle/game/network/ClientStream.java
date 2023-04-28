@@ -18,7 +18,7 @@ import  com.boggle.game.model.chat.*;
 
 import javafx.scene.control.Alert.AlertType;
 
-public class CliStream implements ICli {
+public class ClientStream implements IClient {
     private HelloController controller;
     private ClientListener clientListener;
 
@@ -29,7 +29,7 @@ public class CliStream implements ICli {
     private InputStream is;
     private ObjectInputStream input;
 
-    public CliStream(HelloController controller, String address, int port, String nickname)
+    public ClientStream(HelloController controller, String address, int port, String nickname)
     {
         this.controller = controller;
         this.nickname = nickname;

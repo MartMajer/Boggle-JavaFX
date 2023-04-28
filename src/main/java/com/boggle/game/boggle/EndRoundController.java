@@ -1,7 +1,6 @@
 package com.boggle.game.boggle;
 
 import com.boggle.game.model.HighscoreModel;
-import com.boggle.game.model.PlayerDetailsModel;
 import com.boggle.game.model.StoredDetailsModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableRow;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -28,11 +26,9 @@ import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
+import static com.boggle.game.boggle.GameScreenController._charArray;
 import static com.boggle.game.boggle.HelloController.*;
 import static com.boggle.game.boggle.HighscoreController.arrayList_Highscore;
-import static com.boggle.game.model.StoredDetailsModel.overall_P1;
-
-
 
 public class EndRoundController implements Initializable {
 
@@ -91,7 +87,7 @@ public class EndRoundController implements Initializable {
     private StoredDetailsModel store;
 
     private static Stage stage;
-    public static Integer static_overall;
+    public static Integer static_overall = 0;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -109,7 +105,7 @@ public class EndRoundController implements Initializable {
 
         }
 
-        if (singleplayer_game == true) {
+        if (SINGLEPLAYER == true) {
             ap_singleplayer.setVisible(true);
         }
 
@@ -117,16 +113,15 @@ public class EndRoundController implements Initializable {
         _roundNumber.setText(temp.toString());
 
         arrayList_Highscore.add(new HighscoreModel(getPlayerDetails().get_score_int(), getPlayerDetails().getPlayerName()));
-
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("highscore.ser"))) {
+        if(game_loaded == false) {
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("highscore.ser"))) {
 
                 oos.writeObject(arrayList_Highscore);
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
-
-
 
         for (var word : getPlayerDetails().get_listOfCheckedWords()) {
             //add found words to pane
@@ -141,11 +136,12 @@ public class EndRoundController implements Initializable {
 
         }
 
-        Integer temp1 = getPlayerDetails().get_score_int() + overall_P1;
 
 
+            Integer temp1 = getPlayerDetails().get_score_int() + getPlayerDetails().get_overall_int();
 
-        static_overall = temp1;
+            static_overall = temp1;
+
 
         _player_1_Overall.setText(static_overall.toString());
 
@@ -184,14 +180,17 @@ public class EndRoundController implements Initializable {
 
         game_loaded=false;
 
-        store = new StoredDetailsModel(_player_1_name.getText(), getPlayerDetails().get_score_int(),temp.toString());
+        store = new StoredDetailsModel(_player_1_name.getText(), getPlayerDetails().get_score_int(),temp.toString(), _charArray);
 
 
 
-        if (singleplayer_game == true)
+        if (SINGLEPLAYER == true)
         {
             hello.startgame();
 
+        }
+        else{
+            System.out.println("MULTIPLAYER method not implemented");
         }
 
     }
@@ -281,20 +280,21 @@ public class EndRoundController implements Initializable {
                 fqnList.add(fqn);
             }
 
-            StringBuilder classInfo = new StringBuilder();
+            StringBuilder classInformation = new StringBuilder();
 
             for(String fqn : fqnList) {
-                Class clazz = Class.forName(fqn);
+                Class classe = Class.forName(fqn);
 
-                classInfo.append("<h2>" + clazz.getSimpleName() + "</h2><br />");
+                classInformation.append("</br>");
+                classInformation.append("<h1 style=\"color:blue;\">" + classe.getSimpleName() + "</h1><br />");
 
-                Field[] fields = clazz.getDeclaredFields();
+                Field[] fields = classe.getDeclaredFields();
 
                 for(Field field : fields) {
-                    classInfo.append("<h3>" + Modifier.toString(field.getModifiers()) + " " + field.getName() + "</h3>");
+                    classInformation.append("<h2>" + Modifier.toString(field.getModifiers()) + " " + field.getName() + "</h2>");
                 }
 
-                Constructor[] constructors = clazz.getConstructors();
+                Constructor[] constructors = classe.getConstructors();
 
                 for(Constructor constructor : constructors) {
 
@@ -310,17 +310,20 @@ public class EndRoundController implements Initializable {
                         }
                     }
 
-                    classInfo.append("<h3>" + Modifier.toString(constructor.getModifiers()) + " " + constructor.getDeclaringClass().getSimpleName()
+                    classInformation.append("<h3>" + Modifier.toString(constructor.getModifiers()) + " " + constructor.getDeclaringClass().getSimpleName()
                             + " (" + paramsString + ")</h3>");
                 }
 
                 //
 
-                Method[] methods = clazz.getDeclaredMethods();
+                Method[] methods = classe.getDeclaredMethods();
+
+                classInformation.append("</br>");
 
                 for(Method method : methods) {
 
                     String paramsString = "";
+
 
                     for(int i = 0; i < method.getParameters().length; i++) {
                         Parameter p = method.getParameters()[i];
@@ -332,7 +335,7 @@ public class EndRoundController implements Initializable {
                         }
                     }
 
-                    classInfo.append("<h3>" + Modifier.toString(method.getModifiers()) + " " + method.getName()
+                    classInformation.append("<h3 style=\"color:purple;\">" + Modifier.toString(method.getModifiers()) + " " + method.getName()
                             + " (" + paramsString + ")</h3>");
                 }
 
@@ -346,8 +349,8 @@ public class EndRoundController implements Initializable {
                     .append("<title>HTML Documentation</title>")
                     .append("</head>")
                     .append("<body>")
-                    .append("<h1>Class list</h1>")
-                    .append(classInfo.toString())
+                    .append("<h1 style=\"color:red;\">Class list</h1>")
+                    .append(classInformation.toString())
                     .append("</body>")
                     .append("</html>");
         } catch (IOException e) {

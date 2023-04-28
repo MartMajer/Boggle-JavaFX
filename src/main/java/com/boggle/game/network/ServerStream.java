@@ -20,7 +20,10 @@ import com.boggle.game.model.chat.Message;
 import com.boggle.game.model.chat.MessageType;
 import javafx.scene.control.Alert.AlertType;
 
-public class SerStream implements ISer {
+import static com.boggle.game.boggle.HelloController.CLIENT;
+import static com.boggle.game.boggle.HelloController.SERVER;
+
+public class ServerStream implements IServer {
 
     private static final int PORT = 9001;
     private int minToStartGame = 2;
@@ -28,14 +31,14 @@ public class SerStream implements ISer {
     private HelloController controller;
     private String nickname;
 
+    public static String ipAddress;
 
     private ServerListener serverListener;
-
     private ArrayList<User> users;
     private ArrayList<ObjectOutputStream> writers;
     private ArrayList<User> bannedUsers;
 
-    public SerStream(HelloController controller, String nickname)
+    public ServerStream(HelloController controller, String nickname)
     {
         this.controller = controller;
         this.nickname = nickname;
@@ -117,9 +120,8 @@ public class SerStream implements ISer {
 
     private class Handler extends Thread {
         private Socket socket;
-
         private InputStream is;
-        private ObjectInputStream input;
+        private static ObjectInputStream input;
         private OutputStream os;
         private ObjectOutputStream output;
 
@@ -134,11 +136,14 @@ public class SerStream implements ISer {
         public void run()
         {
             try {
-                // NB: the order of these is important (server: input -> output)
+                // input -> output
+
                 this.is = this.socket.getInputStream();
                 this.input = new ObjectInputStream(this.is);
                 this.os = this.socket.getOutputStream();
                 this.output = new ObjectOutputStream(this.os);
+
+
 
                 while(this.socket.isConnected())
                 {
@@ -174,6 +179,7 @@ public class SerStream implements ISer {
                                 {
                                     // add user and writer to list
                                     User u = new User(incomingMsg.getNickname(), this.socket.getInetAddress());
+                                    ipAddress = this.socket.getInetAddress().toString();
                                     users.add(u);
                                     writers.add(this.output);
                                     controller.addUser(u);
@@ -364,6 +370,7 @@ public class SerStream implements ISer {
 
         return list;
     }
+
 
 
 

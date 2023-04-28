@@ -1,6 +1,6 @@
 package com.boggle.game.network;
 
-public interface ISer {
+public interface IServer {
     void sendChatMessage(String content);
 
     boolean checkCanStartGame();
