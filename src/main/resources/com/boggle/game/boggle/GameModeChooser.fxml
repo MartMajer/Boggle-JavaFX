@@ -24,7 +24,7 @@
       </ImageView>
       <AnchorPane fx:id="gp_multiplayer_new_room_server" prefHeight="400.0" prefWidth="600.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button fx:id="start_game_multiplayer" layoutX="113.0" layoutY="344.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#startgame" prefHeight="30.0" prefWidth="200.0" text="Start game">
+            <Button fx:id="start_game_multiplayer" layoutX="86.0" layoutY="345.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#startMultiplayerGame" prefHeight="30.0" prefWidth="200.0" text="Start game">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -34,10 +34,10 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <TextArea fx:id="textAreaChatS" editable="false" layoutX="209.0" layoutY="41.0" prefHeight="264.0" prefWidth="208.0" wrapText="true" />
-            <ListView fx:id="listViewUsersS" layoutX="21.0" layoutY="41.0" prefHeight="294.0" prefWidth="183.0" style="-fx-text-fill: black;" />
-            <TextField fx:id="textFieldChatS" layoutX="209.0" layoutY="311.0" prefHeight="25.0" prefWidth="151.0" />
-            <Button layoutX="362.0" layoutY="311.0" mnemonicParsing="false" onAction="#sendMessageS" prefHeight="25.0" prefWidth="55.0" text="Send">
+            <TextArea fx:id="textAreaChatS" editable="false" layoutX="294.0" layoutY="41.0" prefHeight="264.0" prefWidth="292.0" wrapText="true" />
+            <ListView fx:id="listViewUsersS" layoutX="21.0" layoutY="41.0" prefHeight="294.0" prefWidth="265.0" style="-fx-text-fill: black;" />
+            <TextField fx:id="textFieldChatS" layoutX="294.0" layoutY="311.0" prefHeight="25.0" prefWidth="230.0" />
+            <Button layoutX="531.0" layoutY="311.0" mnemonicParsing="false" onAction="#sendMessageS" prefHeight="25.0" prefWidth="55.0" text="Send">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -65,7 +65,7 @@
                <font>
                   <Font name="System Bold" size="18.0" />
                </font></Button>
-            <Button fx:id="btn_highcsore_modal" mnemonicParsing="false" onAction="#highscore_modal" prefHeight="40.0" prefWidth="113.0" text="Highscores">
+            <Button fx:id="btn_highcsore_modal" mnemonicParsing="false" onAction="#highscoreModal" prefHeight="40.0" prefWidth="113.0" text="Highscores">
                <GridPane.margin>
                   <Insets left="40.0" />
                </GridPane.margin>
@@ -118,7 +118,7 @@
                   <Insets top="15.0" />
                </GridPane.margin>
             </TextFlow>
-            <Button fx:id="singleplayer_start" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#startgame" prefHeight="50.0" text="Start" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <Button fx:id="singleplayer_start" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#startGame" prefHeight="50.0" text="Start" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -128,7 +128,7 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <TextField fx:id="playerOneNameTextField" alignment="TOP_CENTER" onKeyTyped="#validateNicknameS" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="singleplayerNickname" alignment="TOP_CENTER" onKeyTyped="#validateNicknameS" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Button fx:id="btn_back_singleplayer" mnemonicParsing="false" onAction="#back_btn" prefHeight="32.0" prefWidth="45.0" text="Back" GridPane.rowIndex="5">
                <GridPane.margin>
                   <Insets left="20.0" />
@@ -307,10 +307,15 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <TextArea fx:id="textAreaChatC" editable="false" layoutX="209.0" layoutY="41.0" prefHeight="264.0" prefWidth="208.0" wrapText="true" />
-            <ListView fx:id="listViewUsersC" layoutX="21.0" layoutY="41.0" prefHeight="294.0" prefWidth="183.0" style="-fx-background-color: transparent; -fx-text-fill: white;" />
-            <TextField fx:id="textFieldChatC" layoutX="209.0" layoutY="311.0" prefHeight="25.0" prefWidth="151.0" />
-            <Button layoutX="362.0" layoutY="311.0" mnemonicParsing="false" onAction="#sendMessageC" prefHeight="25.0" prefWidth="55.0" text="Send">
+            <TextArea fx:id="textAreaChatC" editable="false" layoutX="294.0" layoutY="41.0" prefHeight="264.0" prefWidth="292.0" wrapText="true" />
+            <ListView fx:id="listViewUsersC" layoutX="21.0" layoutY="41.0" prefHeight="294.0" prefWidth="265.0" style="-fx-background-color: transparent; -fx-text-fill: white;" />
+            <TextField fx:id="textFieldChatC" layoutX="294.0" layoutY="311.0" prefHeight="25.0" prefWidth="230.0" />
+            <Button layoutX="531.0" layoutY="311.0" mnemonicParsing="false" onAction="#sendMessageC" prefHeight="25.0" prefWidth="55.0" text="Send">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Button layoutX="294.0" layoutY="352.0" mnemonicParsing="false" onAction="#sendReady" prefHeight="25.0" prefWidth="292.0" text="Ready">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>

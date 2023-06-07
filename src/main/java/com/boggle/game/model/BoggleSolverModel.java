@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.*;
 
 
-public class BoggleSolverModel {
+public class BoggleSolverModel implements Serializable {
 
     private int _size;
     public static ArrayList<String> _wordsFound;

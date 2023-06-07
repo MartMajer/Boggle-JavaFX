@@ -1,10 +1,6 @@
-package com.boggle.game.network;
+package com.boggle.game.socket;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.BindException;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -12,21 +8,25 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import com.boggle.game.boggle.HelloController;
 import com.boggle.game.model.User;
 import com.boggle.game.model.chat.Message;
 import com.boggle.game.model.chat.MessageType;
+import javafx.application.Platform;
 import javafx.scene.control.Alert.AlertType;
 
-public class SerStream implements ISer {
+public class ServerStream implements IServer {
 
     private static final int PORT = 9001;
     private int minToStartGame = 2;
     private int maxNumUsers = 6;
     private HelloController controller;
     private String nickname;
+
+    public static String privateIP;
 
 
     private ServerListener serverListener;
@@ -35,7 +35,7 @@ public class SerStream implements ISer {
     private ArrayList<ObjectOutputStream> writers;
     private ArrayList<User> bannedUsers;
 
-    public SerStream(HelloController controller, String nickname)
+    public ServerStream(HelloController controller, String nickname)
     {
         this.controller = controller;
         this.nickname = nickname;
@@ -61,7 +61,7 @@ public class SerStream implements ISer {
                 System.out.println("Server: another socket is already binded to this address and port");
                 try(final DatagramSocket socket = new DatagramSocket()) {
                     socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
-                    String privateIP = socket.getLocalAddress().getHostAddress();
+                    privateIP = socket.getLocalAddress().getHostAddress();
                     this.controller.showAlert(AlertType.ERROR, "Room creation failed", "Another socket is already binded to " + privateIP + ":" + PORT);
                 } catch (SocketException e1) {
                     e.printStackTrace();
@@ -71,6 +71,8 @@ public class SerStream implements ISer {
             }
         }
     }
+
+
 
     private class ServerListener extends Thread {
 
@@ -196,16 +198,51 @@ public class SerStream implements ISer {
 
                                 break;
                             }
-                            case CHAT:
-                            {
+                            case CHAT: {
                                 // add the message to the chat textArea
                                 controller.addToTextArea(incomingMsg);
 
-                                // forward the chat message
+                                // forward the ready message
                                 forwardMessage(incomingMsg);
 
                                 break;
                             }
+                            case READY: {
+                                // add the message to the chat textArea
+                                controller.addToTextArea(incomingMsg);
+
+                                // update the readiness of the user who sent the message
+
+
+                                for (User user : users) {
+                                    System.out.println(user.getNickname() + " is ready? " + user.isReady() );
+
+                                    if (user.getNickname().equals(incomingMsg.getContent().split(" ")[1])) {
+
+                                        user.setReady(!user.isReady());
+                                        System.out.println(user.getNickname() + " is ready? " + user.isReady() );
+                                        break;
+                                    }
+                                }
+
+                                // forward the ready message
+                                forwardMessage(incomingMsg);
+
+                                // check if the game can start now
+                                Platform.runLater(() -> {
+                                    if (checkCanStartGame()) {
+                                        // if all users are ready and there are enough users to start the game, enable the start game button
+                                        controller.start_game_multiplayer.setDisable(false);
+                                    } else {
+                                        // if not all users are ready or there are not enough users to start the game, disable the start game button
+                                        controller.start_game_multiplayer.setDisable(true);
+                                    }
+                                });
+
+
+                                break;
+                            }
+
                             case DISCONNECT:
                             {
                                 // add the message to the chat textArea
@@ -291,6 +328,13 @@ public class SerStream implements ISer {
 
         // add the chat message to the textArea
         this.controller.addToTextArea(msg);
+    }
+
+    @Override
+    public void startGame() throws RemoteException {
+        Message msg = new Message(MessageType.START_GAME, this.controller.getCurrentTimestamp(), this.nickname, "Game has started");
+        controller.startGame();
+        this.sendMessage(msg);
     }
 
 

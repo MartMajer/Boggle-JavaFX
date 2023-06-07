@@ -1,7 +1,6 @@
 package com.boggle.game.boggle;
 
 import com.boggle.game.model.HighscoreModel;
-import com.boggle.game.model.PlayerDetailsModel;
 import com.boggle.game.model.StoredDetailsModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableRow;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -22,6 +20,7 @@ import java.lang.reflect.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -176,7 +175,7 @@ public class EndRoundController implements Initializable {
     }
 
 
-    public void startNewRound(ActionEvent actionEvent) {
+    public void startNewRound(ActionEvent actionEvent) throws RemoteException {
 
         HelloController hello = new HelloController();
 
@@ -190,7 +189,7 @@ public class EndRoundController implements Initializable {
 
         if (singleplayer_game == true)
         {
-            hello.startgame();
+            hello.startGame();
 
         }
 

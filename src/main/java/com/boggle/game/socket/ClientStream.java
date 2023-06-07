@@ -1,4 +1,4 @@
-package com.boggle.game.network;
+package com.boggle.game.socket;
 
 
 import java.io.IOException;
@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +17,10 @@ import com.boggle.game.boggle.HelloController;
 import  com.boggle.game.model.User;
 import  com.boggle.game.model.chat.*;
 
+import javafx.application.Platform;
 import javafx.scene.control.Alert.AlertType;
 
-public class CliStream implements ICli {
+public class ClientStream implements IClient {
     private HelloController controller;
     private ClientListener clientListener;
 
@@ -29,7 +31,7 @@ public class CliStream implements ICli {
     private InputStream is;
     private ObjectInputStream input;
 
-    public CliStream(HelloController controller, String address, int port, String nickname)
+    public ClientStream(HelloController controller, String address, int port, String nickname)
     {
         this.controller = controller;
         this.nickname = nickname;
@@ -83,6 +85,18 @@ public class CliStream implements ICli {
 
                                 break;
                             }
+                            case START_GAME: {
+                                // Transition to the game screen and start the game
+                                Platform.runLater(() -> {
+                                    // Assuming you have a way to switch to your GameScreenController, you can do it here
+                                    try {
+                                        controller.startGame();
+                                    } catch (RemoteException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                });
+                                break;
+                            }
                             case CONNECT_OK:
                             {
                                 // stop loading icon & switch to Client Room View
@@ -99,8 +113,10 @@ public class CliStream implements ICli {
 
                                 break;
                             }
+                            case READY:
                             case CHAT:
                             {
+
                                 // add the message to the chat textArea
                                 controller.addToTextArea(incomingMsg);
 
@@ -169,6 +185,10 @@ public class CliStream implements ICli {
         }
     }
 
+
+
+
+
     private void sendMessage(Message message)
     {
         try {
@@ -193,7 +213,8 @@ public class CliStream implements ICli {
     @Override
     public void sendReady(boolean ready)
     {
-        Message msg = new Message(MessageType.READY, this.controller.getCurrentTimestamp(), this.nickname, "" + ready);
+        Message msg = new Message(MessageType.READY, this.controller.getCurrentTimestamp(), "SYSTEM", "Player " + this.nickname +  " " +  ((ready == true)? "is READY" : "is NOT READY"));
+
 
         // send ready message
         this.sendMessage(msg);
