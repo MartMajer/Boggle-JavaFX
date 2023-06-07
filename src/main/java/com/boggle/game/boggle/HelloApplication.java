@@ -22,13 +22,13 @@ public class HelloApplication extends Application {
         stage.setResizable(false);
         stage.show();
         mainStage = stage;
-
     }
-    @Override
-    public void stop()
-    {
 
-        this.controller.closeConnection();
+    @Override
+    public void stop() {
+        if (controller != null) {
+            controller.closeConnection();
+        }
         Platform.exit();
         System.exit(0);
     }
@@ -38,6 +38,6 @@ public class HelloApplication extends Application {
     }
 
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
 }

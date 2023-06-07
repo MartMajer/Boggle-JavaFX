@@ -6,10 +6,10 @@ import com.boggle.game.model.HighscoreModel;
 import com.boggle.game.model.PlayerDetailsModel;
 import com.boggle.game.model.User;
 import com.boggle.game.model.chat.Message;
-import com.boggle.game.network.CliStream;
-import com.boggle.game.network.ICli;
-import com.boggle.game.network.ISer;
-import com.boggle.game.network.SerStream;
+import com.boggle.game.socket.ClientStream;
+import com.boggle.game.socket.IClient;
+import com.boggle.game.socket.IServer;
+import com.boggle.game.socket.ServerStream;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -32,6 +32,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.*;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,19 +46,21 @@ import static com.boggle.game.boggle.HighscoreController.arrayList_Highscore;
 import static com.boggle.game.model.StoredDetailsModel.P1;
 import static com.boggle.game.model.StoredDetailsModel.overall_P1;
 
-public class HelloController implements Initializable {
+public class HelloController extends UnicastRemoteObject implements Initializable {
 
     public static boolean SERVER;
     public static boolean CLIENT;
+
+    public static boolean SINGLEPLAYER;
 
     private static final int ROOM_CAPACITY = 2;
 
     @FXML
     private TextFlow labelErrorNicknameS;
     @FXML
-    private Button start_game_multiplayer;
+    public Button start_game_multiplayer;
     @FXML
-    private TextField playerOneNameTextField;
+    private TextField singleplayerNickname;
 
     @FXML
     private GridPane gp_mode;
@@ -103,7 +107,7 @@ public class HelloController implements Initializable {
     private ArrayList<Label> listNicknameC;
 
     private int connectedUsers;
-    private ISer server;
+    private IServer server;
 
     public static PlayerDetailsModel playerDetails;
 
@@ -115,7 +119,7 @@ public class HelloController implements Initializable {
 
     private SimpleDateFormat tformatter;
 
-    private ICli client;
+    private IClient client;
     private static final Pattern PATTERN_NICKNAME = Pattern.compile("^[a-zA-Z0-9]{3,15}$");
 
     private static final Pattern PATTERN_IP = Pattern.compile("^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
@@ -133,7 +137,15 @@ public class HelloController implements Initializable {
     @FXML private Button buttonJER;
     @FXML private TextFlow labelErrorNicknameC;
     @FXML private Label labelErrorIP;
+    private boolean isMultiplayer;
+    private  boolean isReady;
 
+    public Label l;
+    private boolean isClient;
+
+    public HelloController() throws RemoteException {
+        super();
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -148,7 +160,7 @@ public class HelloController implements Initializable {
         this.tformatter = new SimpleDateFormat("[HH:mm:ss]");
         this.listNicknameC = new ArrayList<Label>();
         this.listNicknameS = new ArrayList<Label>();
-
+        isReady = false;
 
 
 
@@ -159,23 +171,28 @@ public class HelloController implements Initializable {
             hbox.setPrefSize(280, 25);
             hbox.setSpacing(10);
             hbox.setVisible(false);
+
             // nickname client
-            Label l = new Label("");
+            l = new Label("");
             l.setPrefWidth(200);
             l.setTextFill(Paint.valueOf("black"));
             hbox.getChildren().add(l);
             this.listNicknameC.add(l);
+
             l = new Label("");
-            l.setPrefSize(25, 25);
+            /*l.setPrefSize(25, 25);
             l.setStyle("-fx-background-color: red");
-            l.setVisible(i == 0 ? false : true);
+            l.setVisible(i == 0 ? false : true);*/
             hbox.getChildren().add(l);
             this.listViewUsersC.getItems().add(hbox);
+
+
             // hbox server
             hbox = new HBox();
             hbox.setPrefSize(300, 25);
             hbox.setSpacing(10);
             hbox.setVisible(false);
+
             // nickname server
             l = new Label("");
             l.setPrefWidth(180);
@@ -183,16 +200,24 @@ public class HelloController implements Initializable {
             hbox.getChildren().add(l);
             this.listNicknameS.add(l);
 
+            l = new Label("");
+           /* l.setPrefSize(25, 25);
+            l.setStyle("-fx-background-color: red");
+            l.setVisible(i == 0 ? false : true);*/
+            hbox.getChildren().add(l);
             this.listViewUsersS.getItems().add(hbox);
-        }
 
+        }
         connectedUsers = 0;
     }
 
     public void singleplayer_btn(){
         gp_mode.setVisible(false);
         gp_singleplayer.setVisible(true);
+        isMultiplayer = false;
+        SINGLEPLAYER = true;
     }
+
 
     public void load_btn() throws IOException, ClassNotFoundException {
         gp_mode.setVisible(false);
@@ -216,12 +241,15 @@ public class HelloController implements Initializable {
     public void multiplayer_btn(){
         gp_mode.setVisible(false);
         gp_multiplayer_mode.setVisible(true);
+        isMultiplayer = true;
     }
     public void join_room_btn(){
         gp_mode.setVisible(false);
         gp_multiplayer_mode.setVisible(false);
         gp_multiplayer_new_room_server.setVisible(false);
         gp_join_room.setVisible(true);
+        isClient = true;
+
     }
     public void create_new_room_btn(){
         gp_mode.setVisible(false);
@@ -251,7 +279,7 @@ public class HelloController implements Initializable {
         this.textAreaChatS.setText(this.getCurrentTimestamp() + " " + this.textFieldNicknameS.getText() + " created the room");
 
         // create new room -> start server (if OK switch to Server Room View)
-        this.server = new SerStream(this, this.textFieldNicknameS.getText());
+        this.server = new ServerStream(this, this.textFieldNicknameS.getText());
         this.client = null;
 
         // reset the user list
@@ -265,6 +293,9 @@ public class HelloController implements Initializable {
         this.listViewUsersS.getItems().get(0).setVisible(true);
 
         this.connectedUsers = 1;
+
+
+
     }
 
     public void switchToClientRoom()
@@ -285,9 +316,9 @@ public class HelloController implements Initializable {
         this.singleplayer_start.setDisable(true);
         this.btn_create_newLobby.setDisable(true);
         this.textFieldNicknameS.setText("");
-        this.playerOneNameTextField.setText("");
+        this.singleplayerNickname.setText("");
         this.textFieldNicknameS.setStyle("-fx-border-width: 0px; -fx-focus-color: #039ED3;");
-        this.playerOneNameTextField.setStyle("-fx-border-width: 0px; -fx-focus-color: #039ED3;");
+        this.singleplayerNickname.setStyle("-fx-border-width: 0px; -fx-focus-color: #039ED3;");
         this.labelErrorNicknameS.setVisible(false);
         this.labelErrorNicknameSP.setVisible(false);
 
@@ -312,11 +343,14 @@ public class HelloController implements Initializable {
 
         SERVER = false;
         CLIENT = false;
+        SINGLEPLAYER = false;
+        isMultiplayer = false;
+        isClient = false;
 
 
     }
 
-    public void highscore_modal(){
+    public void highscoreModal(){
         HighscoreController modal =   new HighscoreController();
         highscore_list();
         modal.highScoreCont();
@@ -328,7 +362,8 @@ public class HelloController implements Initializable {
         return PATTERN_NICKNAME.matcher(text).matches() ? true : false;
     }
 
-    public void startgame()  {
+
+    public void startGame() throws RemoteException   {
 
         roundCounter += 1;
 
@@ -356,8 +391,18 @@ public class HelloController implements Initializable {
              // arrayList_Highscore.add(new HighscoreModel(1,"Damira"));
              // arrayList_Highscore.add(new HighscoreModel(0,"Ognjen"));
 
+            playerName = singleplayerNickname.getText();
 
-            playerName = playerOneNameTextField.getText();
+           if (isMultiplayer){
+               if (textFieldNicknameS != null ){
+                   playerName = textFieldNicknameS.getText();
+               }
+           }
+           if(isClient){
+               if (textFieldNicknameC != null ){
+                   playerName = textFieldNicknameC.getText();
+               }
+           }
 
         }
         else {
@@ -442,11 +487,22 @@ public class HelloController implements Initializable {
             this.server.sendChatMessage(msg);
         this.textFieldChatS.setText("");
     }
+
+    @FXML public void startMultiplayerGame(ActionEvent event) throws RemoteException {
+        this.server.startGame();
+    }
     @FXML public void sendMessageC(ActionEvent event)
     {
         String msg = this.textFieldChatC.getText();
         if(!msg.isEmpty() && !msg.isBlank())
             this.client.sendChatMessage(msg);
+        this.textFieldChatC.setText("");
+    }
+
+    @FXML public void sendReady(ActionEvent event)
+    {
+        isReady = !isReady;
+        this.client.sendReady(isReady);
         this.textFieldChatC.setText("");
     }
 
@@ -711,7 +767,7 @@ public class HelloController implements Initializable {
         this.textAreaChatC.setText("");
 
         // connect to existing room -> start client (if OK switch to Client Room View)
-        this.client = new CliStream(this, this.textFieldIP.getText(), 9001, this.textFieldNicknameC.getText());
+        this.client = new ClientStream(this, this.textFieldIP.getText(), 9001, this.textFieldNicknameC.getText());
         this.server = null;
 
 
@@ -721,13 +777,13 @@ public class HelloController implements Initializable {
     @FXML public void validateNicknameS()
     {
         // OK
-        if(this.checkNickname(this.textFieldNicknameS.getText()) || this.checkNickname(this.playerOneNameTextField.getText()) )
+        if(this.checkNickname(this.textFieldNicknameS.getText()) || this.checkNickname(this.singleplayerNickname.getText()) )
         {   this.singleplayer_start.setDisable(false);
             this.btn_create_newLobby.setDisable(false);
             this.labelErrorNicknameS.setVisible(false);
             this.labelErrorNicknameSP.setVisible(false);
             this.textFieldNicknameS.setStyle("-fx-border-width: 0px; -fx-focus-color: #039ED3;");
-            this.playerOneNameTextField.setStyle("-fx-border-width: 0px; -fx-focus-color: #039ED3;");
+            this.singleplayerNickname.setStyle("-fx-border-width: 0px; -fx-focus-color: #039ED3;");
         }
         // NOK
         else
@@ -736,7 +792,7 @@ public class HelloController implements Initializable {
             this.labelErrorNicknameS.setVisible(true);
             this.labelErrorNicknameSP.setVisible(true);
             this.textFieldNicknameS.setStyle("-fx-text-box-border: red; -fx-focus-color: red;");
-            this.playerOneNameTextField.setStyle("-fx-text-box-border: red; -fx-focus-color: red;");
+            this.singleplayerNickname.setStyle("-fx-text-box-border: red; -fx-focus-color: red;");
         }
     }
 
