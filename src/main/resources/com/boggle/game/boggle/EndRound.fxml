@@ -20,7 +20,7 @@
             <Image url="@../../../../Assets/bg_1.jpg" />
          </image>
       </ImageView>
-      <AnchorPane fx:id="ap_multiplayer_2" layoutY="19.0" prefHeight="391.0" prefWidth="620.0" visible="false">
+      <AnchorPane fx:id="ap_multiplayer_2" layoutY="1.0" prefHeight="391.0" prefWidth="620.0">
          <children>
             <ScrollPane layoutX="321.0" layoutY="109.0" prefHeight="200.0" prefWidth="125.0">
                <content>
@@ -40,7 +40,7 @@
                   </AnchorPane>
                </content>
             </ScrollPane>
-            <Label alignment="CENTER_RIGHT" layoutX="221.0" layoutY="6.0" prefHeight="43.0" prefWidth="252.0" text="End of round: " textFill="WHITE">
+            <Label alignment="CENTER_RIGHT" layoutX="150.0" layoutY="28.0" prefHeight="43.0" prefWidth="242.0" text="End of round: " textFill="WHITE">
                <font>
                   <Font name="System Bold" size="26.0" />
                </font>
@@ -48,7 +48,7 @@
                   <Insets left="20.0" right="20.0" top="5.0" />
                </padding>
             </Label>
-            <Label fx:id="_roundNumber2" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="444.0" maxWidth="1.7976931348623157E308" prefHeight="55.0" prefWidth="21.0" text="1" textFill="WHITE">
+            <Label fx:id="_roundNumber2" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="357.0" layoutY="22.0" maxWidth="1.7976931348623157E308" prefHeight="55.0" prefWidth="49.0" text="10" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="34.0" />
                </font>
@@ -68,7 +68,7 @@
                   </Label>
                </graphic>
             </Label>
-            <Button fx:id="_board2" layoutX="14.0" layoutY="15.0" mnemonicParsing="false" onAction="#board" text="Show board" />
+            <Button fx:id="_board2" layoutX="14.0" layoutY="37.0" mnemonicParsing="false" onAction="#board" text="Show board" />
             <Label alignment="CENTER" contentDisplay="CENTER" layoutX="157.0" layoutY="76.0" text="Possible words:" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="14.0" />
@@ -79,8 +79,8 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Button fx:id="_highscore2" layoutX="14.0" layoutY="49.0" mnemonicParsing="false" onAction="#highscore" prefHeight="25.0" prefWidth="80.0" text="Highscores" />
-            <Button fx:id="_startNewRound2" layoutX="480.0" layoutY="14.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#startNewRound" prefHeight="35.0" prefWidth="125.0" text="Start new round!">
+            <Button fx:id="_highscore2" layoutX="14.0" layoutY="71.0" mnemonicParsing="false" onAction="#highscore" prefHeight="25.0" prefWidth="80.0" text="Highscores" />
+            <Button fx:id="_startNewRound2" layoutX="455.0" layoutY="37.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#startNewRound" prefHeight="35.0" prefWidth="117.0" text="Start new round!">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -156,7 +156,7 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="ap_singleplayer" layoutY="15.0" prefHeight="391.0" prefWidth="620.0">
+      <AnchorPane fx:id="ap_singleplayer" layoutY="15.0" prefHeight="391.0" prefWidth="620.0" visible="false">
          <children>
             <ScrollPane layoutX="303.0" layoutY="137.0" prefHeight="200.0" prefWidth="125.0">
               <content>
@@ -184,7 +184,7 @@
                   <Insets left="20.0" right="20.0" top="5.0" />
                </padding>
             </Label>
-            <Label fx:id="_roundNumber" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="321.0" layoutY="8.0" maxWidth="1.7976931348623157E308" prefHeight="55.0" prefWidth="21.0" text="1" textFill="WHITE">
+            <Label fx:id="_roundNumber" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="321.0" layoutY="8.0" maxWidth="1.7976931348623157E308" prefHeight="55.0" prefWidth="49.0" text="1" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="34.0" />
                </font>

@@ -42,6 +42,8 @@ public class EndRoundController implements Initializable {
     private Button _highscore;
     @FXML
     private Button _startNewRound;
+    @FXML
+    private Button _startNewRound2;
 
     @FXML
     private Label _player_1_name;
@@ -99,16 +101,19 @@ public class EndRoundController implements Initializable {
 
         _player_1_RoundScore.setText(getPlayerDetails().get_score());
 
-        if (game_loaded == true){
+        if (GAME_LOADED == true){
 
             _board.setDisable(true);
-            // game_loaded=false;
             _highscore.setDisable(true);
-
 
         }
 
-        if (singleplayer_game == true) {
+        if (CLIENT || SERVER){
+            if (CLIENT){_startNewRound2.setVisible(false);}
+            ap_multiplayer_2.setVisible(true);
+        }
+
+        if (SINGLEPLAYER == true && SERVER == false) {
             ap_singleplayer.setVisible(true);
         }
 
@@ -125,24 +130,23 @@ public class EndRoundController implements Initializable {
             throw new RuntimeException(e);
         }
 
-
-
         for (var word : getPlayerDetails().get_listOfCheckedWords()) {
             //add found words to pane
             __player_1_Pane_Found.getChildren().add(new Label(word));
 
         }
 
-
         for (var word : getPlayerDetails().get_PossibleWords()) {
             //add found words to pane
             __player_1_Pane_Possible.getChildren().add(new Label(word));
-
         }
+        Integer temp1 = 0;
 
-        Integer temp1 = getPlayerDetails().get_score_int() + overall_P1;
-
-
+        if (GAME_LOADED){
+             temp1 = getPlayerDetails().get_score_int();
+        }else {
+             temp1 = getPlayerDetails().get_score_int() + overall_P1;
+        }
 
         static_overall = temp1;
 
@@ -150,7 +154,7 @@ public class EndRoundController implements Initializable {
 
     }
 
-    public void savegame_menuitem(ActionEvent actionEvent) throws IOException, RuntimeException, ClassNotFoundException {
+    public void savegame_menuitem(ActionEvent actionEvent) throws RuntimeException {
 
         roundCounter += 1;
 
@@ -181,15 +185,18 @@ public class EndRoundController implements Initializable {
 
         Integer temp = roundCounter - 1;
 
-        game_loaded=false;
+
 
         store = new StoredDetailsModel(_player_1_name.getText(), getPlayerDetails().get_score_int(),temp.toString());
 
 
 
-        if (singleplayer_game == true)
+        if (SINGLEPLAYER || GAME_LOADED )
         {
+            GAME_LOADED=false;
             hello.startGame();
+
+        } else if (SERVER) {
 
         }
 

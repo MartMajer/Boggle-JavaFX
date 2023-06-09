@@ -1,6 +1,6 @@
 package com.boggle.game.model;
 
-public class AddPointsModel {
+public class PointsModel {
 
     public static int _gameScore = 0;
 

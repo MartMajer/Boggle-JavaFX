@@ -16,6 +16,8 @@ public class GameServerImpl extends UnicastRemoteObject implements GameServer {
 
     public GameServerImpl() throws RemoteException {
         super();
+
+
     }
 
     @Override

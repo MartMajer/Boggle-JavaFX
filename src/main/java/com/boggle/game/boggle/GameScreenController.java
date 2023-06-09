@@ -2,9 +2,8 @@ package com.boggle.game.boggle;
 
 import com.boggle.game.model.*;
 
-import com.boggle.game.rmi.GameServer;
-import com.boggle.game.rmi.GameServerImpl;
-import com.boggle.game.socket.ServerStream;
+import com.boggle.game.rmi.*;
+import com.boggle.game.utils.DictionaryLoader;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -23,18 +22,15 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.io.*;
-import java.net.InetAddress;
 import java.net.URL;
-import java.rmi.Naming;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.security.SecureRandom;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static com.boggle.game.boggle.EndRoundController.static_overall;
 import static com.boggle.game.boggle.HelloController.*;
-import static com.boggle.game.socket.ServerStream.privateIP;
 
 public class GameScreenController implements Initializable {
 
@@ -125,7 +121,7 @@ public class GameScreenController implements Initializable {
 
     private boolean _gameOver;
     private int _size = 4;
-    public int _time;
+    public int _time = 140;
 
     private static int time_const = 121;
     private String _currentWord = "";
@@ -139,11 +135,14 @@ public class GameScreenController implements Initializable {
 
     private GameServer gameClient;
 
-    private AddPointsModel _addPoints;
+    private PointsModel _addPoints;
 
     private Integer scoreYour = 0;
     private Integer scoreOpponent = 0;
 
+    private ArrayList<String> dictionary;
+    private GameServerImpl gameServerImpl;
+    private ServerConnectionManager serverConnectionManager;
 
 
 
@@ -152,65 +151,58 @@ public class GameScreenController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        this._lbScore2.setVisible(false);
-        this._lbScore22.setVisible(false);
-        this._lbOpponent.setVisible(false);
-        this._lbOpponent2.setVisible(false);
+        makeLabelsVisible(false);
+
+        DictionaryLoader dl = new DictionaryLoader();
+        try {
+            dictionary = dl.loadDictionary("src/main/resources/HR_DIC_UPC.txt");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         _lbScore2.setText("0");
 
         initializeBoard();
+
         _player_nickname.setText(getPlayerDetails().getPlayerName());
 
-        if (SINGLEPLAYER || SERVER) {
+        if (CLIENT == true){
+            GAME_LOADED = false;
+        }
 
+        if (SINGLEPLAYER || SERVER || GAME_LOADED) {
 
             try {
-                setUpBoard();
-
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-
+                setUpCubes();
             if (SERVER){
 
+               
+                this.gameServer = new GameServerImpl();
 
-                this._lbScore2.setVisible(true);
-                this._lbScore22.setVisible(true);
-                this._lbOpponent.setVisible(true);
-                this._lbOpponent2.setVisible(true);
+                makeLabelsVisible(true);
 
-                initializeRMIServer();
-
-                try {
-                    gameServer.sendGameBoard(_charArray, _solver);
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-
+                serverConnectionManager = new ServerConnectionManager(gameServer);
+               
+                gameServer.sendGameBoard(_charArray, _solver);
+               
             }
+                setUpBoggleGrid();
 
-            try {
-                boggle();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
-
-        } else if (CLIENT) {
+        }
+        else if (CLIENT) {
             try {
 
+                makeLabelsVisible(true);
 
-                this._lbScore2.setVisible(true);
-                this._lbScore22.setVisible(true);
-                this._lbOpponent.setVisible(true);
-                this._lbOpponent2.setVisible(true);
+                ClientConnectionManager clientConnectionManager = new ClientConnectionManager();
 
-                Registry registry = LocateRegistry.getRegistry(InetAddress.getLocalHost().getHostAddress(), 1099);
-
-                gameClient = (GameServer) registry.lookup("GameService");
+                gameClient = clientConnectionManager.getLookupNamingContext();
 
                 _charArray = gameClient.getGameBoard();
+
                 _solver = gameClient.getBoggleSolver();
 
 
@@ -224,13 +216,7 @@ public class GameScreenController implements Initializable {
 
                 new PreviewBoardController();
 
-
-                try {
-                    boggle();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-
+                setUpBoggleGrid();
 
             } catch (Exception e) {
                 System.err.println("Client exception: " + e.toString());
@@ -239,20 +225,15 @@ public class GameScreenController implements Initializable {
         }
 
     }
-    public void initializeRMIServer() {
-        try {
 
-            InetAddress inetAddress = InetAddress.getLocalHost();
-            System.out.println("IP Address: " + inetAddress.getHostAddress());
 
-            gameServer = new GameServerImpl();
-            LocateRegistry.createRegistry(1099);
-            Naming.rebind("rmi://localhost/GameService", gameServer);
-            System.out.println("RMI Server is ready.");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void makeLabelsVisible(boolean bool) {
+        this._lbScore2.setVisible(bool);
+        this._lbScore22.setVisible(bool);
+        this._lbOpponent.setVisible(bool);
+        this._lbOpponent2.setVisible(bool);
     }
+
 
     private void initializeBoard() {
         gameBoard = new Button[GAME_BOARD_HEIGHT][GAME_BOARD_WIDTH];
@@ -279,8 +260,9 @@ public class GameScreenController implements Initializable {
         gameBoard[3][3] = mat_3_3;
     }
 
-    public void setUpBoard() throws IOException {
-
+    public void setUpCubes() throws IOException {
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        executorService.submit(() -> {
         SecureRandom r = new SecureRandom();
 
         ArrayList<String> dice = new ArrayList<>();
@@ -320,14 +302,16 @@ public class GameScreenController implements Initializable {
 
             }
         }
+
+
+        });
+        executorService.shutdown();
         new PreviewBoardController();
-        _solver = new BoggleSolverModel(_charArray);
-
-
+        _solver = new BoggleSolverModel(_charArray, dictionary);
     }
 
 
-    public void boggle() throws IOException {
+    public void setUpBoggleGrid() throws IOException {
 
         _gameOver = false;
         _isClicked = new boolean[_size][_size];
@@ -335,7 +319,7 @@ public class GameScreenController implements Initializable {
         _iStack = new Stack<>();
         _jStack = new Stack<>();
         _gridPane.setFocusTraversable(true);
-        _addPoints = new AddPointsModel();
+        _addPoints = new PointsModel();
         _listOfCheckedWords = new ArrayList<>();
         _listOfCheckedWords_temp = new ArrayList<>();
 
@@ -385,10 +369,13 @@ public class GameScreenController implements Initializable {
                 if (SERVER){
                     try {
                         gameServer.updateScore(scoreYour);
-                        if (_time == 138 || _time == 100 || _time == 50){
+                       if (_time <= 130){
                             _time = gameServer.getTimeSync();
                         }
                         scoreOpponent = gameServer.getClientScore();
+                        if (scoreOpponent == null) {
+                            scoreOpponent = 0;  // weird issue upon start - nullPointerExc must be rmi data speed so this snip is to overcome starting issue
+                        }
                         _lbScore2.setText(scoreOpponent.toString());
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
@@ -396,9 +383,9 @@ public class GameScreenController implements Initializable {
                 } else if (CLIENT) {
                     try {
                         gameClient.clientUpdateScore(scoreYour);
-                        if (_time == 138 || _time == 100 || _time == 50 || _time == 139 || _time == 101 || _time == 51)  {
-                            gameClient.sendTimeSync(_time);
-                        }
+                        //if (_time == 138 || _time == 100 || _time == 50 || _time == 139 || _time == 101 || _time == 51)  {
+                        gameClient.sendTimeSync(_time);
+                        //}
                         scoreOpponent = gameClient.getScore();
                         _lbScore2.setText(scoreOpponent.toString());
                     } catch (RemoteException e) {
@@ -416,7 +403,7 @@ public class GameScreenController implements Initializable {
                 //////////////// store player 1 details and start player 2 game! //////////////
 
                 _listOfCheckedWords_temp = new ArrayList<String>(_listOfCheckedWords);
-                getPlayerDetails().setRoundDetails(_listOfCheckedWords_temp, _solver._wordsFound, scoreYour, roundCounter, static_overall);
+                getPlayerDetails().setRoundDetails(_listOfCheckedWords_temp, _solver.getWords(), scoreYour, roundCounter, static_overall);
 
                 _listOfCheckedWords.clear();
                 reset_states();
@@ -425,7 +412,7 @@ public class GameScreenController implements Initializable {
                 _gameOver = true;
                 _timeline.stop();
 
-                new EndRoundModel();
+                new EndRoundModel(serverConnectionManager);
 
     }
 
@@ -459,7 +446,7 @@ public class GameScreenController implements Initializable {
 
     public void buttonCheckWord(ActionEvent actionEvent) {
 
-        if (_solver._wordsFound.contains(_currentWord)) {
+        if (_solver.getWords().contains(_currentWord)) {
             _notAWord.setText("");
 
 
@@ -537,11 +524,7 @@ public class GameScreenController implements Initializable {
                     _charArray[i][j] = gameBoard[i][j];
                 }
             }
-            try {
-                _solver = new BoggleSolverModel(_charArray);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            _solver = new BoggleSolverModel(_charArray, dictionary);
         });
     }
 
