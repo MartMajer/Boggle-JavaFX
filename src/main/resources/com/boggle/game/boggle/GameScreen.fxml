@@ -257,7 +257,7 @@
                         </GridPane>
                      </children>
                   </AnchorPane>
-                  <Label fx:id="_timeLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="62.0" prefWidth="267.0" text="Time remaining: 120 seconds" textFill="WHITE" wrapText="true" GridPane.rowIndex="2">
+                  <Label fx:id="_timeLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="62.0" prefWidth="267.0" text="Time remaining: 140 seconds" textFill="WHITE" wrapText="true" GridPane.rowIndex="2">
                      <font>
                         <Font name="System Bold" size="19.0" />
                      </font>

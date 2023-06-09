@@ -11,13 +11,11 @@ public class PlayerDetailsModel implements Serializable {
 
     public String playerName;
 
-
     private List<String> _listOfCheckedWords;
 
     private ArrayList<String> _possibleWords;
 
     private Integer overall;
-
 
     private Integer round;
 
@@ -45,7 +43,6 @@ public class PlayerDetailsModel implements Serializable {
         this.playerName = playerName;
     }
     public PlayerDetailsModel() {
-
     }
 
     public String getPlayerName() {

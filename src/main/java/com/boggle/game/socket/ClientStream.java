@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.boggle.game.boggle.HelloController;
-import  com.boggle.game.model.User;
+import com.boggle.game.model.PlayerModel;
 import  com.boggle.game.model.chat.*;
 
 import javafx.application.Platform;
@@ -128,7 +128,7 @@ public class ClientStream implements IClient {
                                 controller.addToTextArea(incomingMsg.getTimestamp() + " " + incomingMsg.getNickname() + " has joined the room");;
 
                                 // add the user and update the list
-                                controller.addUser(new User(incomingMsg.getNickname()));
+                                controller.addUser(new PlayerModel(incomingMsg.getNickname()));
 
                                 break;
                             }
@@ -229,15 +229,15 @@ public class ClientStream implements IClient {
         this.sendMessage(msg);
     }
 
-    private List<User> extractUserList(String s)
+    private List<PlayerModel> extractUserList(String s)
     {
-        List<User> list = new ArrayList<User>();
+        List<PlayerModel> list = new ArrayList<PlayerModel>();
 
         String[] sTmp = s.split(";");
         for(int i = 0; i < sTmp.length; i++)
         {
             String[] sNickReady = sTmp[i].split(",");
-            User u = new User(sNickReady[0]);
+            PlayerModel u = new PlayerModel(sNickReady[0]);
             u.setReady(Boolean.parseBoolean(sNickReady[1]));
             list.add(u);
         }

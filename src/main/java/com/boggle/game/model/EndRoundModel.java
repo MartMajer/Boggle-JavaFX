@@ -1,6 +1,7 @@
 package com.boggle.game.model;
 
 import com.boggle.game.boggle.HelloApplication;
+import com.boggle.game.rmi.ServerConnectionManager;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -9,7 +10,7 @@ import java.io.IOException;
 
 public class EndRoundModel {
 
-    public EndRoundModel() {
+    public EndRoundModel(ServerConnectionManager serverConnectionManager) {
 
 
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("EndRound.fxml"));
@@ -27,11 +28,6 @@ public class EndRoundModel {
             stage.setTitle("Hello!");
             stage.setScene(scene);
             stage.show();
-
-
-
-
-
 
     }
 

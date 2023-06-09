@@ -12,7 +12,7 @@ public interface GameServer extends Remote {
     char[][] getGameBoard() throws RemoteException;
     void clientUpdateScore(int score) throws RemoteException;
     Integer getClientScore( ) throws RemoteException;
-    public BoggleSolverModel getBoggleSolver() throws RemoteException;
+    BoggleSolverModel getBoggleSolver() throws RemoteException;
     void sendTimeSync(int _time) throws RemoteException;
     int getTimeSync() throws RemoteException;
 }

@@ -3,8 +3,8 @@ package com.boggle.game.boggle;
 
 import com.boggle.game.model.EndRoundModel;
 import com.boggle.game.model.HighscoreModel;
+import com.boggle.game.model.PlayerModel;
 import com.boggle.game.model.PlayerDetailsModel;
-import com.boggle.game.model.User;
 import com.boggle.game.model.chat.Message;
 import com.boggle.game.socket.ClientStream;
 import com.boggle.game.socket.IClient;
@@ -48,6 +48,7 @@ import static com.boggle.game.model.StoredDetailsModel.overall_P1;
 
 public class HelloController extends UnicastRemoteObject implements Initializable {
 
+    public static boolean GAME_LOADED = false;
     public static boolean SERVER;
     public static boolean CLIENT;
 
@@ -111,11 +112,10 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
 
     public static PlayerDetailsModel playerDetails;
 
-    public static boolean singleplayer_game=false;
 
     public static Integer roundCounter = 1;
 
-    public static Boolean game_loaded=false;
+
 
     private SimpleDateFormat tformatter;
 
@@ -137,11 +137,11 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
     @FXML private Button buttonJER;
     @FXML private TextFlow labelErrorNicknameC;
     @FXML private Label labelErrorIP;
-    private boolean isMultiplayer;
+
     private  boolean isReady;
 
     public Label l;
-    private boolean isClient;
+
 
     public HelloController() throws RemoteException {
         super();
@@ -150,7 +150,7 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        if (game_loaded == true) {
+        if (GAME_LOADED == true) {
             btn_load.setVisible(false);
         }
 
@@ -214,41 +214,42 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
     public void singleplayer_btn(){
         gp_mode.setVisible(false);
         gp_singleplayer.setVisible(true);
-        isMultiplayer = false;
+
         SINGLEPLAYER = true;
     }
 
 
     public void load_btn() throws IOException, ClassNotFoundException {
         gp_mode.setVisible(false);
-
+        GAME_LOADED = true;
         PlayerDetailsModel model = new PlayerDetailsModel();
 
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("playerdetails.ser"))) {
             model = (PlayerDetailsModel)ois.readObject();
         }
 
-        game_loaded = true;
 
         setPlayerDetails(model);
 
         roundCounter = model.get_round_int();
         static_overall = model.get_overall_int();
+        SINGLEPLAYER = true;
 
-        new EndRoundModel();
+        new EndRoundModel(null);
     }
 
     public void multiplayer_btn(){
         gp_mode.setVisible(false);
         gp_multiplayer_mode.setVisible(true);
-        isMultiplayer = true;
+
     }
     public void join_room_btn(){
         gp_mode.setVisible(false);
         gp_multiplayer_mode.setVisible(false);
         gp_multiplayer_new_room_server.setVisible(false);
         gp_join_room.setVisible(true);
-        isClient = true;
+
+        CLIENT = true;
 
     }
     public void create_new_room_btn(){
@@ -344,8 +345,8 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
         SERVER = false;
         CLIENT = false;
         SINGLEPLAYER = false;
-        isMultiplayer = false;
-        isClient = false;
+
+
 
 
     }
@@ -366,8 +367,6 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
     public void startGame() throws RemoteException   {
 
         roundCounter += 1;
-
-        singleplayer_game = true;
 
         String playerName;
 
@@ -393,12 +392,12 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
 
             playerName = singleplayerNickname.getText();
 
-           if (isMultiplayer){
+           if (SERVER){
                if (textFieldNicknameS != null ){
                    playerName = textFieldNicknameS.getText();
                }
            }
-           if(isClient){
+           if(CLIENT){
                if (textFieldNicknameC != null ){
                    playerName = textFieldNicknameC.getText();
                }
@@ -461,10 +460,10 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
           throw new RuntimeException(e);
       }
 
-      for (var item : model
+/*      for (var item : model
       ) {
           System.out.println(item.toString());
-      }
+      }*/
 
       arrayList_Highscore = ((ArrayList<HighscoreModel>) model.clone());
 
@@ -544,7 +543,7 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
             a.show();
         });
     }
-    public void addUser(User u)
+    public void addUser(PlayerModel u)
     {
         Platform.runLater(() -> {
             if(CLIENT)
@@ -583,18 +582,18 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
             }
         }
     }
-    public void updateUserList(List<User> users)
+    public void updateUserList(List<PlayerModel> players)
     {
         Platform.runLater(() -> {
             if(CLIENT)
             {
-                for(int i = 0; i < users.size(); i++)
+                for(int i = 0; i < players.size(); i++)
                 {
-                    User u = users.get(i);
+                    PlayerModel u = players.get(i);
                     this.listNicknameC.get(i).setText(u.getNickname());
                     this.listViewUsersC.getItems().get(i).setVisible(true);
                 }
-                this.connectedUsers = users.size();
+                this.connectedUsers = players.size();
             }
             else if(SERVER)
             {

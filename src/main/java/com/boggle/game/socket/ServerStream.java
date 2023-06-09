@@ -12,7 +12,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import com.boggle.game.boggle.HelloController;
-import com.boggle.game.model.User;
+import com.boggle.game.model.PlayerModel;
 import com.boggle.game.model.chat.Message;
 import com.boggle.game.model.chat.MessageType;
 import javafx.application.Platform;
@@ -31,9 +31,9 @@ public class ServerStream implements IServer {
 
     private ServerListener serverListener;
 
-    private ArrayList<User> users;
+    private ArrayList<PlayerModel> players;
     private ArrayList<ObjectOutputStream> writers;
-    private ArrayList<User> bannedUsers;
+    private ArrayList<PlayerModel> bannedPlayers;
 
     public ServerStream(HelloController controller, String nickname)
     {
@@ -41,10 +41,10 @@ public class ServerStream implements IServer {
         this.nickname = nickname;
 
 
-        this.users = new ArrayList<User>();
-        User u = new User(nickname);
+        this.players = new ArrayList<PlayerModel>();
+        PlayerModel u = new PlayerModel(nickname);
         u.setReady(true);
-        this.users.add(u);
+        this.players.add(u);
         this.writers = new ArrayList<ObjectOutputStream>();
         this.writers.add(null);
 
@@ -157,7 +157,7 @@ public class ServerStream implements IServer {
                                 Message mReply = new Message();
                                 mReply.setTimestamp(controller.getCurrentTimestamp());
 
-                                 if(users.size() == maxNumUsers)
+                                 if(players.size() == maxNumUsers)
                                 {
                                     mReply.setMsgType(MessageType.CONNECT_FAILED);
                                     mReply.setNickname("");
@@ -175,8 +175,8 @@ public class ServerStream implements IServer {
                                 else
                                 {
                                     // add user and writer to list
-                                    User u = new User(incomingMsg.getNickname(), this.socket.getInetAddress());
-                                    users.add(u);
+                                    PlayerModel u = new PlayerModel(incomingMsg.getNickname(), this.socket.getInetAddress());
+                                    players.add(u);
                                     writers.add(this.output);
                                     controller.addUser(u);
 
@@ -214,13 +214,13 @@ public class ServerStream implements IServer {
                                 // update the readiness of the user who sent the message
 
 
-                                for (User user : users) {
-                                    System.out.println(user.getNickname() + " is ready? " + user.isReady() );
+                                for (PlayerModel player : players) {
+                                    System.out.println(player.getNickname() + " is ready? " + player.isReady() );
 
-                                    if (user.getNickname().equals(incomingMsg.getContent().split(" ")[1])) {
+                                    if (player.getNickname().equals(incomingMsg.getContent().split(" ")[1])) {
 
-                                        user.setReady(!user.isReady());
-                                        System.out.println(user.getNickname() + " is ready? " + user.isReady() );
+                                        player.setReady(!player.isReady());
+                                        System.out.println(player.getNickname() + " is ready? " + player.isReady() );
                                         break;
                                     }
                                 }
@@ -255,11 +255,11 @@ public class ServerStream implements IServer {
                                 controller.removeUser(incomingMsg.getNickname());
 
                                 // remove user and writer from the list
-                                for(int i = 1; i < users.size(); i++)
+                                for(int i = 1; i < players.size(); i++)
                                 {
-                                    if(users.get(i).getNickname().equals(incomingMsg.getNickname()))
+                                    if(players.get(i).getNickname().equals(incomingMsg.getNickname()))
                                     {
-                                        users.remove(i);
+                                        players.remove(i);
                                         writers.remove(i);
                                         break;
                                     }
@@ -307,7 +307,7 @@ public class ServerStream implements IServer {
     private void sendMessage(Message message)
     {
         // send the message to each user except the server
-        for(int i = 1; i < this.users.size(); i++)
+        for(int i = 1; i < this.players.size(); i++)
         {
             try {
                 this.writers.get(i).writeObject(message);
@@ -341,12 +341,12 @@ public class ServerStream implements IServer {
     @Override
     public boolean checkCanStartGame()
     {
-        for(User u : this.users)
+        for(PlayerModel u : this.players)
         {
             if(!u.isReady())
                 return false;
         }
-        return this.users.size() >= this.minToStartGame ? true : false;
+        return this.players.size() >= this.minToStartGame ? true : false;
     }
 
     @Override
@@ -355,9 +355,9 @@ public class ServerStream implements IServer {
         Message msg = new Message(MessageType.DISCONNECT, controller.getCurrentTimestamp(), this.nickname, "Server room closed");
 
         // send the message to each user except the server (NB: it's not a normal sendMessage
-        for(int i = 1; i < this.users.size(); i++)
+        for(int i = 1; i < this.players.size(); i++)
         {
-            msg.setNickname(this.users.get(i).getNickname());
+            msg.setNickname(this.players.get(i).getNickname());
             try {
                 this.writers.get(i).writeObject(msg);
             } catch (IOException e) {
@@ -373,9 +373,9 @@ public class ServerStream implements IServer {
     private void forwardMessage(Message msg)
     {
         // forward the message to each connected client, except the one that sent the message first
-        for(int i = 1; i < this.users.size(); i++)
+        for(int i = 1; i < this.players.size(); i++)
         {
-            if(!msg.getNickname().equals(this.users.get(i).getNickname()))
+            if(!msg.getNickname().equals(this.players.get(i).getNickname()))
             {
                 try {
                     this.writers.get(i).writeObject(msg);
@@ -388,7 +388,7 @@ public class ServerStream implements IServer {
 
     private boolean checkDuplicateNickname(String nickname)
     {
-        for(User u : this.users)
+        for(PlayerModel u : this.players)
         {
             if(u.getNickname().equals(nickname))
                 return true; // nickname already present
@@ -399,11 +399,11 @@ public class ServerStream implements IServer {
     private String getUserList()
     {
         String list = "";
-        for(int i = 0; i < this.users.size(); i++)
+        for(int i = 0; i < this.players.size(); i++)
         {
-            User u = this.users.get(i);
+            PlayerModel u = this.players.get(i);
             list += u.getNickname() + "," + u.isReady();
-            list += (i == this.users.size() - 1 ? "" : ";");
+            list += (i == this.players.size() - 1 ? "" : ";");
         }
 
         return list;
