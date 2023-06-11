@@ -20,7 +20,7 @@
             <Image url="@../../../../Assets/bg_1.jpg" />
          </image>
       </ImageView>
-      <AnchorPane fx:id="ap_multiplayer_2" layoutY="1.0" prefHeight="391.0" prefWidth="620.0">
+      <AnchorPane fx:id="ap_multiplayer_2" layoutY="1.0" prefHeight="391.0" prefWidth="620.0" visible="false">
          <children>
             <ScrollPane layoutX="321.0" layoutY="109.0" prefHeight="200.0" prefWidth="125.0">
                <content>

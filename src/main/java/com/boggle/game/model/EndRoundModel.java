@@ -18,6 +18,7 @@ public class EndRoundModel {
    private ServerConnectionManager serverConnectionManager;
 
     public EndRoundModel(GameServerImpl gameServer, GameServer gameClient, ServerConnectionManager serverConnectionManager) {
+
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("EndRound.fxml"));
 
         this.gameClient=gameClient;
@@ -32,10 +33,8 @@ public class EndRoundModel {
             throw new RuntimeException(e);
         }
 
-
         EndRoundController controller = fxmlLoader.getController();
         controller.setGameData(this.gameServer, this.gameClient, serverConnectionManager, "test");
-
 
         Stage stage = HelloApplication.getMainStage();
 
@@ -43,6 +42,4 @@ public class EndRoundModel {
         stage.setScene(scene);
         stage.show();
     }
-
-
 }

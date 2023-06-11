@@ -34,4 +34,12 @@ public interface GameServer extends Remote {
     List<String> getPlayer_2_checked_words() throws RemoteException;
 
     void startNewRound() throws RemoteException;
+
+    void addOverallScorePlayer1(int score) throws RemoteException;
+
+    Integer getOverallScorePlayer1() throws RemoteException;
+
+    void addOverallScorePlayer2(int score) throws RemoteException;
+
+    Integer getOverallScorePlayer2() throws RemoteException;
 }

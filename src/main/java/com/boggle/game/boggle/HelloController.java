@@ -158,8 +158,6 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
         this.listNicknameS = new ArrayList<Label>();
         isReady = false;
 
-
-
         for(int i = 0; i < ROOM_CAPACITY; i++)
         {
             // hbox client
@@ -224,7 +222,6 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
             model = (PlayerDetailsModel)ois.readObject();
         }
 
-
         setPlayerDetails(model);
 
         roundCounter = model.get_round_int();
@@ -237,7 +234,6 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
     public void multiplayer_btn(){
         gp_mode.setVisible(false);
         gp_multiplayer_mode.setVisible(true);
-
     }
     public void join_room_btn(){
         gp_mode.setVisible(false);
@@ -369,7 +365,10 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
 
             //// Load those only once in program
 
-            overall_P1 = 0;
+            if (!NEW_ROUND_MULTIPLAYER){
+                overall_P1 = 0;
+            }
+
 
             highscore_list();
 
@@ -409,39 +408,42 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
         playerDetails = new PlayerDetailsModel(playerName);
 
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("gameScreen.fxml"));
-
-        Scene scene = null;
-
-        System.out.println("KOOOOOOLKI JEEE:  "+NEW_ROUND_MULTIPLAYER);
-        System.out.println("SERVER JEEE:  "+SERVER);
-        System.out.println("CLIENT JEEE:  "+CLIENT);
-
-
-
-        try {
-            // load() called only once
-            Parent root = fxmlLoader.load();
-
-            if (NEW_ROUND_MULTIPLAYER){
-                GameScreenController gsc = fxmlLoader.getController();
+        if (NEW_ROUND_MULTIPLAYER){
+            fxmlLoader.setControllerFactory(param -> {
+                GameScreenController gsc = new GameScreenController();
                 gsc.setGameData(gameServer,gameClient,serverConnectionManager);
-            }
-
-            // Scene created with the existing root
-            scene = new Scene(root, 600, 400);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+                return gsc;
+            });
         }
 
+            Scene scene = null;
+
+            System.out.println("KOOOOOOLKI JEEE:  "+NEW_ROUND_MULTIPLAYER);
+            System.out.println("SERVER JEEE:  "+SERVER);
+            System.out.println("CLIENT JEEE:  "+CLIENT);
 
 
-        Stage stage = HelloApplication.getMainStage();
+            try {
+                // load() called only once
+                Parent root = fxmlLoader.load();
+                 scene = new Scene(root, 600, 400);
 
-        stage.setTitle("Hello!");
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.show();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+
+
+            Stage stage = HelloApplication.getMainStage();
+
+            stage.setTitle("Hello!");
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+
+
+
+
 
     }
 
@@ -791,7 +793,7 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
         }
     }
 
-    public void newRoundMultiplayer(GameServerImpl gameServer, GameServer gameClient, ServerConnectionManager serverConnectionManager, boolean client, boolean server) {
+    public synchronized void newRoundMultiplayer(GameServerImpl gameServer, GameServer gameClient, ServerConnectionManager serverConnectionManager, boolean client, boolean server) {
         this.gameServer = gameServer;
         this.gameClient = gameClient;
         this.serverConnectionManager = serverConnectionManager;

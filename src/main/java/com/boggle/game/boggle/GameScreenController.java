@@ -141,11 +141,12 @@ public class GameScreenController implements Initializable {
     private ServerConnectionManager serverConnectionManager;
 
 
-
-
+    public GameScreenController() {
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
 
         makeLabelsVisible(false);
 
@@ -170,9 +171,8 @@ public class GameScreenController implements Initializable {
         if (SINGLE_PLAYER || SERVER || GAME_LOADED) {
 
             try {
+
                 setUpCubes();
-
-
 
                     if (SERVER){
 
@@ -317,7 +317,7 @@ public class GameScreenController implements Initializable {
         _solver = new BoggleSolverModel(_charArray, dictionary);
     }
 
-    public void setGameData(GameServerImpl gameServer, GameServer gameClient,ServerConnectionManager serverConnectionManager) {
+    public synchronized  void setGameData(GameServerImpl gameServer, GameServer gameClient,ServerConnectionManager serverConnectionManager) {
         this.gameServer = gameServer;
         this.gameClient = gameClient;
         this.serverConnectionManager=serverConnectionManager;

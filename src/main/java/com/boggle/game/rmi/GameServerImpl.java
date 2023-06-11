@@ -24,6 +24,9 @@ public class GameServerImpl extends UnicastRemoteObject implements GameServer {
     private Integer overall_player_2;
     private List<String> player_1_checked_words;
     private List<String> player_2_checked_words;
+
+    private Integer overallScorePlayer1 = 0;
+    private Integer overallScorePlayer2 = 0;
     public GameServerImpl() throws RemoteException {
         super();
     }
@@ -129,8 +132,30 @@ public class GameServerImpl extends UnicastRemoteObject implements GameServer {
 
 
     @Override
-    public void startNewRound( ) throws RemoteException {
+    public void startNewRound() throws RemoteException {
         HelloController hello = new HelloController();
         hello.startGame();
     }
+
+
+    @Override
+    public void addOverallScorePlayer1(int score) throws RemoteException {
+        this.overallScorePlayer1 += score;
+    }
+
+    @Override
+    public Integer getOverallScorePlayer1() throws RemoteException {
+        return this.overallScorePlayer1;
+    }
+
+    @Override
+    public void addOverallScorePlayer2(int score) throws RemoteException {
+        this.overallScorePlayer2 += score;
+    }
+
+    @Override
+    public Integer getOverallScorePlayer2() throws RemoteException {
+        return this.overallScorePlayer2;
+    }
+
 }

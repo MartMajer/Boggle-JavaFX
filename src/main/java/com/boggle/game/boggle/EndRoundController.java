@@ -326,89 +326,72 @@ public class EndRoundController implements Initializable {
         multiplayerSetup();
     }
 
-
     private void multiplayerSetup(){
 
         Platform.runLater(() -> {
-        if (CLIENT || SERVER )
-        {
+            if (CLIENT || SERVER )
+            {
 
-            if (SERVER){
-                try {
+                if (SERVER){
+                    try {
 
-                    _player_2_name.setText(gameServer.getPlayer_2_name());
-                    _player_2_RoundScore.setText(gameServer.getPlayer_2_score().toString());
+                        _player_2_name.setText(gameServer.getPlayer_2_name());
+                        _player_2_RoundScore.setText(gameServer.getPlayer_2_score().toString());
 
+                        gameServer.addOverallScorePlayer2(gameServer.getPlayer_2_score());
 
-                    Integer temp = 0;
+                        _player_2_Overall.setText(gameServer.getOverallScorePlayer2().toString());
 
-                    temp += gameServer.getPlayer_2_score();
-                    static_overall_player_2 =temp;
-
-                    _player_2_Overall.setText(static_overall_player_2.toString());
-
-                    if (gameServer.getPlayer_2_checked_words() != null){
-                        player_2_listOfCheckedWords = new ArrayList<>(gameServer.getPlayer_2_checked_words());
-                    }
-
-
-
-
-
+                        if (gameServer.getPlayer_2_checked_words() != null){
+                            player_2_listOfCheckedWords = new ArrayList<>(gameServer.getPlayer_2_checked_words());
+                        }
 
                         for (var word : player_2_listOfCheckedWords) {
 
                             __player_2_Pane_Found.getChildren().add(new Label(word));
                         }
 
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
 
+                else if (CLIENT){
 
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
+                    _startNewRound2.setVisible(false);
+
+                    try {
+                        clientConnectionManager = new ClientConnectionManager();
+
+                        _player_2_name.setText(gameClient.getPlayer_1_name());
+                        _player_2_RoundScore.setText(gameClient.getPlayer_1_score().toString());
+
+                        gameClient.addOverallScorePlayer1(gameClient.getPlayer_1_score());
+
+                        _player_2_Overall.setText(gameClient.getOverallScorePlayer1().toString());
+
+                        if (gameClient.getPlayer_1_checked_words() != null){
+                            player_1_listOfCheckedWords = new ArrayList<>(gameClient.getPlayer_1_checked_words());
+                        }
+
+                        for (var word : player_1_listOfCheckedWords) {
+
+                            __player_2_Pane_Found.getChildren().add(new Label(word));
+                        }
+
+                    } catch (NamingException e) {
+                        throw new RuntimeException(e);
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
-
-
-            else if (CLIENT){
-
-                _startNewRound2.setVisible(false);
-
-                try {
-                    clientConnectionManager = new ClientConnectionManager();
-
-                    _player_2_name.setText(gameClient.getPlayer_1_name());
-                    _player_2_RoundScore.setText(gameClient.getPlayer_1_score().toString());
-
-
-                    Integer temp = 0;
-
-                    temp += gameClient.getPlayer_1_score();
-                    static_overall_player_2 =temp;
-
-                    _player_2_Overall.setText(static_overall_player_2.toString());
-
-                    if (gameClient.getPlayer_1_checked_words() != null){
-                        player_1_listOfCheckedWords = new ArrayList<>(gameClient.getPlayer_1_checked_words());
-                    }
-
-
-                    for (var word : player_1_listOfCheckedWords) {
-
-
-                        __player_2_Pane_Found.getChildren().add(new Label(word));
-
-                    }
-
-
-                } catch (NamingException e) {
-                    throw new RuntimeException(e);
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
         });
     }
+
+
+
+
 
 
 
@@ -540,7 +523,7 @@ public class EndRoundController implements Initializable {
 
     public void setUpTimeline() {
         //Official boggle game time is set at 2 minutes
-        _time = 5;
+        _time = 20;
         KeyFrame kf = new KeyFrame(Duration.seconds(1), new EndRoundController.TimeHandler());
         _timeline = new Timeline(kf);
         _timeline.setCycleCount(Animation.INDEFINITE);
@@ -561,6 +544,11 @@ public class EndRoundController implements Initializable {
 
             if (_time == 1) {
 
+                Integer temp = roundCounter - 1;
+
+                store = new StoredDetailsModel(_singleplayer_name.getText(), getPlayerDetails().get_score_int(),temp.toString());
+
+
                 NEW_ROUND_MULTIPLAYER = true;
                 _timeline.stop();
 
@@ -570,9 +558,7 @@ public class EndRoundController implements Initializable {
                 }
 
                 try {
-                    HelloController hello = new HelloController();
-                    hello.newRoundMultiplayer(gameServer, gameClient, serverConnectionManager, CLIENT, SERVER);
-                    hello.startGame();
+                    newRoundStart();
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -584,6 +570,13 @@ public class EndRoundController implements Initializable {
             }
             event.consume();
         }
+    }
+
+    public synchronized void newRoundStart() throws RemoteException {
+        HelloController hello = new HelloController();
+        hello.newRoundMultiplayer(gameServer, gameClient, serverConnectionManager, CLIENT, SERVER);
+        hello.startGame();
+
     }
 
 
