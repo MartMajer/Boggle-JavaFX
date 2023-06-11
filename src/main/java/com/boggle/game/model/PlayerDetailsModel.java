@@ -15,19 +15,19 @@ public class PlayerDetailsModel implements Serializable {
 
     private ArrayList<String> _possibleWords;
 
-    private Integer overall;
+    private Integer overall_player_1;
 
     private Integer round;
 
     private Integer _score;
 
-    public void setRoundDetails(List<String> listOfCheckedWords, ArrayList<String> possibleWords, Integer score, Integer round,Integer overall) {
+    public void setRoundDetails(List<String> listOfCheckedWords, ArrayList<String> possibleWords, Integer score, Integer round,Integer overall_player_1) {
 
         _possibleWords = possibleWords;
         _listOfCheckedWords=listOfCheckedWords;
         _score=score;
         this.round=round;
-        this.overall=overall;
+        this.overall_player_1 = overall_player_1;
     }
 
     /////// getters for player
@@ -37,7 +37,7 @@ public class PlayerDetailsModel implements Serializable {
     public String get_score(){return  _score.toString();}
     public Integer get_score_int(){return  _score;}
     public Integer get_round_int(){return  round;}
-    public Integer get_overall_int(){return  overall;}
+    public Integer get_overall_int(){return overall_player_1;}
 
     public PlayerDetailsModel(String playerName) {
         this.playerName = playerName;

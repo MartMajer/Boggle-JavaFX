@@ -8,7 +8,6 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -29,8 +28,9 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.boggle.game.boggle.EndRoundController.static_overall;
+import static com.boggle.game.boggle.EndRoundController.static_overall_player_1;
 import static com.boggle.game.boggle.HelloController.*;
+import static com.boggle.game.boggle.HelloApplication.NEW_ROUND_MULTIPLAYER;
 
 public class GameScreenController implements Initializable {
 
@@ -125,31 +125,28 @@ public class GameScreenController implements Initializable {
 
     private static int time_const = 121;
     private String _currentWord = "";
-
     public Timeline _timeline;
 
     private static List<String> _listOfCheckedWords;
+    public static List<String> player_1_listOfCheckedWords;
+    public static List<String> player_2_listOfCheckedWords;
     private static List<String> _listOfCheckedWords_temp;
 
     private GameServerImpl gameServer;
-
     private GameServer gameClient;
-
     private PointsModel _addPoints;
-
     private Integer scoreYour = 0;
     private Integer scoreOpponent = 0;
-
     private ArrayList<String> dictionary;
-    private GameServerImpl gameServerImpl;
     private ServerConnectionManager serverConnectionManager;
 
 
-
-
+    public GameScreenController() {
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
 
         makeLabelsVisible(false);
 
@@ -170,22 +167,29 @@ public class GameScreenController implements Initializable {
             GAME_LOADED = false;
         }
 
-        if (SINGLEPLAYER || SERVER || GAME_LOADED) {
+
+        if (SINGLE_PLAYER || SERVER || GAME_LOADED) {
 
             try {
+
                 setUpCubes();
-            if (SERVER){
 
-               
-                this.gameServer = new GameServerImpl();
+                    if (SERVER){
 
-                makeLabelsVisible(true);
 
-                serverConnectionManager = new ServerConnectionManager(gameServer);
-               
-                gameServer.sendGameBoard(_charArray, _solver);
-               
-            }
+                        if (NEW_ROUND_MULTIPLAYER == false){
+                            this.gameServer = new GameServerImpl();
+                            serverConnectionManager = new ServerConnectionManager(gameServer);
+                        }
+
+                        makeLabelsVisible(true);
+
+                        gameServer.sendGameBoard(_charArray, _solver);
+                        gameServer.sendPlayer_1_name(_player_nickname.getText());
+
+                    }
+
+
                 setUpBoggleGrid();
 
             } catch (IOException e) {
@@ -193,13 +197,18 @@ public class GameScreenController implements Initializable {
             }
         }
         else if (CLIENT) {
+
             try {
 
                 makeLabelsVisible(true);
 
                 ClientConnectionManager clientConnectionManager = new ClientConnectionManager();
 
+
                 gameClient = clientConnectionManager.getLookupNamingContext();
+                gameClient.sendPlayer_2_name(_player_nickname.getText());
+
+                System.out.println(gameClient);
 
                 _charArray = gameClient.getGameBoard();
 
@@ -223,8 +232,9 @@ public class GameScreenController implements Initializable {
                 e.printStackTrace();
             }
         }
-
     }
+
+
 
 
     public void makeLabelsVisible(boolean bool) {
@@ -262,6 +272,7 @@ public class GameScreenController implements Initializable {
 
     public void setUpCubes() throws IOException {
         ExecutorService executorService = Executors.newCachedThreadPool();
+
         executorService.submit(() -> {
         SecureRandom r = new SecureRandom();
 
@@ -296,18 +307,21 @@ public class GameScreenController implements Initializable {
                 String s = Character.toString(letter);
                 gameBoard[i][j].setText(s);
 
-
                 //finally the character is added to the array of characters in the correct location
                 _charArray[i][j] = letter;
-
             }
         }
-
-
         });
         executorService.shutdown();
         new PreviewBoardController();
         _solver = new BoggleSolverModel(_charArray, dictionary);
+    }
+
+    public synchronized  void setGameData(GameServerImpl gameServer, GameServer gameClient,ServerConnectionManager serverConnectionManager) {
+        this.gameServer = gameServer;
+        this.gameClient = gameClient;
+        this.serverConnectionManager=serverConnectionManager;
+
     }
 
 
@@ -323,6 +337,8 @@ public class GameScreenController implements Initializable {
         _listOfCheckedWords = new ArrayList<>();
         _listOfCheckedWords_temp = new ArrayList<>();
 
+       player_2_listOfCheckedWords = new ArrayList<>();
+       player_1_listOfCheckedWords = new ArrayList<>();
 
         this.clearBoolArray();
 
@@ -342,6 +358,12 @@ public class GameScreenController implements Initializable {
     }
 
     public void setUpTimeline() {
+
+        if (_timeline != null) {
+            _timeline.stop();
+            _timeline = null;
+        }
+
         //Official boggle game time is set at 2 minutes
         _time = 140;
         KeyFrame kf = new KeyFrame(Duration.seconds(1), new TimeHandler());
@@ -355,24 +377,31 @@ public class GameScreenController implements Initializable {
     /*
      * This is the private inner class that is the timehandler.
      */
-    private class TimeHandler implements EventHandler<ActionEvent> {
+    public class TimeHandler implements EventHandler<ActionEvent> {
 
         @Override
         public void handle(ActionEvent event) {
 
             //When the timer reaches zero, the game will stop and the endGame method is called.
             if (_time == 0) {
-                endGame();
+                try {
+                    endGame();
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
             } else {
                 _time = _time - 1;
 
                 if (SERVER){
                     try {
-                        gameServer.updateScore(scoreYour);
+                        gameServer.sendPlayer_1_score(scoreYour);
                        if (_time <= 130){
+                           if (NEW_ROUND_MULTIPLAYER){
+                               gameServer.sendTimeSync(_time);
+                           }
                             _time = gameServer.getTimeSync();
                         }
-                        scoreOpponent = gameServer.getClientScore();
+                        scoreOpponent = gameServer.getPlayer_2_score();
                         if (scoreOpponent == null) {
                             scoreOpponent = 0;  // weird issue upon start - nullPointerExc must be rmi data speed so this snip is to overcome starting issue
                         }
@@ -382,11 +411,12 @@ public class GameScreenController implements Initializable {
                     }
                 } else if (CLIENT) {
                     try {
-                        gameClient.clientUpdateScore(scoreYour);
+                        gameClient.sendPlayer_2_score(scoreYour);
                         //if (_time == 138 || _time == 100 || _time == 50 || _time == 139 || _time == 101 || _time == 51)  {
                         gameClient.sendTimeSync(_time);
+
                         //}
-                        scoreOpponent = gameClient.getScore();
+                        scoreOpponent = gameClient.getPlayer_1_score();
                         _lbScore2.setText(scoreOpponent.toString());
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
@@ -398,12 +428,10 @@ public class GameScreenController implements Initializable {
         }
     }
 
-    private void endGame() {
-
-                //////////////// store player 1 details and start player 2 game! //////////////
+    private void endGame() throws RemoteException {
 
                 _listOfCheckedWords_temp = new ArrayList<String>(_listOfCheckedWords);
-                getPlayerDetails().setRoundDetails(_listOfCheckedWords_temp, _solver.getWords(), scoreYour, roundCounter, static_overall);
+                getPlayerDetails().setRoundDetails(_listOfCheckedWords_temp, _solver.getWords(), scoreYour, roundCounter, static_overall_player_1);
 
                 _listOfCheckedWords.clear();
                 reset_states();
@@ -412,7 +440,11 @@ public class GameScreenController implements Initializable {
                 _gameOver = true;
                 _timeline.stop();
 
-                new EndRoundModel(serverConnectionManager);
+        if(CLIENT || SERVER) {
+           new EndRoundModel(gameServer, gameClient, serverConnectionManager);
+        } else {
+           new EndRoundModel(null, null  , null);
+        }
 
     }
 
@@ -426,9 +458,7 @@ public class GameScreenController implements Initializable {
 
 
     public void buttonPressed_end_round(ActionEvent event) {
-
         _time = 0;
-
     }
 
     public void buttonPressed(Event q) {
@@ -444,13 +474,13 @@ public class GameScreenController implements Initializable {
         }
     }
 
-    public void buttonCheckWord(ActionEvent actionEvent) {
+    public void buttonCheckWord(ActionEvent actionEvent) throws RemoteException {
 
         if (_solver.getWords().contains(_currentWord)) {
+
             _notAWord.setText("");
 
-
-            if (!_listOfCheckedWords.contains(_currentWord)) {
+            if (!_listOfCheckedWords.contains(_currentWord) ) {
                 //add points to player and display on board
                 _addPoints.setPoints(_currentWord);
                 scoreYour = _addPoints.getPoints();
@@ -459,6 +489,16 @@ public class GameScreenController implements Initializable {
                 //add found words to pane
                 _vBox.getChildren().add(new Label(_currentWord));
                 _listOfCheckedWords.add(_currentWord);
+
+                if (CLIENT && !player_2_listOfCheckedWords.contains(_currentWord)){
+                    player_2_listOfCheckedWords.add(_currentWord);
+                    gameClient.setPlayer_2_checked_words(player_2_listOfCheckedWords);
+                } else if (SERVER  && !player_1_listOfCheckedWords.contains(_currentWord)) {
+                    player_1_listOfCheckedWords.add(_currentWord);
+                    gameServer.setPlayer_1_checked_words(player_1_listOfCheckedWords);
+
+
+                }
 
 
                 //reset labels
@@ -474,7 +514,7 @@ public class GameScreenController implements Initializable {
             _currentWordLabel.setText("Current word: ");
         }
 
-        if (_listOfCheckedWords.contains(_currentWord))
+        if (_listOfCheckedWords.contains(_currentWord) )
         {
             _currentWord = "";
             _currentWordLabel.setText("Current word: ");
@@ -493,42 +533,6 @@ public class GameScreenController implements Initializable {
 
         scoreYour = 0;
     }
-
-    public char[][] getBoardLetters() {
-
-        return _charArray;
-
-    }
-
-    public static void delay(long millis, Runnable continuation) {
-        Task<Void> sleeper = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                try {
-                    Thread.sleep(millis);
-                } catch (InterruptedException e) {
-                }
-                return null;
-            }
-        };
-        sleeper.setOnSucceeded(event -> continuation.run());
-        new Thread(sleeper).start();
-    }
-
-    public void receiveGameBoard(char[][] gameBoard) {
-        // Use Platform.runLater to safely update the GUI from a different thread
-        Platform.runLater(() -> {
-            for (int i = 0; i < GAME_BOARD_WIDTH; i++) {
-                for (int j = 0; j < GAME_BOARD_HEIGHT; j++) {
-                    this.gameBoard[i][j].setText(String.valueOf(gameBoard[i][j]));
-                    _charArray[i][j] = gameBoard[i][j];
-                }
-            }
-            _solver = new BoggleSolverModel(_charArray, dictionary);
-        });
-    }
-
-
 
 }
 

@@ -1,5 +1,7 @@
 package com.boggle.game.rmi;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class ServerConnectionManager {
 
 private SetupJNDI setupJNDI;
