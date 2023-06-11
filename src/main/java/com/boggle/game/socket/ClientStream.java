@@ -58,13 +58,13 @@ public class ClientStream implements IClient {
             try {
                 this.socket = new Socket(address, port);
 
-                // NB: the order of these is important (client: output -> input)
+
                 os = this.socket.getOutputStream();
                 output = new ObjectOutputStream(os);
                 is = this.socket.getInputStream();
                 input = new ObjectInputStream(is);
 
-                // send CONNECT message
+                //CONNECT message
                 Message msg = new Message(MessageType.CONNECT, controller.getCurrentTimestamp(), nickname, "");
                 output.writeObject(msg);
 
@@ -78,8 +78,6 @@ public class ClientStream implements IClient {
                         {
                             case CONNECT_FAILED:
                             {
-
-
                                 // show alert
                                 controller.showAlert(AlertType.INFORMATION, "Connection failed", incomingMsg.getContent());
 

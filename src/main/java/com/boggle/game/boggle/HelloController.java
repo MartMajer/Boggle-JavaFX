@@ -6,6 +6,9 @@ import com.boggle.game.model.HighscoreModel;
 import com.boggle.game.model.PlayerModel;
 import com.boggle.game.model.PlayerDetailsModel;
 import com.boggle.game.model.chat.Message;
+import com.boggle.game.rmi.GameServer;
+import com.boggle.game.rmi.GameServerImpl;
+import com.boggle.game.rmi.ServerConnectionManager;
 import com.boggle.game.socket.ClientStream;
 import com.boggle.game.socket.IClient;
 import com.boggle.game.socket.IServer;
@@ -16,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -24,6 +28,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
@@ -41,20 +46,21 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-import static com.boggle.game.boggle.EndRoundController.static_overall;
+import static com.boggle.game.boggle.EndRoundController.static_overall_player_1;
 import static com.boggle.game.boggle.HighscoreController.arrayList_Highscore;
 import static com.boggle.game.model.StoredDetailsModel.P1;
 import static com.boggle.game.model.StoredDetailsModel.overall_P1;
+import static com.boggle.game.boggle.HelloApplication.NEW_ROUND_MULTIPLAYER;
 
 public class HelloController extends UnicastRemoteObject implements Initializable {
+
 
     public static boolean GAME_LOADED = false;
     public static boolean SERVER;
     public static boolean CLIENT;
-
-    public static boolean SINGLEPLAYER;
-
+    public static boolean SINGLE_PLAYER;
     private static final int ROOM_CAPACITY = 2;
+
 
     @FXML
     private TextFlow labelErrorNicknameS;
@@ -62,10 +68,8 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
     public Button start_game_multiplayer;
     @FXML
     private TextField singleplayerNickname;
-
     @FXML
     private GridPane gp_mode;
-
     @FXML
     private GridPane gp_singleplayer;
     @FXML
@@ -76,7 +80,6 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
     private GridPane gp_multiplayer_mode;
     @FXML
     private GridPane gp_join_room;
-
     @FXML
     private GridPane gp_create_room;
     @FXML
@@ -91,7 +94,6 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
     private TextField textFieldChatS;
     @FXML
     private TextField textFieldNicknameS;
-
     @FXML
     private TextArea textAreaChatS;
     @FXML
@@ -101,24 +103,15 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
     @FXML
     private ListView<HBox> listViewUsersS;
     private ArrayList<Label> listNicknameS;
-
     @FXML
     private ListView<HBox> listViewUsersC;
-
     private ArrayList<Label> listNicknameC;
 
     private int connectedUsers;
     private IServer server;
-
     public static PlayerDetailsModel playerDetails;
-
-
     public static Integer roundCounter = 1;
-
-
-
     private SimpleDateFormat tformatter;
-
     private IClient client;
     private static final Pattern PATTERN_NICKNAME = Pattern.compile("^[a-zA-Z0-9]{3,15}$");
 
@@ -141,6 +134,9 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
     private  boolean isReady;
 
     public Label l;
+    private GameServerImpl gameServer;
+    private GameServer gameClient;
+    private ServerConnectionManager serverConnectionManager;
 
 
     public HelloController() throws RemoteException {
@@ -215,7 +211,7 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
         gp_mode.setVisible(false);
         gp_singleplayer.setVisible(true);
 
-        SINGLEPLAYER = true;
+        SINGLE_PLAYER = true;
     }
 
 
@@ -232,10 +228,10 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
         setPlayerDetails(model);
 
         roundCounter = model.get_round_int();
-        static_overall = model.get_overall_int();
-        SINGLEPLAYER = true;
+        static_overall_player_1 = model.get_overall_int();
+        SINGLE_PLAYER = true;
 
-        new EndRoundModel(null);
+        new EndRoundModel(null, null, null);
     }
 
     public void multiplayer_btn(){
@@ -264,6 +260,7 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
         gp_multiplayer_new_room_server.setVisible(true);
 
         SERVER = true;
+        NEW_ROUND_MULTIPLAYER=false;
 
 
         if(!this.checkNickname(this.textFieldNicknameS.getText()))
@@ -344,10 +341,8 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
 
         SERVER = false;
         CLIENT = false;
-        SINGLEPLAYER = false;
-
-
-
+        SINGLE_PLAYER = false;
+        GAME_LOADED = false;
 
     }
 
@@ -379,17 +374,17 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
             highscore_list();
 
              //insert hardcode users to populate list
-             // arrayList_Highscore.add(new HighscoreModel(25,"Marac"));
-             // arrayList_Highscore.add(new HighscoreModel(20,"Ivana"));
-             // arrayList_Highscore.add(new HighscoreModel(15,"Marko"));
-             // arrayList_Highscore.add(new HighscoreModel(10,"Lana"));
-             // arrayList_Highscore.add(new HighscoreModel(7,"Robi"));
-             // arrayList_Highscore.add(new HighscoreModel(3,"Lovorka"));
-             // arrayList_Highscore.add(new HighscoreModel(15,"Miro"));
-             // arrayList_Highscore.add(new HighscoreModel(32,"Koko"));
-             // arrayList_Highscore.add(new HighscoreModel(1,"Damira"));
-             // arrayList_Highscore.add(new HighscoreModel(0,"Ognjen"));
-
+           /* arrayList_Highscore.add(new HighscoreModel(25,"Marac"));
+              arrayList_Highscore.add(new HighscoreModel(20,"Ivana"));
+              arrayList_Highscore.add(new HighscoreModel(15,"Marko"));
+              arrayList_Highscore.add(new HighscoreModel(10,"Lana"));
+              arrayList_Highscore.add(new HighscoreModel(7,"Robi"));
+              arrayList_Highscore.add(new HighscoreModel(3,"Lovorka"));
+              arrayList_Highscore.add(new HighscoreModel(15,"Miro"));
+              arrayList_Highscore.add(new HighscoreModel(32,"Koko"));
+              arrayList_Highscore.add(new HighscoreModel(1,"Damira"));
+              arrayList_Highscore.add(new HighscoreModel(0,"Ognjen"));
+            */
             playerName = singleplayerNickname.getText();
 
            if (SERVER){
@@ -417,28 +412,29 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
 
         Scene scene = null;
 
+        System.out.println("KOOOOOOLKI JEEE:  "+NEW_ROUND_MULTIPLAYER);
+        System.out.println("SERVER JEEE:  "+SERVER);
+        System.out.println("CLIENT JEEE:  "+CLIENT);
+
+
+
         try {
+            // load() called only once
+            Parent root = fxmlLoader.load();
 
+            if (NEW_ROUND_MULTIPLAYER){
+                GameScreenController gsc = fxmlLoader.getController();
+                gsc.setGameData(gameServer,gameClient,serverConnectionManager);
+            }
 
-            FileInputStream inputstream = new FileInputStream("src/main/resources/Assets/bg_1.jpg");
-            Image image = new Image(inputstream);
-            ImageView imageView = new ImageView(image);
-
-            imageView.setX(50);
-            imageView.setY(25);
-            imageView.setFitHeight(455);
-            imageView.setFitWidth(500);
-
-            imageView.setPreserveRatio(true);
-
-            Group root = new Group(imageView);
-
-            scene = new Scene(fxmlLoader.load(), 600, 400);
-
+            // Scene created with the existing root
+            scene = new Scene(root, 600, 400);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+
 
         Stage stage = HelloApplication.getMainStage();
 
@@ -487,7 +483,7 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
         this.textFieldChatS.setText("");
     }
 
-    @FXML public void startMultiplayerGame(ActionEvent event) throws RemoteException {
+    @FXML public void startMultiplayerGame() throws RemoteException {
         this.server.startGame();
     }
     @FXML public void sendMessageC(ActionEvent event)
@@ -795,4 +791,12 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
         }
     }
 
+    public void newRoundMultiplayer(GameServerImpl gameServer, GameServer gameClient, ServerConnectionManager serverConnectionManager, boolean client, boolean server) {
+        this.gameServer = gameServer;
+        this.gameClient = gameClient;
+        this.serverConnectionManager = serverConnectionManager;
+        CLIENT = client;
+        SERVER = server;
+
+    }
 }

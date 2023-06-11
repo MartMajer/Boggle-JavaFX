@@ -1,23 +1,31 @@
 package com.boggle.game.rmi;
 
+import com.boggle.game.boggle.HelloController;
 import com.boggle.game.model.BoggleSolverModel;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameServerImpl extends UnicastRemoteObject implements GameServer {
-    private Integer score;
-    private Integer clientScore;
+    private Integer player1_score;
+    private Integer player2_score;
 
     private int _time;
 
     private char[][] gameBoard;
     private BoggleSolverModel _solver;
 
+    private String _player_1_name;
+    private String _player_2_name;
+
+    private Integer overall_player_1;
+    private Integer overall_player_2;
+    private List<String> player_1_checked_words;
+    private List<String> player_2_checked_words;
     public GameServerImpl() throws RemoteException {
         super();
-
-
     }
 
     @Override
@@ -27,12 +35,14 @@ public class GameServerImpl extends UnicastRemoteObject implements GameServer {
     }
 
     @Override
-    public void updateScore(Integer newScore) throws RemoteException {
-        score = newScore;
+    public void sendPlayer_1_score(Integer newScore) throws RemoteException {
+        player1_score = newScore;
+       // overall_player_1 += player1_score;
+
     }
     @Override
-    public  Integer getScore( ) throws RemoteException {
-       return  score;
+    public  Integer getPlayer_1_score( ) throws RemoteException {
+       return player1_score;
     }
 
     @Override
@@ -45,13 +55,16 @@ public class GameServerImpl extends UnicastRemoteObject implements GameServer {
     }
 
     @Override
-    public void clientUpdateScore(int score) throws RemoteException{
-        clientScore = score;
+    public void sendPlayer_2_score(int score) throws RemoteException{
+        player2_score = score;
+        //overall_player_2 += player2_score;
+
+
     }
 
     @Override
-    public Integer getClientScore( ) throws RemoteException{
-        return clientScore;
+    public Integer getPlayer_2_score( ) throws RemoteException{
+        return player2_score;
     }
     @Override
     public void sendTimeSync(int _time) throws RemoteException {
@@ -62,4 +75,62 @@ public class GameServerImpl extends UnicastRemoteObject implements GameServer {
         return this._time;
     }
 
+    @Override
+    public void sendPlayer_1_name(String name) throws RemoteException {
+        this._player_1_name = name;
+    }
+
+    @Override
+    public void sendPlayer_2_name(String name) throws RemoteException {
+        this._player_2_name = name;
+    }
+    @Override
+    public String getPlayer_1_name() throws RemoteException {
+        return this._player_1_name;
+    }
+    @Override
+    public String getPlayer_2_name() throws RemoteException {
+        return this._player_2_name;
+    }
+    @Override
+    public Integer getPlayer_1_overall() throws RemoteException {
+        return this.overall_player_1;
+    }
+    @Override
+    public Integer getPlayer_2_overall() throws RemoteException {
+        return this.overall_player_2;
+    }
+    @Override
+    public void setPlayer_1_overall(Integer overall_player_1) throws RemoteException {
+        this.overall_player_1 = overall_player_1;
+    }
+    @Override
+    public void setPlayer_2_overall(Integer overall_player_2) throws RemoteException {
+       this.overall_player_2 = overall_player_2;
+    }
+
+
+    @Override
+    public void setPlayer_1_checked_words(List<String> checked_words) throws RemoteException {
+        this.player_1_checked_words =  new ArrayList<>(checked_words);
+    }
+    @Override
+    public List<String> getPlayer_1_checked_words() throws RemoteException {
+        return this.player_1_checked_words;
+    }
+    @Override
+    public void setPlayer_2_checked_words(List<String> checked_words) throws RemoteException {
+        this.player_2_checked_words =  new ArrayList<>(checked_words);
+    }
+    @Override
+    public List<String> getPlayer_2_checked_words() throws RemoteException {
+        return this.player_2_checked_words;
+    }
+
+
+    @Override
+    public void startNewRound( ) throws RemoteException {
+        HelloController hello = new HelloController();
+        hello.startGame();
+    }
 }
