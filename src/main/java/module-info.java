@@ -3,6 +3,7 @@ module com.boggle.game.boggle {
     requires javafx.fxml;
     requires java.rmi;
     requires java.naming;
+    requires java.xml;
 
 
     opens com.boggle.game.boggle to javafx.fxml;

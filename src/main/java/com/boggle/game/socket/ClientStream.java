@@ -13,9 +13,10 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.boggle.game.boggle.HelloController.RMI_IP_ADDRESS;
 import com.boggle.game.boggle.HelloController;
 import com.boggle.game.model.PlayerModel;
-import  com.boggle.game.model.chat.*;
+import com.boggle.game.model.chat.*;
 
 import javafx.application.Platform;
 import javafx.scene.control.Alert.AlertType;
@@ -64,6 +65,10 @@ public class ClientStream implements IClient {
                 is = this.socket.getInputStream();
                 input = new ObjectInputStream(is);
 
+                String rmiServerIp = (String) input.readObject();
+                RMI_IP_ADDRESS = rmiServerIp;
+                System.out.println("For RMI: " + rmiServerIp);
+
                 //CONNECT message
                 Message msg = new Message(MessageType.CONNECT, controller.getCurrentTimestamp(), nickname, "");
                 output.writeObject(msg);
@@ -86,8 +91,7 @@ public class ClientStream implements IClient {
                             case START_GAME: {
                                 // Transition to the game screen and start the game
                                 Platform.runLater(() -> {
-                                    // Assuming you have a way to switch to your GameScreenController, you can do it here
-                                    try {
+                                     try {
                                         controller.startGame();
                                     } catch (RemoteException e) {
                                         throw new RuntimeException(e);
@@ -112,6 +116,12 @@ public class ClientStream implements IClient {
                                 break;
                             }
                             case READY:
+                            {
+
+                                controller.addToTextArea(incomingMsg);
+
+                                break;
+                            }
                             case CHAT:
                             {
 

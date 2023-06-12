@@ -21,7 +21,7 @@ public class RmiRegistry {
             gameServer = new GameServerImpl();
 
             // Bind your remote object to the RMI registry
-            registry.bind("MyRemoteObject", gameServer);
+            registry.bind("GameService", gameServer);
 
             System.out.println("Server is ready...");
 

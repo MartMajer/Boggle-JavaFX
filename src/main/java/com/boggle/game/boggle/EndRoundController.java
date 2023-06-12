@@ -2,12 +2,11 @@ package com.boggle.game.boggle;
 
 import com.boggle.game.model.HighscoreModel;
 import com.boggle.game.model.StoredDetailsModel;
+import com.boggle.game.model.XmlManager;
 import com.boggle.game.rmi.ClientConnectionManager;
 import com.boggle.game.rmi.GameServer;
 import com.boggle.game.rmi.GameServerImpl;
 import com.boggle.game.rmi.ServerConnectionManager;
-import com.boggle.game.socket.IServer;
-import com.boggle.game.socket.ServerStream;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -21,6 +20,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -137,13 +137,15 @@ public class EndRoundController implements Initializable {
     @FXML
     private Label _timeLabel;
 
+    @FXML
+    private AnchorPane ap_about;
+    @FXML
+    private Menu xml_menubar;
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-
-
-
 
         _singleplayer_name.setText(getPlayerDetails().getPlayerName());
 
@@ -155,10 +157,6 @@ public class EndRoundController implements Initializable {
             _highscore.setDisable(true);
 
         }
-
-
-
-
 
         Integer temp = roundCounter - 1;
         _roundNumber.setText(temp.toString());
@@ -218,11 +216,14 @@ public class EndRoundController implements Initializable {
         }
 
         static_overall_player_1 = temp1;
+        playerDetails.set_overall(static_overall_player_1);
 
         _singleplayer_Overall.setText(static_overall_player_1.toString());
 
+
         if (SINGLE_PLAYER == true && SERVER == false) {
             ap_singleplayer.setVisible(true);
+            xml_menubar.setVisible(false);
         }else {
 
             NEW_ROUND_MULTIPLAYER = true;
@@ -239,6 +240,8 @@ public class EndRoundController implements Initializable {
 
     }
 
+
+
     public void savegame_menuitem(ActionEvent actionEvent) throws RuntimeException {
 
         roundCounter += 1;
@@ -246,10 +249,43 @@ public class EndRoundController implements Initializable {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("playerdetails.ser"))) {
 
             oos.writeObject(playerDetails);
+            XmlManager xml = new XmlManager();
+            xml.xmlWrite(playerDetails);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+    public void savegame_XML_menuitem(ActionEvent actionEvent) throws RuntimeException {
+
+        roundCounter += 1;
+
+            XmlManager xml = new XmlManager();
+            xml.xmlWrite(playerDetails);
+
+    }
+
+    @FXML
+    public void show_about(ActionEvent actionEvent) throws RuntimeException {
+
+        ap_about.setVisible(true);
+
+    }
+
+    public void btn_about_back(ActionEvent actionEvent) throws RuntimeException {
+
+        ap_about.setVisible(false);;
+
+    }
+
+    public void saveXml_menuitem(ActionEvent actionEvent) throws RuntimeException {
+
+       gameServer.writeXml();
+    }
+    public void readXml_menuitem(ActionEvent actionEvent) throws RuntimeException {
+
+        XmlManager xmlReader = new XmlManager();
+        xmlReader.parseXml();
     }
 
     public void mainmenu_return(ActionEvent actionEvent) throws IOException {

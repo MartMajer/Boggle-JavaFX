@@ -11,6 +11,7 @@ import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+
 import com.boggle.game.boggle.HelloController;
 import com.boggle.game.model.PlayerModel;
 import com.boggle.game.model.chat.Message;
@@ -62,6 +63,7 @@ public class ServerStream implements IServer {
                 try(final DatagramSocket socket = new DatagramSocket()) {
                     socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
                     privateIP = socket.getLocalAddress().getHostAddress();
+
                     this.controller.showAlert(AlertType.ERROR, "Room creation failed", "Another socket is already binded to " + privateIP + ":" + PORT);
                 } catch (SocketException e1) {
                     e.printStackTrace();
@@ -141,6 +143,9 @@ public class ServerStream implements IServer {
                 this.input = new ObjectInputStream(this.is);
                 this.os = this.socket.getOutputStream();
                 this.output = new ObjectOutputStream(this.os);
+
+                // Send the IP address of the RMI server to the client
+                this.output.writeObject(ServerStream.privateIP);
 
                 while(this.socket.isConnected())
                 {
@@ -318,6 +323,8 @@ public class ServerStream implements IServer {
         }
     }
 
+
+
     @Override
     public void sendChatMessage(String content)
     {
@@ -367,7 +374,10 @@ public class ServerStream implements IServer {
         }
 
         // close the socket
-        this.serverListener.closeSocket();
+        if ( serverListener != null){
+            this.serverListener.closeSocket();
+        }
+
     }
 
     private void forwardMessage(Message msg)

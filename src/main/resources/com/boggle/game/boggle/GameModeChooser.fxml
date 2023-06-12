@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
@@ -55,6 +56,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#singleplayer_btn" prefHeight="50.0" text="Singleplayer" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -73,7 +75,7 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </Button>
-            <Button fx:id="btn_load" mnemonicParsing="false" onAction="#load_btn" prefHeight="40.0" prefWidth="113.0" text="Load Game" GridPane.rowIndex="3">
+            <Button fx:id="btn_load" mnemonicParsing="false" onAction="#load_btn" prefHeight="40.0" prefWidth="113.0" text="Load Game" GridPane.rowIndex="4">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
@@ -81,6 +83,11 @@
                   <Insets left="40.0" />
                </GridPane.margin>
             </Button>
+            <CheckBox fx:id="checkbox" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#load_fxml_toggle" text="Load XML" textFill="WHITE" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets left="41.0" top="70.0" />
+               </GridPane.margin>
+            </CheckBox>
          </children>
       </GridPane>
       <GridPane fx:id="gp_singleplayer" layoutY="3.0" prefHeight="383.0" prefWidth="600.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

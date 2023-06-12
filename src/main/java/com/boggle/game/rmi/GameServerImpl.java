@@ -3,10 +3,24 @@ package com.boggle.game.rmi;
 import com.boggle.game.boggle.HelloController;
 import com.boggle.game.model.BoggleSolverModel;
 
+import java.io.File;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.PrintWriter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class GameServerImpl extends UnicastRemoteObject implements GameServer {
     private Integer player1_score;
@@ -157,5 +171,74 @@ public class GameServerImpl extends UnicastRemoteObject implements GameServer {
     public Integer getOverallScorePlayer2() throws RemoteException {
         return this.overallScorePlayer2;
     }
+
+    public void writeXml() {
+        try {
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            Document xmlDocument = documentBuilder.newDocument();
+
+            Element rootElement = xmlDocument.createElement("GameServer");
+
+            xmlDocument.appendChild(rootElement);
+
+            Element element = xmlDocument.createElement("player1_score");
+            element.appendChild(xmlDocument.createTextNode(player1_score == null ? "" : String.valueOf(player1_score)));
+            rootElement.appendChild(element);
+
+            element = xmlDocument.createElement("player2_score");
+            element.appendChild(xmlDocument.createTextNode(player2_score == null ? "" : String.valueOf(player2_score)));
+            rootElement.appendChild(element);
+
+            element = xmlDocument.createElement("time");
+            element.appendChild(xmlDocument.createTextNode(_time == 0 ? "" : String.valueOf(_time)));
+            rootElement.appendChild(element);
+
+            element = xmlDocument.createElement("player_1_name");
+            element.appendChild(xmlDocument.createTextNode(_player_1_name == null ? "" : _player_1_name));
+            rootElement.appendChild(element);
+
+            element = xmlDocument.createElement("player_2_name");
+            element.appendChild(xmlDocument.createTextNode(_player_2_name == null ? "" : _player_2_name));
+            rootElement.appendChild(element);
+
+            element = xmlDocument.createElement("overall_player_1");
+            element.appendChild(xmlDocument.createTextNode(overall_player_1 == null ? "" : String.valueOf(overall_player_1)));
+            rootElement.appendChild(element);
+
+            element = xmlDocument.createElement("overall_player_2");
+            element.appendChild(xmlDocument.createTextNode(overall_player_2 == null ? "" : String.valueOf(overall_player_2)));
+            rootElement.appendChild(element);
+
+            String player1CheckedWords = (player_1_checked_words == null) ? "" : String.join(", ", player_1_checked_words);
+            element = xmlDocument.createElement("player_1_checked_words");
+            element.appendChild(xmlDocument.createTextNode(player1CheckedWords));
+            rootElement.appendChild(element);
+
+            String player2CheckedWords = (player_2_checked_words == null) ? "" : String.join(", ", player_2_checked_words);
+            element = xmlDocument.createElement("player_2_checked_words");
+            element.appendChild(xmlDocument.createTextNode(player2CheckedWords));
+            rootElement.appendChild(element);
+
+            element = xmlDocument.createElement("overallScorePlayer1");
+            element.appendChild(xmlDocument.createTextNode(overallScorePlayer1 == null ? "" : String.valueOf(overallScorePlayer1)));
+            rootElement.appendChild(element);
+
+            element = xmlDocument.createElement("overallScorePlayer2");
+            element.appendChild(xmlDocument.createTextNode(overallScorePlayer2 == null ? "" : String.valueOf(overallScorePlayer2)));
+            rootElement.appendChild(element);
+
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            DOMSource xmlSource = new DOMSource(xmlDocument);
+            StreamResult xmlResult = new StreamResult(new File("gameserver.xml"));
+
+            transformer.transform(xmlSource, xmlResult);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
 
 }

@@ -4,6 +4,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import java.util.Hashtable;
 
+import static com.boggle.game.boggle.HelloController.RMI_IP_ADDRESS;
+
 public class SetupJNDI {
 
 
@@ -14,15 +16,19 @@ public class SetupJNDI {
         this.gameServer = gameServer;
 
         try {
+
+            System.out.println("Server IP CHECk_TEST: "+ RMI_IP_ADDRESS);
+            System.setProperty("java.rmi.server.hostname", RMI_IP_ADDRESS);
+
             Hashtable<String, String> env = new Hashtable<>();
             env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.rmi.registry.RegistryContextFactory");
-            env.put(Context.PROVIDER_URL, "rmi://localhost:1099");
+            env.put(Context.PROVIDER_URL, "rmi://"+RMI_IP_ADDRESS+":1099");
             Context namingContext = new InitialContext(env);
 
 
 
             // Bind the remote object
-            namingContext.bind("GameService", gameServer);
+            namingContext.bind("MyRemoteObject", gameServer);
 
             System.out.println("Server ready");
         } catch (Exception e) {

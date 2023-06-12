@@ -7,17 +7,20 @@ import com.boggle.game.utils.DictionaryLoader;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.*;
@@ -411,6 +414,7 @@ public class GameScreenController implements Initializable {
                     }
                 } else if (CLIENT) {
                     try {
+
                         gameClient.sendPlayer_2_score(scoreYour);
                         //if (_time == 138 || _time == 100 || _time == 50 || _time == 139 || _time == 101 || _time == 51)  {
                         gameClient.sendTimeSync(_time);
@@ -419,7 +423,23 @@ public class GameScreenController implements Initializable {
                         scoreOpponent = gameClient.getPlayer_1_score();
                         _lbScore2.setText(scoreOpponent.toString());
                     } catch (RemoteException e) {
-                        throw new RuntimeException(e);
+
+                        _time = 0;
+                        Platform.runLater(() -> {
+
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Error Dialog");
+                            alert.setHeaderText("Connection Error");
+                            alert.setContentText("The server has disconnected. The application will now exit.");
+
+                            alert.showAndWait();
+
+                            // Exit the application:
+                            Platform.exit();
+                            System.exit(0);
+                        });
+
+
                     }
                 }
                 _timeLabel.setText("Time remaining: " + _time + " seconds");

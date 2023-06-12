@@ -15,6 +15,7 @@ public class HelloApplication extends Application {
 
     public static boolean NEW_ROUND_MULTIPLAYER = false;
 
+
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("GameModeChooser.fxml"));
@@ -43,3 +44,4 @@ public class HelloApplication extends Application {
         launch(args);
     }
 }
+
