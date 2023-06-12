@@ -1,10 +1,7 @@
 package com.boggle.game.boggle;
 
 
-import com.boggle.game.model.EndRoundModel;
-import com.boggle.game.model.HighscoreModel;
-import com.boggle.game.model.PlayerModel;
-import com.boggle.game.model.PlayerDetailsModel;
+import com.boggle.game.model.*;
 import com.boggle.game.model.chat.Message;
 import com.boggle.game.rmi.GameServer;
 import com.boggle.game.rmi.GameServerImpl;
@@ -51,6 +48,7 @@ import static com.boggle.game.boggle.HighscoreController.arrayList_Highscore;
 import static com.boggle.game.model.StoredDetailsModel.P1;
 import static com.boggle.game.model.StoredDetailsModel.overall_P1;
 import static com.boggle.game.boggle.HelloApplication.NEW_ROUND_MULTIPLAYER;
+import static com.boggle.game.socket.ServerStream.privateIP;
 
 public class HelloController extends UnicastRemoteObject implements Initializable {
 
@@ -60,6 +58,7 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
     public static boolean CLIENT;
     public static boolean SINGLE_PLAYER;
     private static final int ROOM_CAPACITY = 2;
+    public static String RMI_IP_ADDRESS;
 
 
     @FXML
@@ -131,12 +130,16 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
     @FXML private TextFlow labelErrorNicknameC;
     @FXML private Label labelErrorIP;
 
+    @FXML private CheckBox checkbox;
+
     private  boolean isReady;
 
     public Label l;
     private GameServerImpl gameServer;
     private GameServer gameClient;
     private ServerConnectionManager serverConnectionManager;
+
+    private boolean LOAD_XML = false;
 
 
     public HelloController() throws RemoteException {
@@ -148,6 +151,7 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
 
         if (GAME_LOADED == true) {
             btn_load.setVisible(false);
+            checkbox.setVisible(false);
         }
 
         this.singleplayer_start.setDisable(true);
@@ -212,20 +216,34 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
         SINGLE_PLAYER = true;
     }
 
+    @FXML public void load_fxml_toggle(ActionEvent event){
+        LOAD_XML = !LOAD_XML;
+    }
+
+
 
     public void load_btn() throws IOException, ClassNotFoundException {
         gp_mode.setVisible(false);
         GAME_LOADED = true;
-        PlayerDetailsModel model = new PlayerDetailsModel();
 
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("playerdetails.ser"))) {
-            model = (PlayerDetailsModel)ois.readObject();
+        PlayerDetailsModel player = new PlayerDetailsModel();
+
+        if (LOAD_XML){
+            XmlManager xml = new XmlManager();
+            player = xml.xmlRead();
+        }
+        else{
+
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("playerdetails.ser"))) {
+                player = (PlayerDetailsModel)ois.readObject();
+            }
         }
 
-        setPlayerDetails(model);
 
-        roundCounter = model.get_round_int();
-        static_overall_player_1 = model.get_overall_int();
+        setPlayerDetails(player);
+
+        roundCounter = player.get_round_int();
+        static_overall_player_1 = player.get_overall_int();
         SINGLE_PLAYER = true;
 
         new EndRoundModel(null, null, null);
@@ -372,8 +390,9 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
 
             highscore_list();
 
-             //insert hardcode users to populate list
-           /* arrayList_Highscore.add(new HighscoreModel(25,"Marac"));
+             //insert hardcoded users to populate list
+           /*
+              arrayList_Highscore.add(new HighscoreModel(25,"Marac"));
               arrayList_Highscore.add(new HighscoreModel(20,"Ivana"));
               arrayList_Highscore.add(new HighscoreModel(15,"Marko"));
               arrayList_Highscore.add(new HighscoreModel(10,"Lana"));
@@ -417,10 +436,6 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
         }
 
             Scene scene = null;
-
-            System.out.println("KOOOOOOLKI JEEE:  "+NEW_ROUND_MULTIPLAYER);
-            System.out.println("SERVER JEEE:  "+SERVER);
-            System.out.println("CLIENT JEEE:  "+CLIENT);
 
 
             try {
@@ -653,7 +668,8 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
     {
         try(final DatagramSocket socket = new DatagramSocket()) {
             socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
-            String privateIP = socket.getLocalAddress().getHostAddress();
+              privateIP = socket.getLocalAddress().getHostAddress();
+                RMI_IP_ADDRESS = privateIP;
             this.labelServerIP.setText("Private Server IP address: " + privateIP);
         } catch (SocketException e) {
             e.printStackTrace();
@@ -666,7 +682,7 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
         if (SERVER){
             this.server.sendClose();
             this.server = null;}
-        else if (CLIENT){
+        else if (CLIENT && client != null){
             this.client.sendClose();
             this.client = null;}
     }

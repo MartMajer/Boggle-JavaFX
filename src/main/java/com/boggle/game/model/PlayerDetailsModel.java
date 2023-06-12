@@ -44,6 +44,9 @@ public class PlayerDetailsModel implements Serializable {
     }
     public PlayerDetailsModel() {
     }
+    public void set_overall(Integer overall){
+        this.overall_player_1=overall;
+    }
 
     public String getPlayerName() {
         return playerName;

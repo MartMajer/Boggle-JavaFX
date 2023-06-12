@@ -10,6 +10,9 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -154,7 +157,7 @@
                   </Label>
                </graphic>
             </Label>
-            <Label fx:id="_timeLabel" contentDisplay="TOP" layoutX="14.0" layoutY="333.0" prefHeight="43.0" prefWidth="207.0" text="New round in: 10" textFill="WHITE">
+            <Label fx:id="_timeLabel" contentDisplay="TOP" layoutX="14.0" layoutY="333.0" prefHeight="43.0" prefWidth="207.0" text="New round in: 20" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
@@ -245,20 +248,76 @@
             </Label>
          </children>
       </AnchorPane>
+      <AnchorPane fx:id="ap_about" layoutY="10.0" prefHeight="400.0" prefWidth="620.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <ImageView fitHeight="400.0" fitWidth="620.0">
+               <image>
+                  <Image url="@../../../../Assets/bg_1.jpg" />
+               </image>
+            </ImageView>
+            <GridPane prefHeight="410.0" prefWidth="620.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="149.0" minWidth="10.0" prefWidth="98.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="218.0" minWidth="0.0" prefWidth="79.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="465.0" minWidth="10.0" prefWidth="443.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="230.0" minHeight="10.0" prefHeight="132.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="176.0" minHeight="10.0" prefHeight="132.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="149.0" minHeight="10.0" prefHeight="145.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label prefHeight="29.0" prefWidth="186.0" text="Made by Martin Majeric" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                     <padding>
+                        <Insets bottom="100.0" />
+                     </padding>
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="424.0" layoutY="207.0" text="For the purpose of Java 2 " textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                     <padding>
+                        <Insets bottom="60.0" />
+                     </padding>
+                  </Label>
+                  <Label text="2023" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                     <padding>
+                        <Insets bottom="25.0" />
+                     </padding>
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#btn_about_back" prefHeight="25.0" prefWidth="71.0" text="Back" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets left="340.0" top="80.0" />
+                     </GridPane.margin>
+                  </Button>
+               </children>
+            </GridPane>
+         </children>
+      </AnchorPane>
       <MenuBar layoutY="1.0" prefHeight="25.0" prefWidth="620.0">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
               <MenuItem fx:id="mi_mainmenu" mnemonicParsing="false" onAction="#mainmenu_return" text="Main menu" />
-                  <MenuItem mnemonicParsing="false" onAction="#savegame_menuitem" text="Save game" />
+                  <MenuItem mnemonicParsing="false" onAction="#savegame_menuitem" text="Save game - Serialize" />
+                  <MenuItem mnemonicParsing="false" onAction="#savegame_XML_menuitem" text="Save game - XML" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Help">
+          <Menu mnemonicParsing="false" text="Options">
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#generateDocumentation" text="Generate documentation" />
-              <MenuItem mnemonicParsing="false" text="About" />
+              <MenuItem mnemonicParsing="false" onAction="#show_about" text="About" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="XML" fx:id="xml_menubar">
+               <items>
+                  <MenuItem fx:id="mi_mainmenu1" mnemonicParsing="false" onAction="#saveXml_menuitem" text="Write XML" />
+                  <MenuItem mnemonicParsing="false" onAction="#readXml_menuitem" text="Read XML" />
+               </items>
+            </Menu>
         </menus>
       </MenuBar>
    </children>
