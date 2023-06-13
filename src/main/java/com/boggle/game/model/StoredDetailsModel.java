@@ -5,15 +5,15 @@ import java.io.Serializable;
 
 public class StoredDetailsModel implements Serializable {
 
-    public static String P1;
+    public static String player1;
 
-    public static Integer overall_P1;
+    public static Integer overallScorePlayer1;
 
-    public StoredDetailsModel(String P1, Integer score_P1, String round){
+    public StoredDetailsModel(String player1, Integer scorePlayer1, String round) {
 
-        this.P1 = P1;
+        StoredDetailsModel.player1 = player1;
 
-        overall_P1 += score_P1;
+        overallScorePlayer1 += scorePlayer1;
 
     }
 

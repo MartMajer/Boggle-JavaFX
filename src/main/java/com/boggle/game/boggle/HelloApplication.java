@@ -13,8 +13,6 @@ public class HelloApplication extends Application {
     private HelloController controller;
     private static Stage mainStage;
 
-    public static boolean NEW_ROUND_MULTIPLAYER = false;
-
 
     @Override
     public void start(Stage stage) throws IOException {

@@ -1,11 +1,16 @@
 package com.boggle.game.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class HighscoreModel implements Comparable<HighscoreModel>, Serializable {
 
-    private String name;
-    private Integer index;
+    private static final long serialVersionUID = 3648685275967776802L;
+
+    private final String name;
+    private final Integer index;
+
+
 
     public HighscoreModel(int index, String name){
 
@@ -21,7 +26,7 @@ public class HighscoreModel implements Comparable<HighscoreModel>, Serializable 
 
     @Override
     public int compareTo(HighscoreModel name) {
-        int compareIndex=((HighscoreModel)name).getIndex();
+        int compareIndex= name.getIndex();
 
         return compareIndex - this.index;
 

@@ -1,17 +1,5 @@
 package com.boggle.game.socket;
 
-import java.io.*;
-import java.net.BindException;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.rmi.RemoteException;
-import java.util.ArrayList;
-
-
 import com.boggle.game.boggle.HelloController;
 import com.boggle.game.model.PlayerModel;
 import com.boggle.game.model.chat.Message;
@@ -19,21 +7,26 @@ import com.boggle.game.model.chat.MessageType;
 import javafx.application.Platform;
 import javafx.scene.control.Alert.AlertType;
 
+import java.io.*;
+import java.net.*;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+
 public class ServerStream implements IServer {
 
     private static final int PORT = 9001;
-    private int minToStartGame = 2;
-    private int maxNumUsers = 6;
-    private HelloController controller;
-    private String nickname;
+    private final int minToStartGame = 2;
+    private final int maxNumUsers = 6;
+    private final HelloController controller;
+    private final String nickname;
 
     public static String privateIP;
 
 
     private ServerListener serverListener;
 
-    private ArrayList<PlayerModel> players;
-    private ArrayList<ObjectOutputStream> writers;
+    private final ArrayList<PlayerModel> players;
+    private final ArrayList<ObjectOutputStream> writers;
     private ArrayList<PlayerModel> bannedPlayers;
 
     public ServerStream(HelloController controller, String nickname)
@@ -78,7 +71,7 @@ public class ServerStream implements IServer {
 
     private class ServerListener extends Thread {
 
-        private ServerSocket listener;
+        private final ServerSocket listener;
 
         public ServerListener(int port) throws IOException
         {
@@ -120,7 +113,7 @@ public class ServerStream implements IServer {
     }
 
     private class Handler extends Thread {
-        private Socket socket;
+        private final Socket socket;
 
         private InputStream is;
         private ObjectInputStream input;
@@ -152,7 +145,7 @@ public class ServerStream implements IServer {
                     Message incomingMsg = (Message) this.input.readObject();
                     if(incomingMsg != null)
                     {
-                        System.out.println("Server (" + this.getId() + "): received " + incomingMsg.toString());
+                        System.out.println("Server (" + this.getId() + "): received " + incomingMsg);
                         switch(incomingMsg.getMsgType())
                         {
                             case CONNECT:
@@ -235,13 +228,9 @@ public class ServerStream implements IServer {
 
                                 // check if the game can start now
                                 Platform.runLater(() -> {
-                                    if (checkCanStartGame()) {
-                                        // if all users are ready and there are enough users to start the game, enable the start game button
-                                        controller.start_game_multiplayer.setDisable(false);
-                                    } else {
-                                        // if not all users are ready or there are not enough users to start the game, disable the start game button
-                                        controller.start_game_multiplayer.setDisable(true);
-                                    }
+                                    // if all users are ready and there are enough users to start the game, enable the start game button
+                                    // if not all users are ready or there are not enough users to start the game, disable the start game button
+                                    controller.btnStartGameMultiplayer.setDisable(!checkCanStartGame());
                                 });
 
 
@@ -282,7 +271,7 @@ public class ServerStream implements IServer {
                             }
                             default:
                             {
-                                System.out.println("Server: received unknow message type: " + incomingMsg.toString());
+                                System.out.println("Server: received unknow message type: " + incomingMsg);
                                 break;
                             }
                         }
@@ -353,7 +342,7 @@ public class ServerStream implements IServer {
             if(!u.isReady())
                 return false;
         }
-        return this.players.size() >= this.minToStartGame ? true : false;
+        return this.players.size() >= this.minToStartGame;
     }
 
     @Override

@@ -1,11 +1,14 @@
 package com.boggle.game.socket;
 
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
+import com.boggle.game.boggle.HelloController;
+import com.boggle.game.model.PlayerModel;
+import com.boggle.game.model.chat.Message;
+import com.boggle.game.model.chat.MessageType;
+import javafx.application.Platform;
+import javafx.scene.control.Alert.AlertType;
+
+import java.io.*;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketException;
@@ -14,26 +17,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.boggle.game.boggle.HelloController.RMI_IP_ADDRESS;
-import com.boggle.game.boggle.HelloController;
-import com.boggle.game.model.PlayerModel;
-import com.boggle.game.model.chat.*;
-
-import javafx.application.Platform;
-import javafx.scene.control.Alert.AlertType;
 
 public class ClientStream implements IClient {
-    private HelloController controller;
-    private ClientListener clientListener;
+    private final HelloController controller;
+    private final ClientListener clientListener;
 
-    private String nickname;
+    private final String nickname;
 
     private OutputStream os;
     private ObjectOutputStream output;
     private InputStream is;
     private ObjectInputStream input;
 
-    public ClientStream(HelloController controller, String address, int port, String nickname)
-    {
+    public ClientStream(HelloController controller, String address, int port, String nickname) {
         this.controller = controller;
         this.nickname = nickname;
 
@@ -43,18 +39,16 @@ public class ClientStream implements IClient {
 
     private class ClientListener extends Thread {
         private Socket socket;
-        private String address;
-        private int port;
+        private final String address;
+        private final int port;
 
-        public ClientListener(String address, int port)
-        {
+        public ClientListener(String address, int port) {
             this.address = address;
             this.port = port;
         }
 
         @Override
-        public void run()
-        {
+        public void run() {
             System.out.println("Client: running. Nickname: " + nickname);
             try {
                 this.socket = new Socket(address, port);
@@ -73,16 +67,12 @@ public class ClientStream implements IClient {
                 Message msg = new Message(MessageType.CONNECT, controller.getCurrentTimestamp(), nickname, "");
                 output.writeObject(msg);
 
-                while(this.socket.isConnected())
-                {
+                while (this.socket.isConnected()) {
                     Message incomingMsg = (Message) input.readObject();
-                    if(incomingMsg != null)
-                    {
-                        System.out.println("Client (" + this.getId() + "): received " + incomingMsg.toString()); // test
-                        switch(incomingMsg.getMsgType())
-                        {
-                            case CONNECT_FAILED:
-                            {
+                    if (incomingMsg != null) {
+                        System.out.println("Client (" + this.getId() + "): received " + incomingMsg); // test
+                        switch (incomingMsg.getMsgType()) {
+                            case CONNECT_FAILED: {
                                 // show alert
                                 controller.showAlert(AlertType.INFORMATION, "Connection failed", incomingMsg.getContent());
 
@@ -91,7 +81,7 @@ public class ClientStream implements IClient {
                             case START_GAME: {
                                 // Transition to the game screen and start the game
                                 Platform.runLater(() -> {
-                                     try {
+                                    try {
                                         controller.startGame();
                                     } catch (RemoteException e) {
                                         throw new RuntimeException(e);
@@ -99,8 +89,7 @@ public class ClientStream implements IClient {
                                 });
                                 break;
                             }
-                            case CONNECT_OK:
-                            {
+                            case CONNECT_OK: {
                                 // stop loading icon & switch to Client Room View
                                 controller.switchToClientRoom();
 
@@ -115,38 +104,33 @@ public class ClientStream implements IClient {
 
                                 break;
                             }
-                            case READY:
-                            {
+                            case READY: {
 
                                 controller.addToTextArea(incomingMsg);
 
                                 break;
                             }
-                            case CHAT:
-                            {
+                            case CHAT: {
 
                                 // add the message to the chat textArea
                                 controller.addToTextArea(incomingMsg);
 
                                 break;
                             }
-                            case USER_JOINED:
-                            {
+                            case USER_JOINED: {
                                 // add the message to the chat textArea
-                                controller.addToTextArea(incomingMsg.getTimestamp() + " " + incomingMsg.getNickname() + " has joined the room");;
+                                controller.addToTextArea(incomingMsg.getTimestamp() + " " + incomingMsg.getNickname() + " has joined the room");
 
                                 // add the user and update the list
                                 controller.addUser(new PlayerModel(incomingMsg.getNickname()));
 
                                 break;
                             }
-                            case DISCONNECT:
-                            {
+                            case DISCONNECT: {
                                 // the room has been closed (connection lost from the server)
-                                if(incomingMsg.getNickname().equals(nickname))
-                                {
+                                if (incomingMsg.getNickname().equals(nickname)) {
                                     // switch view
-                                    controller.back_btn();
+                                    controller.backBtn();
 
                                     // close connection(?)
 
@@ -154,8 +138,7 @@ public class ClientStream implements IClient {
                                     controller.showAlert(AlertType.INFORMATION, "Disconnected from server", incomingMsg.getContent());
                                 }
                                 // another user disconnected
-                                else
-                                {
+                                else {
                                     // add the message to the chat textArea
                                     controller.addToTextArea(incomingMsg.getTimestamp() + " " + incomingMsg.getNickname() + " has left the room");
 
@@ -165,26 +148,21 @@ public class ClientStream implements IClient {
 
                                 break;
                             }
-                            default:
-                            {
-                                System.out.println("Client: received unknow message type: " + incomingMsg.toString());
+                            default: {
+                                System.out.println("Client: received unknow message type: " + incomingMsg);
                                 break;
                             }
                         }
                     }
                 }
-            } catch(SocketException e) {
+            } catch (SocketException e) {
                 System.out.println("Socket exception");
-                if(e instanceof ConnectException)
-                {
+                if (e instanceof ConnectException) {
                     controller.showAlert(AlertType.ERROR, "Connection failed", e.getMessage());
 
-                }
-                else if(e.getMessage().equals("Connection reset"))
-                {
+                } else if (e.getMessage().equals("Connection reset")) {
                     System.out.println("Stream closed");
-                }
-                else e.printStackTrace();
+                } else e.printStackTrace();
             } catch (IOException e) {
                 System.out.println("Stream closed");
             } catch (ClassNotFoundException e) {
@@ -194,11 +172,7 @@ public class ClientStream implements IClient {
     }
 
 
-
-
-
-    private void sendMessage(Message message)
-    {
+    private void sendMessage(Message message) {
         try {
             this.output.writeObject(message);
         } catch (IOException e) {
@@ -207,8 +181,7 @@ public class ClientStream implements IClient {
     }
 
     @Override
-    public void sendChatMessage(String content)
-    {
+    public void sendChatMessage(String content) {
         Message msg = new Message(MessageType.CHAT, this.controller.getCurrentTimestamp(), this.nickname, content);
 
         // send the message
@@ -219,9 +192,8 @@ public class ClientStream implements IClient {
     }
 
     @Override
-    public void sendReady(boolean ready)
-    {
-        Message msg = new Message(MessageType.READY, this.controller.getCurrentTimestamp(), "SYSTEM", "Player " + this.nickname +  " " +  ((ready == true)? "is READY" : "is NOT READY"));
+    public void sendReady(boolean ready) {
+        Message msg = new Message(MessageType.READY, this.controller.getCurrentTimestamp(), "SYSTEM", "Player " + this.nickname + " " + ((ready) ? "is READY" : "is NOT READY"));
 
 
         // send ready message
@@ -229,21 +201,18 @@ public class ClientStream implements IClient {
     }
 
     @Override
-    public void sendClose()
-    {
+    public void sendClose() {
         Message msg = new Message(MessageType.DISCONNECT, controller.getCurrentTimestamp(), this.nickname, "");
 
         // send disconnect message
         this.sendMessage(msg);
     }
 
-    private List<PlayerModel> extractUserList(String s)
-    {
+    private List<PlayerModel> extractUserList(String s) {
         List<PlayerModel> list = new ArrayList<PlayerModel>();
 
         String[] sTmp = s.split(";");
-        for(int i = 0; i < sTmp.length; i++)
-        {
+        for (int i = 0; i < sTmp.length; i++) {
             String[] sNickReady = sTmp[i].split(",");
             PlayerModel u = new PlayerModel(sNickReady[0]);
             u.setReady(Boolean.parseBoolean(sNickReady[1]));
@@ -252,7 +221,6 @@ public class ClientStream implements IClient {
 
         return list;
     }
-
 
 
 }

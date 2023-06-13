@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class TrieNodeModel {
     private boolean isLeaf;
-    private HashMap<Character, TrieNodeModel> child;
+    private final HashMap<Character, TrieNodeModel> child;
 
     public TrieNodeModel() {
         isLeaf = false;

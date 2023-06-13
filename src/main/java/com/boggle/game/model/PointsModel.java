@@ -2,7 +2,7 @@ package com.boggle.game.model;
 
 public class PointsModel {
 
-    public static int _gameScore = 0;
+    public static int gameScore = 0;
 
 
 
@@ -11,23 +11,23 @@ public class PointsModel {
 
         if (word.length()==3 || word.length()==4 )
         {
-            _gameScore += 1;
+            gameScore += 1;
         }
         else if (word.length()==5)
         {
-            _gameScore += 2;
+            gameScore += 2;
         }
         else if (word.length()==6)
         {
-            _gameScore += 3;
+            gameScore += 3;
         }
         else if (word.length()==7)
         {
-            _gameScore += 4;
+            gameScore += 4;
         }
         else if (word.length()<=8)
         {
-            _gameScore += 11;
+            gameScore += 11;
         }
 
 
@@ -36,6 +36,6 @@ public class PointsModel {
 
     }
 
-    public int getPoints(){ return _gameScore;}
-    public void setPoints(){ _gameScore=0;}
+    public int getPoints(){ return gameScore;}
+    public void setPoints(){ gameScore =0;}
 }

@@ -1,7 +1,9 @@
 package com.boggle.game.socket;
 
 public interface IClient {
-    public void sendChatMessage(String content);
-    public void sendReady(boolean ready);
-    public void sendClose();
+    void sendChatMessage(String content);
+
+    void sendReady(boolean ready);
+
+    void sendClose();
 }

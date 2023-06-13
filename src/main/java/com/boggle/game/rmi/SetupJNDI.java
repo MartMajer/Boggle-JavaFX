@@ -17,14 +17,13 @@ public class SetupJNDI {
 
         try {
 
-            System.out.println("Server IP CHECk_TEST: "+ RMI_IP_ADDRESS);
+            System.out.println("Server IP CHECk_TEST: " + RMI_IP_ADDRESS);
             System.setProperty("java.rmi.server.hostname", RMI_IP_ADDRESS);
 
             Hashtable<String, String> env = new Hashtable<>();
             env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.rmi.registry.RegistryContextFactory");
-            env.put(Context.PROVIDER_URL, "rmi://"+RMI_IP_ADDRESS+":1099");
+            env.put(Context.PROVIDER_URL, "rmi://" + RMI_IP_ADDRESS + ":1099");
             Context namingContext = new InitialContext(env);
-
 
 
             // Bind the remote object
@@ -32,7 +31,7 @@ public class SetupJNDI {
 
             System.out.println("Server ready");
         } catch (Exception e) {
-            System.err.println("Server exception: " + e.toString());
+            System.err.println("Server exception: " + e);
             e.printStackTrace();
         }
     }
