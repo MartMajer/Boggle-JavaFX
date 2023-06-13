@@ -17,10 +17,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ResourceBundle;
 
-import static com.boggle.game.boggle.HelloController.arrayListHighscore;
+import static com.boggle.game.boggle.GameChooser.arrayListHighscore;
 
 
-public class HighScoreController implements Initializable, Serializable {
+public class HighScoreView implements Initializable, Serializable {
 
     @FXML
     private VBox highScoreName;
@@ -31,7 +31,7 @@ public class HighScoreController implements Initializable, Serializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        highscore_list();
+        highScoreList();
 
         Collections.sort(arrayListHighscore);
 
@@ -51,9 +51,10 @@ public class HighScoreController implements Initializable, Serializable {
 
     public void highScoreCont() {
         try {
+
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("HighScore.fxml"));
-            loader.setController(this);
             Parent root = loader.load();
+            HighScoreView controller = loader.getController();
 
             Scene scene = new Scene(root);
             Stage stage = new Stage();
@@ -72,7 +73,7 @@ public class HighScoreController implements Initializable, Serializable {
     }
 
 
-    private void highscore_list() {
+    private void highScoreList() {
 
 
         ArrayList<HighscoreModel> model;

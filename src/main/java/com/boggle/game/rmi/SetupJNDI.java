@@ -4,7 +4,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import java.util.Hashtable;
 
-import static com.boggle.game.boggle.HelloController.RMI_IP_ADDRESS;
+import static com.boggle.game.boggle.GameChooser.RMI_IP_ADDRESS;
 
 public class SetupJNDI {
 

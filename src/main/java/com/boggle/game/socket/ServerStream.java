@@ -1,7 +1,7 @@
 package com.boggle.game.socket;
 
-import com.boggle.game.boggle.HelloController;
-import com.boggle.game.model.PlayerModel;
+import com.boggle.game.boggle.GameChooser;
+import com.boggle.game.model.Player;
 import com.boggle.game.model.chat.Message;
 import com.boggle.game.model.chat.MessageType;
 import javafx.application.Platform;
@@ -17,7 +17,7 @@ public class ServerStream implements IServer {
     private static final int PORT = 9001;
     private final int minToStartGame = 2;
     private final int maxNumUsers = 6;
-    private final HelloController controller;
+    private final GameChooser controller;
     private final String nickname;
 
     public static String privateIP;
@@ -25,18 +25,18 @@ public class ServerStream implements IServer {
 
     private ServerListener serverListener;
 
-    private final ArrayList<PlayerModel> players;
+    private final ArrayList<Player> players;
     private final ArrayList<ObjectOutputStream> writers;
-    private ArrayList<PlayerModel> bannedPlayers;
+    private ArrayList<Player> bannedPlayers;
 
-    public ServerStream(HelloController controller, String nickname)
+    public ServerStream(GameChooser controller, String nickname)
     {
         this.controller = controller;
         this.nickname = nickname;
 
 
-        this.players = new ArrayList<PlayerModel>();
-        PlayerModel u = new PlayerModel(nickname);
+        this.players = new ArrayList<Player>();
+        Player u = new Player(nickname);
         u.setReady(true);
         this.players.add(u);
         this.writers = new ArrayList<ObjectOutputStream>();
@@ -173,7 +173,7 @@ public class ServerStream implements IServer {
                                 else
                                 {
                                     // add user and writer to list
-                                    PlayerModel u = new PlayerModel(incomingMsg.getNickname(), this.socket.getInetAddress());
+                                    Player u = new Player(incomingMsg.getNickname(), this.socket.getInetAddress());
                                     players.add(u);
                                     writers.add(this.output);
                                     controller.addUser(u);
@@ -212,7 +212,7 @@ public class ServerStream implements IServer {
                                 // update the readiness of the user who sent the message
 
 
-                                for (PlayerModel player : players) {
+                                for (Player player : players) {
                                     System.out.println(player.getNickname() + " is ready? " + player.isReady() );
 
                                     if (player.getNickname().equals(incomingMsg.getContent().split(" ")[1])) {
@@ -337,7 +337,7 @@ public class ServerStream implements IServer {
     @Override
     public boolean checkCanStartGame()
     {
-        for(PlayerModel u : this.players)
+        for(Player u : this.players)
         {
             if(!u.isReady())
                 return false;
@@ -387,7 +387,7 @@ public class ServerStream implements IServer {
 
     private boolean checkDuplicateNickname(String nickname)
     {
-        for(PlayerModel u : this.players)
+        for(Player u : this.players)
         {
             if(u.getNickname().equals(nickname))
                 return true; // nickname already present
@@ -400,7 +400,7 @@ public class ServerStream implements IServer {
         String list = "";
         for(int i = 0; i < this.players.size(); i++)
         {
-            PlayerModel u = this.players.get(i);
+            Player u = this.players.get(i);
             list += u.getNickname() + "," + u.isReady();
             list += (i == this.players.size() - 1 ? "" : ";");
         }

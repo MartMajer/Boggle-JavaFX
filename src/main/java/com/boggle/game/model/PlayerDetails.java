@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerDetailsModel implements Serializable {
+public class PlayerDetails implements Serializable {
 
     private static final long serialVersionUID = 6716309859678708712L;
 
@@ -57,11 +57,11 @@ public class PlayerDetailsModel implements Serializable {
         return overallPlayer1 != null ? overallPlayer1 : 0;
     }
 
-    public PlayerDetailsModel(String playerName) {
+    public PlayerDetails(String playerName) {
         this.playerName = playerName;
     }
 
-    public PlayerDetailsModel() {
+    public PlayerDetails() {
     }
 
     public void setScore(Integer score) {

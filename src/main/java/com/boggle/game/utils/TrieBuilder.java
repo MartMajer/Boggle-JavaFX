@@ -1,13 +1,13 @@
 package com.boggle.game.utils;
 
-import com.boggle.game.model.TrieNodeModel;
+import com.boggle.game.model.TrieNode;
 
 import java.util.ArrayList;
 
 public class TrieBuilder {
 
-    public TrieNodeModel buildTrie(ArrayList<String> dictionary) {
-        TrieNodeModel root = new TrieNodeModel();
+    public TrieNode buildTrie(ArrayList<String> dictionary) {
+        TrieNode root = new TrieNode();
 
         for (String string : dictionary) {
             if (string.length() > 2) {
@@ -18,12 +18,12 @@ public class TrieBuilder {
         return root;
     }
 
-    public void add(TrieNodeModel trie, String s) {
+    public void add(TrieNode trie, String s) {
         for (int i = 0; i < s.length(); i++) {
             Character c = s.charAt(i);
 
             if (trie.getChild(c) == null) {
-                trie.setChild(c, new TrieNodeModel());
+                trie.setChild(c, new TrieNode());
             }
             trie = trie.getChild(c);
         }

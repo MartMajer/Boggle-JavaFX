@@ -1,8 +1,8 @@
 package com.boggle.game.boggle;
 
 import com.boggle.game.model.HighscoreModel;
-import com.boggle.game.model.PlayerDetailsModel;
-import com.boggle.game.model.StoredDetailsModel;
+import com.boggle.game.model.PlayerDetails;
+import com.boggle.game.model.StoredDetails;
 import com.boggle.game.model.XmlManager;
 import com.boggle.game.rmi.ClientConnectionManager;
 import com.boggle.game.rmi.GameServer;
@@ -41,13 +41,13 @@ import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
-import static com.boggle.game.boggle.GameScreenController.listOfCheckedWordsPlayer1;
-import static com.boggle.game.boggle.GameScreenController.listOfCheckedWordsPlayer2;
-import static com.boggle.game.boggle.HelloController.*;
-import static com.boggle.game.model.StoredDetailsModel.overallScorePlayer1;
+import static com.boggle.game.boggle.GameScreen.listOfCheckedWordsPlayer1;
+import static com.boggle.game.boggle.GameScreen.listOfCheckedWordsPlayer2;
+import static com.boggle.game.boggle.GameChooser.*;
+import static com.boggle.game.model.StoredDetails.overallScorePlayer1;
 
 
-public class EndRoundController implements Initializable {
+public class EndRound implements Initializable {
 
     @FXML
     private Button btnBoard;
@@ -97,8 +97,8 @@ public class EndRoundController implements Initializable {
     private AnchorPane apMultiplayer_2;
     @FXML
     private MenuItem mi_mainmenu;
-    private final HighScoreController highscoreController = new HighScoreController();
-    private StoredDetailsModel storedDetailsModel;
+    private final HighScoreView highscoreController = new HighScoreView();
+    private StoredDetails storedDetailsModel;
     public static Integer staticOverallPlayer1;
     private ServerConnectionManager serverConnectionManager;
     private ClientConnectionManager clientConnectionManager;
@@ -120,7 +120,7 @@ public class EndRoundController implements Initializable {
         btnSingleplayerName.setText(getPlayerDetails().getPlayerName());
 
 
-        PlayerDetailsModel details = getPlayerDetails();
+        PlayerDetails details = getPlayerDetails();
         if (details != null && details.getScore() != null) {
             lblroundScoreSingleplayer.setText(details.getScore().toString());
         }
@@ -280,11 +280,11 @@ public class EndRoundController implements Initializable {
 
     public void startNewRound(ActionEvent actionEvent) throws RemoteException {
 
-        HelloController hello = new HelloController();
+        GameChooser hello = new GameChooser();
 
         Integer temp = roundCounter - 1;
 
-        storedDetailsModel = new StoredDetailsModel(btnSingleplayerName.getText(), getPlayerDetails().getScoreInt(), temp.toString());
+        storedDetailsModel = new StoredDetails(btnSingleplayerName.getText(), getPlayerDetails().getScoreInt(), temp.toString());
 
         if (SINGLE_PLAYER || GAME_LOADED) {
             GAME_LOADED = false;
@@ -525,7 +525,7 @@ public class EndRoundController implements Initializable {
     public void setUpTimeline() {
         //Official boggle game time is set at 2 minutes
         _time = 20;
-        KeyFrame kf = new KeyFrame(Duration.seconds(1), new EndRoundController.TimeHandler());
+        KeyFrame kf = new KeyFrame(Duration.seconds(1), new EndRound.TimeHandler());
         timeline = new Timeline(kf);
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
@@ -547,7 +547,7 @@ public class EndRoundController implements Initializable {
 
                 Integer temp = roundCounter - 1;
 
-                storedDetailsModel = new StoredDetailsModel(btnSingleplayerName.getText(), getPlayerDetails().getScoreInt(), temp.toString());
+                storedDetailsModel = new StoredDetails(btnSingleplayerName.getText(), getPlayerDetails().getScoreInt(), temp.toString());
 
 
                 NEW_ROUND_MULTIPLAYER = true;
@@ -574,7 +574,7 @@ public class EndRoundController implements Initializable {
     }
 
     public synchronized void newRoundStart() throws RemoteException {
-        HelloController hello = new HelloController();
+        GameChooser hello = new GameChooser();
         hello.newRoundMultiplayer(gameServer, gameClient, serverConnectionManager, CLIENT, SERVER);
         hello.startGame();
 

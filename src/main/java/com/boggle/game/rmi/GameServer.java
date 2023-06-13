@@ -1,13 +1,13 @@
 package com.boggle.game.rmi;
 
-import com.boggle.game.model.BoggleSolverModel;
+import com.boggle.game.model.BoggleSolver;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
 public interface GameServer extends Remote {
-    void sendGameBoard(char[][] gameBoard, BoggleSolverModel _solver) throws RemoteException;
+    void sendGameBoard(char[][] gameBoard, BoggleSolver _solver) throws RemoteException;
 
     void setScorePlayer1(Integer newScore) throws RemoteException;
 
@@ -19,7 +19,7 @@ public interface GameServer extends Remote {
 
     Integer getScorePlayer2() throws RemoteException;
 
-    BoggleSolverModel getBoggleSolver() throws RemoteException;
+    BoggleSolver getBoggleSolver() throws RemoteException;
 
     void sendTimeSync(int _time) throws RemoteException;
 

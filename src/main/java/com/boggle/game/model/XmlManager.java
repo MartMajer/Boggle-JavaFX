@@ -61,7 +61,7 @@ public class XmlManager {
     }
 
 
-    public void xmlWrite(PlayerDetailsModel player) {
+    public void xmlWrite(PlayerDetails player) {
         try {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -114,8 +114,8 @@ public class XmlManager {
         }
     }
 
-    public PlayerDetailsModel xmlRead() {
-        PlayerDetailsModel player = new PlayerDetailsModel();
+    public PlayerDetails xmlRead() {
+        PlayerDetails player = new PlayerDetails();
         try {
             File xmlFile = new File("playerDetails.xml");
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();

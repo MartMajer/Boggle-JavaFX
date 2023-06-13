@@ -1,7 +1,7 @@
 package com.boggle.game.rmi;
 
-import com.boggle.game.boggle.HelloController;
-import com.boggle.game.model.BoggleSolverModel;
+import com.boggle.game.boggle.GameChooser;
+import com.boggle.game.model.BoggleSolver;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -24,7 +24,7 @@ public class GameServerImpl extends UnicastRemoteObject implements GameServer {
     private int _time;
 
     private char[][] gameBoard;
-    private BoggleSolverModel solver;
+    private BoggleSolver solver;
 
     private String namePlayer1;
     private String namePlayer2;
@@ -43,7 +43,7 @@ public class GameServerImpl extends UnicastRemoteObject implements GameServer {
     }
 
     @Override
-    public void sendGameBoard(char[][] gameBoard, BoggleSolverModel solver) throws RemoteException {
+    public void sendGameBoard(char[][] gameBoard, BoggleSolver solver) throws RemoteException {
         this.gameBoard = gameBoard;
         this.solver = solver;
     }
@@ -66,7 +66,7 @@ public class GameServerImpl extends UnicastRemoteObject implements GameServer {
     }
 
     @Override
-    public BoggleSolverModel getBoggleSolver() throws RemoteException {
+    public BoggleSolver getBoggleSolver() throws RemoteException {
         return this.solver;
     }
 
@@ -157,7 +157,7 @@ public class GameServerImpl extends UnicastRemoteObject implements GameServer {
 
     @Override
     public void startNewRound() throws RemoteException {
-        HelloController hello = new HelloController();
+        GameChooser hello = new GameChooser();
         hello.startGame();
     }
 

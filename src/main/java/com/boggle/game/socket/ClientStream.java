@@ -1,8 +1,8 @@
 package com.boggle.game.socket;
 
 
-import com.boggle.game.boggle.HelloController;
-import com.boggle.game.model.PlayerModel;
+import com.boggle.game.boggle.GameChooser;
+import com.boggle.game.model.Player;
 import com.boggle.game.model.chat.Message;
 import com.boggle.game.model.chat.MessageType;
 import javafx.application.Platform;
@@ -16,10 +16,10 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.boggle.game.boggle.HelloController.RMI_IP_ADDRESS;
+import static com.boggle.game.boggle.GameChooser.RMI_IP_ADDRESS;
 
 public class ClientStream implements IClient {
-    private final HelloController controller;
+    private final GameChooser controller;
     private final ClientListener clientListener;
 
     private final String nickname;
@@ -29,7 +29,7 @@ public class ClientStream implements IClient {
     private InputStream is;
     private ObjectInputStream input;
 
-    public ClientStream(HelloController controller, String address, int port, String nickname) {
+    public ClientStream(GameChooser controller, String address, int port, String nickname) {
         this.controller = controller;
         this.nickname = nickname;
 
@@ -122,7 +122,7 @@ public class ClientStream implements IClient {
                                 controller.addToTextArea(incomingMsg.getTimestamp() + " " + incomingMsg.getNickname() + " has joined the room");
 
                                 // add the user and update the list
-                                controller.addUser(new PlayerModel(incomingMsg.getNickname()));
+                                controller.addUser(new Player(incomingMsg.getNickname()));
 
                                 break;
                             }
@@ -208,13 +208,13 @@ public class ClientStream implements IClient {
         this.sendMessage(msg);
     }
 
-    private List<PlayerModel> extractUserList(String s) {
-        List<PlayerModel> list = new ArrayList<PlayerModel>();
+    private List<Player> extractUserList(String s) {
+        List<Player> list = new ArrayList<Player>();
 
         String[] sTmp = s.split(";");
         for (int i = 0; i < sTmp.length; i++) {
             String[] sNickReady = sTmp[i].split(",");
-            PlayerModel u = new PlayerModel(sNickReady[0]);
+            Player u = new Player(sNickReady[0]);
             u.setReady(Boolean.parseBoolean(sNickReady[1]));
             list.add(u);
         }

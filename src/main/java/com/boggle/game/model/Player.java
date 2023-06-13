@@ -3,24 +3,24 @@ package com.boggle.game.model;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public class PlayerModel {
+public class Player {
     private String nickname;
     private boolean isReady;
     private InetAddress address;
 
 
-    public PlayerModel(String nickname) {
+    public Player(String nickname) {
         this.nickname = nickname;
 
     }
 
-    public PlayerModel(String nickname, InetAddress address) {
+    public Player(String nickname, InetAddress address) {
         this.nickname = nickname;
         this.address = address;
 
     }
 
-    public PlayerModel(String nickname, String address) {
+    public Player(String nickname, String address) {
         this.nickname = nickname;
         try {
             this.address = InetAddress.getByName(address);
