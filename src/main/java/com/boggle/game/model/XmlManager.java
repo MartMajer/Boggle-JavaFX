@@ -1,10 +1,11 @@
 package com.boggle.game.model;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -14,12 +15,10 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class XmlManager {
 
@@ -75,7 +74,7 @@ public class XmlManager {
             rootElement.appendChild(playerNameElement);
 
             Element checkedWordsElement = xmlDocument.createElement("CheckedWords");
-            for (String word : player.get_listOfCheckedWords()) {
+            for (String word : player.getListOfCheckedWords()) {
                 Element wordElement = xmlDocument.createElement("Word");
                 wordElement.appendChild(xmlDocument.createTextNode(word));
                 checkedWordsElement.appendChild(wordElement);
@@ -83,7 +82,7 @@ public class XmlManager {
             rootElement.appendChild(checkedWordsElement);
 
             Element possibleWordsElement = xmlDocument.createElement("PossibleWords");
-            for (String word : player.get_PossibleWords()) {
+            for (String word : player.getPossibleWords()) {
                 Element wordElement = xmlDocument.createElement("Word");
                 wordElement.appendChild(xmlDocument.createTextNode(word));
                 possibleWordsElement.appendChild(wordElement);
@@ -91,15 +90,15 @@ public class XmlManager {
             rootElement.appendChild(possibleWordsElement);
 
             Element scoreElement = xmlDocument.createElement("Score");
-            scoreElement.appendChild(xmlDocument.createTextNode(player.get_score()));
+            scoreElement.appendChild(xmlDocument.createTextNode(player.getScore().toString()));
             rootElement.appendChild(scoreElement);
 
             Element roundElement = xmlDocument.createElement("Round");
-            roundElement.appendChild(xmlDocument.createTextNode(player.get_round_int().toString()));
+            roundElement.appendChild(xmlDocument.createTextNode(player.getRoundInt().toString()));
             rootElement.appendChild(roundElement);
 
             Element overallElement = xmlDocument.createElement("Overall");
-            overallElement.appendChild(xmlDocument.createTextNode(player.get_overall_int().toString()));
+            overallElement.appendChild(xmlDocument.createTextNode(player.getOverallInt().toString()));
             rootElement.appendChild(overallElement);
 
             xmlDocument.appendChild(rootElement);
@@ -146,7 +145,7 @@ public class XmlManager {
 
             String overall = rootElement.getElementsByTagName("Overall").item(0).getTextContent();
 
-            player.setRoundDetails(checkedWordList,possibleWordList,Integer.parseInt(score),Integer.parseInt(round),Integer.parseInt(overall) );
+            player.setRoundDetails(checkedWordList, possibleWordList, Integer.parseInt(score), Integer.parseInt(round), Integer.parseInt(overall));
 
 
         } catch (Exception e) {
@@ -154,7 +153,6 @@ public class XmlManager {
         }
         return player;
     }
-
 
 
 }

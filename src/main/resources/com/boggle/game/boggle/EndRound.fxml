@@ -23,13 +23,13 @@
             <Image url="@../../../../Assets/bg_1.jpg" />
          </image>
       </ImageView>
-      <AnchorPane fx:id="ap_multiplayer_2" layoutY="1.0" prefHeight="391.0" prefWidth="620.0" visible="false">
+      <AnchorPane fx:id="apMultiplayer_2" layoutY="1.0" prefHeight="391.0" prefWidth="620.0" visible="false">
          <children>
             <ScrollPane layoutX="321.0" layoutY="109.0" prefHeight="200.0" prefWidth="125.0">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="443.0" prefWidth="102.0">
                      <children>
-                        <VBox fx:id="__player_1_Pane_Found" prefHeight="621.0" prefWidth="100.0" />
+                        <VBox fx:id="vboxWordsFoundPlayer2" prefHeight="621.0" prefWidth="100.0" />
                      </children>
                   </AnchorPane>
                </content>
@@ -38,7 +38,7 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="6000.0" prefWidth="102.0">
                      <children>
-                        <VBox fx:id="__multiplayer_Pane_Possible" prefHeight="624.0" prefWidth="100.0" />
+                        <VBox fx:id="vboxMultiplayerWordsPossible" prefHeight="624.0" prefWidth="100.0" />
                      </children>
                   </AnchorPane>
                </content>
@@ -51,7 +51,7 @@
                   <Insets left="20.0" right="20.0" top="5.0" />
                </padding>
             </Label>
-            <Label fx:id="_roundNumber2" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="357.0" layoutY="22.0" maxWidth="1.7976931348623157E308" prefHeight="55.0" prefWidth="49.0" text="1" textFill="WHITE">
+            <Label fx:id="lblRoundNumberMulti" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="357.0" layoutY="22.0" maxWidth="1.7976931348623157E308" prefHeight="55.0" prefWidth="49.0" text="1" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="34.0" />
                </font>
@@ -64,7 +64,7 @@
                   <Font size="13.0" />
                </font>
                <graphic>
-                  <Label fx:id="_player_1_name" prefHeight="19.0" prefWidth="66.0" text="Martin" textFill="WHITE">
+                  <Label fx:id="lblNamePlayer1" prefHeight="19.0" prefWidth="66.0" text="Martin" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>
@@ -83,12 +83,12 @@
                </font>
             </Label>
             <Button fx:id="_highscore2" layoutX="14.0" layoutY="71.0" mnemonicParsing="false" onAction="#highscore" prefHeight="25.0" prefWidth="80.0" text="Highscores" />
-            <Button fx:id="_startNewRound2" layoutX="455.0" layoutY="37.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#startNewRound" prefHeight="35.0" prefWidth="117.0" text="Start new round!" visible="false">
+            <Button fx:id="btnStartNewRoundMulti" layoutX="455.0" layoutY="37.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#startNewRound" prefHeight="35.0" prefWidth="117.0" text="Start new round!" visible="false">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Label fx:id="_player_1_RoundScore" layoutX="322.0" layoutY="334.0" prefHeight="35.0" prefWidth="117.0" text="21" textFill="WHITE">
+            <Label fx:id="lblroundScorePlayer1" layoutX="322.0" layoutY="334.0" prefHeight="35.0" prefWidth="117.0" text="21" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -100,7 +100,7 @@
                   </Label>
                </graphic>
             </Label>
-            <Label fx:id="_player_1_Overall" layoutX="321.0" layoutY="369.0" prefHeight="20.0" prefWidth="125.0" text="212" textFill="WHITE">
+            <Label fx:id="lbloverallPlayer1" layoutX="321.0" layoutY="369.0" prefHeight="20.0" prefWidth="125.0" text="212" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
@@ -117,7 +117,7 @@
                   <Font size="13.0" />
                </font>
                <graphic>
-                  <Label fx:id="_player_2_name" prefHeight="19.0" prefWidth="66.0" text="Martin" textFill="WHITE">
+                  <Label fx:id="lblnamePlayer2" prefHeight="19.0" prefWidth="66.0" text="Martin" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>
@@ -128,12 +128,12 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="441.0" prefWidth="95.0">
                      <children>
-                        <VBox fx:id="__player_2_Pane_Found" prefHeight="620.0" prefWidth="100.0" />
+                        <VBox fx:id="vboxWordsFoundPlayer1" prefHeight="620.0" prefWidth="100.0" />
                      </children>
                   </AnchorPane>
                </content>
             </ScrollPane>
-            <Label fx:id="_player_2_RoundScore" layoutX="465.0" layoutY="334.0" prefHeight="35.0" prefWidth="117.0" text="21" textFill="WHITE">
+            <Label fx:id="lblroundScorePlayer2" layoutX="465.0" layoutY="334.0" prefHeight="35.0" prefWidth="117.0" text="21" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -145,7 +145,7 @@
                   </Label>
                </graphic>
             </Label>
-            <Label fx:id="_player_2_Overall" layoutX="467.0" layoutY="369.0" prefHeight="20.0" prefWidth="125.0" text="212" textFill="WHITE">
+            <Label fx:id="lbloverallPlayer2" layoutX="467.0" layoutY="369.0" prefHeight="20.0" prefWidth="125.0" text="212" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
@@ -157,7 +157,7 @@
                   </Label>
                </graphic>
             </Label>
-            <Label fx:id="_timeLabel" contentDisplay="TOP" layoutX="14.0" layoutY="333.0" prefHeight="43.0" prefWidth="207.0" text="New round in: 20" textFill="WHITE">
+            <Label fx:id="lblTime" contentDisplay="TOP" layoutX="14.0" layoutY="333.0" prefHeight="43.0" prefWidth="207.0" text="New round in: 20" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
@@ -167,13 +167,13 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="ap_singleplayer" layoutY="15.0" prefHeight="391.0" prefWidth="620.0" visible="false">
+      <AnchorPane fx:id="apSingleplayer" layoutY="15.0" prefHeight="391.0" prefWidth="620.0" visible="false">
          <children>
             <ScrollPane layoutX="303.0" layoutY="137.0" prefHeight="200.0" prefWidth="125.0">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="443.0" prefWidth="102.0">
                      <children>
-                        <VBox fx:id="__singleplayer_Pane_Found" prefHeight="621.0" prefWidth="100.0" />
+                        <VBox fx:id="vboxSingleplayerWordsFound" prefHeight="621.0" prefWidth="100.0" />
                      </children>
                   </AnchorPane>
               </content>
@@ -182,7 +182,7 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="6000.0" prefWidth="102.0">
                      <children>
-                        <VBox fx:id="__player_Pane_Possible" prefHeight="624.0" prefWidth="100.0" />
+                        <VBox fx:id="vboxSingleplayerWordsPossible" prefHeight="624.0" prefWidth="100.0" />
                      </children>
                   </AnchorPane>
                </content>
@@ -195,7 +195,7 @@
                   <Insets left="20.0" right="20.0" top="5.0" />
                </padding>
             </Label>
-            <Label fx:id="_roundNumber" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="321.0" layoutY="8.0" maxWidth="1.7976931348623157E308" prefHeight="55.0" prefWidth="49.0" text="1" textFill="WHITE">
+            <Label fx:id="lblRoundNumberSingle" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="321.0" layoutY="8.0" maxWidth="1.7976931348623157E308" prefHeight="55.0" prefWidth="49.0" text="1" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="34.0" />
                </font>
@@ -208,18 +208,18 @@
                   <Font size="13.0" />
                </font>
                <graphic>
-                  <Label fx:id="_singleplayer_name" prefHeight="19.0" prefWidth="66.0" text="Martin" textFill="WHITE">
+                  <Label fx:id="btnSingleplayerName" prefHeight="19.0" prefWidth="66.0" text="Martin" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>
                   </Label>
                </graphic>
             </Label>
-            <Button fx:id="_board" layoutX="156.0" layoutY="80.0" mnemonicParsing="false" onAction="#board" text="Show board" />
+            <Button fx:id="btnBoard" layoutX="156.0" layoutY="80.0" mnemonicParsing="false" onAction="#board" text="Show board" />
             <Label alignment="CENTER" contentDisplay="CENTER" layoutX="452.0" layoutY="111.0" text="Possible words:" textAlignment="CENTER" textFill="WHITE" />
             <Label alignment="CENTER" contentDisplay="CENTER" layoutX="303.0" layoutY="111.0" text="Found words:" textAlignment="CENTER" textFill="WHITE" />
-            <Button fx:id="_highscore" layoutX="156.0" layoutY="116.0" mnemonicParsing="false" onAction="#highscore" prefHeight="25.0" prefWidth="80.0" text="Highscores" />
-            <Button fx:id="_startNewRound" layoutX="453.0" layoutY="23.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#startNewRound" prefHeight="35.0" prefWidth="125.0" text="Start new round!">
+            <Button fx:id="btnHighscore" layoutX="156.0" layoutY="116.0" mnemonicParsing="false" onAction="#highscore" prefHeight="25.0" prefWidth="80.0" text="Highscores" />
+            <Button fx:id="btnStartNewRoundSingle" layoutX="453.0" layoutY="23.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#startNewRound" prefHeight="35.0" prefWidth="125.0" text="Start new round!">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -229,12 +229,12 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="_singleplayer_RoundScore" layoutX="249.0" layoutY="168.0" prefHeight="35.0" prefWidth="41.0" text="21" textFill="WHITE">
+            <Label fx:id="lblroundScoreSingleplayer" layoutX="249.0" layoutY="168.0" prefHeight="35.0" prefWidth="41.0" text="21" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="_singleplayer_Overall" layoutX="134.0" layoutY="203.0" text="212" textFill="WHITE">
+            <Label fx:id="lblsingleplayerOverall" layoutX="134.0" layoutY="203.0" text="212" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font>
@@ -248,7 +248,7 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="ap_about" layoutY="10.0" prefHeight="400.0" prefWidth="620.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+      <AnchorPane fx:id="apAbout" layoutY="10.0" prefHeight="400.0" prefWidth="620.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
          <children>
             <ImageView fitHeight="400.0" fitWidth="620.0">
                <image>
@@ -312,7 +312,7 @@
               <MenuItem mnemonicParsing="false" onAction="#show_about" text="About" />
             </items>
           </Menu>
-            <Menu mnemonicParsing="false" text="XML" fx:id="xml_menubar">
+            <Menu mnemonicParsing="false" text="XML" fx:id="xmlMenubar">
                <items>
                   <MenuItem fx:id="mi_mainmenu1" mnemonicParsing="false" onAction="#saveXml_menuitem" text="Write XML" />
                   <MenuItem mnemonicParsing="false" onAction="#readXml_menuitem" text="Read XML" />

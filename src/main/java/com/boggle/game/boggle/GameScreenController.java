@@ -1,13 +1,16 @@
 package com.boggle.game.boggle;
 
-import com.boggle.game.model.*;
-
-import com.boggle.game.rmi.*;
+import com.boggle.game.model.BoggleSolverModel;
+import com.boggle.game.model.EndRoundModel;
+import com.boggle.game.model.PointsModel;
+import com.boggle.game.rmi.ClientConnectionManager;
+import com.boggle.game.rmi.GameServer;
+import com.boggle.game.rmi.GameServerImpl;
+import com.boggle.game.rmi.ServerConnectionManager;
 import com.boggle.game.utils.DictionaryLoader;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -20,20 +23,22 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.security.SecureRandom;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.Stack;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.boggle.game.boggle.EndRoundController.static_overall_player_1;
+import static com.boggle.game.boggle.EndRoundController.staticOverallPlayer1;
 import static com.boggle.game.boggle.HelloController.*;
-import static com.boggle.game.boggle.HelloApplication.NEW_ROUND_MULTIPLAYER;
+
 
 public class GameScreenController implements Initializable {
 
@@ -74,70 +79,69 @@ public class GameScreenController implements Initializable {
     private Button mat_3_3;
 
     @FXML
-    private Label _timeLabel;
+    private Label lblTime;
     @FXML
-    private Label _player_nickname;
+    private Label lblPlayerNickname;
 
     @FXML
-    private Label chosenLetter;
+    private Label lblChosenLetter;
     @FXML
-    private Label _currentWordLabel;
+    private Label lblCurrentWordLabel;
     @FXML
-    private Button buttonCheckWord_btn;
+    private Button btnButtonCheckWord;
     @FXML
-    private VBox _vBox;
+    private VBox vBoxFoundWords;
     @FXML
-    private Label _lbScore;
+    private Label lblScore;
     @FXML
-    private Label _lbScore2;
+    private Label lblScorePlayer1;
     @FXML
-    private Label _lbScore22;
+    private Label lblScorePlayer2;
     @FXML
-    private Label _lbOpponent;
+    private Label lblOpponentPlayer1;
     @FXML
-    private Label _lbOpponent2;
+    private Label lblOpponentPlayer2;
 
     @FXML
-    private Label _notAWord;
+    private Label lblNotAWord;
     @FXML
-    private Button _endRound;
+    private Button btnEndRound;
     @FXML
-    private MenuItem _save_state;
+    private MenuItem miSaveState;
     @FXML
-    private MenuItem _load_state;
+    private MenuItem miLoadState;
 
-    public Button gameBoard[][];
+    public Button[][] gameBoard;
 
 
-    private BoggleSolverModel _solver;
+    private BoggleSolverModel boggleSolver;
 
 
     private static final int GAME_BOARD_WIDTH = 4;
     private static final int GAME_BOARD_HEIGHT = 4;
-    public static char[][] _charArray;
+    public static char[][] charArray;
 
-    private GridPane _gridPane;
-    private boolean[][] _isClicked;
-    private Stack<Integer> _iStack;
-    private Stack<Integer> _jStack;
+    private GridPane gpBoggleGrid;
+    private boolean[][] isClicked;
+    private Stack<Integer> iStack;
+    private Stack<Integer> jStack;
 
 
-    private boolean _gameOver;
-    private int _size = 4;
+    private boolean isGameOver;
+    private final int _size = 4;
     public int _time = 140;
 
-    private static int time_const = 121;
-    private String _currentWord = "";
-    public Timeline _timeline;
+    private String currentWord = "";
+    public Timeline timeline;
 
-    private static List<String> _listOfCheckedWords;
-    public static List<String> player_1_listOfCheckedWords;
-    public static List<String> player_2_listOfCheckedWords;
-    private static List<String> _listOfCheckedWords_temp;
+    private static List<String> listOfCheckedWords;
+    public static List<String> listOfCheckedWordsPlayer1;
+    public static List<String> listOfCheckedWordsPlayer2;
+    private static List<String> listOfCheckedWords_temp;
 
     private GameServerImpl gameServer;
     private GameServer gameClient;
-    private PointsModel _addPoints;
+    private PointsModel addPoints;
     private Integer scoreYour = 0;
     private Integer scoreOpponent = 0;
     private ArrayList<String> dictionary;
@@ -160,13 +164,13 @@ public class GameScreenController implements Initializable {
             throw new RuntimeException(e);
         }
 
-        _lbScore2.setText("0");
+        lblScorePlayer1.setText("0");
 
         initializeBoard();
 
-        _player_nickname.setText(getPlayerDetails().getPlayerName());
+        lblPlayerNickname.setText(getPlayerDetails().getPlayerName());
 
-        if (CLIENT == true){
+        if (CLIENT) {
             GAME_LOADED = false;
         }
 
@@ -177,20 +181,20 @@ public class GameScreenController implements Initializable {
 
                 setUpCubes();
 
-                    if (SERVER){
+                if (SERVER) {
 
 
-                        if (NEW_ROUND_MULTIPLAYER == false){
-                            this.gameServer = new GameServerImpl();
-                            serverConnectionManager = new ServerConnectionManager(gameServer);
-                        }
-
-                        makeLabelsVisible(true);
-
-                        gameServer.sendGameBoard(_charArray, _solver);
-                        gameServer.sendPlayer_1_name(_player_nickname.getText());
-
+                    if (!NEW_ROUND_MULTIPLAYER) {
+                        this.gameServer = new GameServerImpl();
+                        serverConnectionManager = new ServerConnectionManager(gameServer);
                     }
+
+                    makeLabelsVisible(true);
+
+                    gameServer.sendGameBoard(charArray, boggleSolver);
+                    gameServer.setNamePlayer1(lblPlayerNickname.getText());
+
+                }
 
 
                 setUpBoggleGrid();
@@ -198,8 +202,7 @@ public class GameScreenController implements Initializable {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        }
-        else if (CLIENT) {
+        } else if (CLIENT) {
 
             try {
 
@@ -209,19 +212,19 @@ public class GameScreenController implements Initializable {
 
 
                 gameClient = clientConnectionManager.getLookupNamingContext();
-                gameClient.sendPlayer_2_name(_player_nickname.getText());
+                gameClient.setNamePlayer2(lblPlayerNickname.getText());
 
                 System.out.println(gameClient);
 
-                _charArray = gameClient.getGameBoard();
+                charArray = gameClient.getGameBoard();
 
-                _solver = gameClient.getBoggleSolver();
+                boggleSolver = gameClient.getBoggleSolver();
 
 
                 Platform.runLater(() -> {
-                    for(int i = 0; i < GAME_BOARD_HEIGHT; i++) {
-                        for(int j = 0; j < GAME_BOARD_WIDTH; j++) {
-                            gameBoard[i][j].setText(String.valueOf(_charArray[i][j]));
+                    for (int i = 0; i < GAME_BOARD_HEIGHT; i++) {
+                        for (int j = 0; j < GAME_BOARD_WIDTH; j++) {
+                            gameBoard[i][j].setText(String.valueOf(charArray[i][j]));
                         }
                     }
                 });
@@ -231,26 +234,24 @@ public class GameScreenController implements Initializable {
                 setUpBoggleGrid();
 
             } catch (Exception e) {
-                System.err.println("Client exception: " + e.toString());
+                System.err.println("Client exception: " + e);
                 e.printStackTrace();
             }
         }
     }
 
 
-
-
     public void makeLabelsVisible(boolean bool) {
-        this._lbScore2.setVisible(bool);
-        this._lbScore22.setVisible(bool);
-        this._lbOpponent.setVisible(bool);
-        this._lbOpponent2.setVisible(bool);
+        this.lblScorePlayer1.setVisible(bool);
+        this.lblScorePlayer2.setVisible(bool);
+        this.lblOpponentPlayer1.setVisible(bool);
+        this.lblOpponentPlayer2.setVisible(bool);
     }
 
 
     private void initializeBoard() {
         gameBoard = new Button[GAME_BOARD_HEIGHT][GAME_BOARD_WIDTH];
-        _charArray = new char[GAME_BOARD_WIDTH][GAME_BOARD_HEIGHT];
+        charArray = new char[GAME_BOARD_WIDTH][GAME_BOARD_HEIGHT];
 
         gameBoard[0][0] = mat_0_0;
         gameBoard[0][1] = mat_0_1;
@@ -277,71 +278,71 @@ public class GameScreenController implements Initializable {
         ExecutorService executorService = Executors.newCachedThreadPool();
 
         executorService.submit(() -> {
-        SecureRandom r = new SecureRandom();
+            SecureRandom r = new SecureRandom();
 
-        ArrayList<String> dice = new ArrayList<>();
-        dice.add("ZONEOS");
-        dice.add("AMOAJR");
-        dice.add("KVETII");
-        dice.add("DŽINRA");
-        dice.add("EJRIEF");
-        dice.add("PGVOUĐ");
-        dice.add("KINECT");
-        dice.add("MĆAIDT");
-        dice.add("ETSŠAA");
-        dice.add("IBJULS");
-        dice.add("ADSOŽV");
-        dice.add("OMANOJ");
-        dice.add("ESAAMČ");
-        dice.add("ALUJNP");
-        dice.add("KRUZHI");
-        dice.add("LEOGIE");
+            ArrayList<String> dice = new ArrayList<>();
+            dice.add("ZONEOS");
+            dice.add("AMOAJR");
+            dice.add("KVETII");
+            dice.add("DŽINRA");
+            dice.add("EJRIEF");
+            dice.add("PGVOUĐ");
+            dice.add("KINECT");
+            dice.add("MĆAIDT");
+            dice.add("ETSŠAA");
+            dice.add("IBJULS");
+            dice.add("ADSOŽV");
+            dice.add("OMANOJ");
+            dice.add("ESAAMČ");
+            dice.add("ALUJNP");
+            dice.add("KRUZHI");
+            dice.add("LEOGIE");
 
-        char letter;
+            char letter;
 
-        for (int i = 0; i < GAME_BOARD_WIDTH; i++) {
-            for (int j = 0; j < GAME_BOARD_HEIGHT; j++) {
+            for (int i = 0; i < GAME_BOARD_WIDTH; i++) {
+                for (int j = 0; j < GAME_BOARD_HEIGHT; j++) {
 
 
-                int n = r.nextInt(dice.size());
-                letter = dice.get(n).charAt(r.nextInt(dice.get(n).length()));
-                dice.remove(n);
+                    int n = r.nextInt(dice.size());
+                    letter = dice.get(n).charAt(r.nextInt(dice.get(n).length()));
+                    dice.remove(n);
 
-                String s = Character.toString(letter);
-                gameBoard[i][j].setText(s);
+                    String s = Character.toString(letter);
+                    gameBoard[i][j].setText(s);
 
-                //finally the character is added to the array of characters in the correct location
-                _charArray[i][j] = letter;
+                    //finally the character is added to the array of characters in the correct location
+                    charArray[i][j] = letter;
+                }
             }
-        }
         });
         executorService.shutdown();
         new PreviewBoardController();
-        _solver = new BoggleSolverModel(_charArray, dictionary);
+        boggleSolver = new BoggleSolverModel(charArray, dictionary);
     }
 
-    public synchronized  void setGameData(GameServerImpl gameServer, GameServer gameClient,ServerConnectionManager serverConnectionManager) {
+    public synchronized void setGameData(GameServerImpl gameServer, GameServer gameClient, ServerConnectionManager serverConnectionManager) {
         this.gameServer = gameServer;
         this.gameClient = gameClient;
-        this.serverConnectionManager=serverConnectionManager;
+        this.serverConnectionManager = serverConnectionManager;
 
     }
 
 
     public void setUpBoggleGrid() throws IOException {
 
-        _gameOver = false;
-        _isClicked = new boolean[_size][_size];
-        _gridPane = new GridPane();
-        _iStack = new Stack<>();
-        _jStack = new Stack<>();
-        _gridPane.setFocusTraversable(true);
-        _addPoints = new PointsModel();
-        _listOfCheckedWords = new ArrayList<>();
-        _listOfCheckedWords_temp = new ArrayList<>();
+        isGameOver = false;
+        isClicked = new boolean[_size][_size];
+        gpBoggleGrid = new GridPane();
+        iStack = new Stack<>();
+        jStack = new Stack<>();
+        gpBoggleGrid.setFocusTraversable(true);
+        addPoints = new PointsModel();
+        listOfCheckedWords = new ArrayList<>();
+        listOfCheckedWords_temp = new ArrayList<>();
 
-       player_2_listOfCheckedWords = new ArrayList<>();
-       player_1_listOfCheckedWords = new ArrayList<>();
+        listOfCheckedWordsPlayer2 = new ArrayList<>();
+        listOfCheckedWordsPlayer1 = new ArrayList<>();
 
         this.clearBoolArray();
 
@@ -355,24 +356,24 @@ public class GameScreenController implements Initializable {
     private void clearBoolArray() {
         for (int i = 0; i < _size; i++) {
             for (int j = 0; j < _size; j++) {
-                _isClicked[i][j] = false;
+                isClicked[i][j] = false;
             }
         }
     }
 
     public void setUpTimeline() {
 
-        if (_timeline != null) {
-            _timeline.stop();
-            _timeline = null;
+        if (timeline != null) {
+            timeline.stop();
+            timeline = null;
         }
 
         //Official boggle game time is set at 2 minutes
         _time = 140;
         KeyFrame kf = new KeyFrame(Duration.seconds(1), new TimeHandler());
-        _timeline = new Timeline(kf);
-        _timeline.setCycleCount(Animation.INDEFINITE);
-        _timeline.play();
+        timeline = new Timeline(kf);
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
 
 
     }
@@ -395,33 +396,33 @@ public class GameScreenController implements Initializable {
             } else {
                 _time = _time - 1;
 
-                if (SERVER){
+                if (SERVER) {
                     try {
-                        gameServer.sendPlayer_1_score(scoreYour);
-                       if (_time <= 130){
-                           if (NEW_ROUND_MULTIPLAYER){
-                               gameServer.sendTimeSync(_time);
-                           }
+                        gameServer.setScorePlayer1(scoreYour);
+                        if (_time <= 130) {
+                            if (NEW_ROUND_MULTIPLAYER) {
+                                gameServer.sendTimeSync(_time);
+                            }
                             _time = gameServer.getTimeSync();
                         }
-                        scoreOpponent = gameServer.getPlayer_2_score();
+                        scoreOpponent = gameServer.getScorePlayer2();
                         if (scoreOpponent == null) {
                             scoreOpponent = 0;  // weird issue upon start - nullPointerExc must be rmi data speed so this snip is to overcome starting issue
                         }
-                        _lbScore2.setText(scoreOpponent.toString());
+                        lblScorePlayer1.setText(scoreOpponent.toString());
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
                     }
                 } else if (CLIENT) {
                     try {
 
-                        gameClient.sendPlayer_2_score(scoreYour);
+                        gameClient.setScorePlayer2(scoreYour);
                         //if (_time == 138 || _time == 100 || _time == 50 || _time == 139 || _time == 101 || _time == 51)  {
                         gameClient.sendTimeSync(_time);
 
                         //}
-                        scoreOpponent = gameClient.getPlayer_1_score();
-                        _lbScore2.setText(scoreOpponent.toString());
+                        scoreOpponent = gameClient.getScorePlayer1();
+                        lblScorePlayer1.setText(scoreOpponent.toString());
                     } catch (RemoteException e) {
 
                         _time = 0;
@@ -442,7 +443,7 @@ public class GameScreenController implements Initializable {
 
                     }
                 }
-                _timeLabel.setText("Time remaining: " + _time + " seconds");
+                lblTime.setText("Time remaining: " + _time + " seconds");
             }
             event.consume();
         }
@@ -450,20 +451,20 @@ public class GameScreenController implements Initializable {
 
     private void endGame() throws RemoteException {
 
-                _listOfCheckedWords_temp = new ArrayList<String>(_listOfCheckedWords);
-                getPlayerDetails().setRoundDetails(_listOfCheckedWords_temp, _solver.getWords(), scoreYour, roundCounter, static_overall_player_1);
+        listOfCheckedWords_temp = new ArrayList<String>(listOfCheckedWords);
+        getPlayerDetails().setRoundDetails(listOfCheckedWords_temp, boggleSolver.getWords(), scoreYour, roundCounter, staticOverallPlayer1);
 
-                _listOfCheckedWords.clear();
-                reset_states();
+        listOfCheckedWords.clear();
+        reset_states();
 
-                //boolean is set to true to the key and click handlers and buttons know to not respond to inputs
-                _gameOver = true;
-                _timeline.stop();
+        //boolean is set to true to the key and click handlers and buttons know to not respond to inputs
+        isGameOver = true;
+        timeline.stop();
 
-        if(CLIENT || SERVER) {
-           new EndRoundModel(gameServer, gameClient, serverConnectionManager);
+        if (CLIENT || SERVER) {
+            new EndRoundModel(gameServer, gameClient, serverConnectionManager);
         } else {
-           new EndRoundModel(null, null  , null);
+            new EndRoundModel(null, null, null);
         }
 
     }
@@ -471,8 +472,8 @@ public class GameScreenController implements Initializable {
 
     private void addLetterToLabel(int i, int j) {
 
-        _currentWord = _currentWord + _charArray[i][j];
-        _currentWordLabel.setText("Current word: " + _currentWord);
+        currentWord = currentWord + charArray[i][j];
+        lblCurrentWordLabel.setText("Current word: " + currentWord);
 
     }
 
@@ -496,60 +497,59 @@ public class GameScreenController implements Initializable {
 
     public void buttonCheckWord(ActionEvent actionEvent) throws RemoteException {
 
-        if (_solver.getWords().contains(_currentWord)) {
+        if (boggleSolver.getWords().contains(currentWord)) {
 
-            _notAWord.setText("");
+            lblNotAWord.setText("");
 
-            if (!_listOfCheckedWords.contains(_currentWord) ) {
+            if (!listOfCheckedWords.contains(currentWord)) {
                 //add points to player and display on board
-                _addPoints.setPoints(_currentWord);
-                scoreYour = _addPoints.getPoints();
-                _lbScore.setText(scoreYour.toString());
+                addPoints.setPoints(currentWord);
+                scoreYour = addPoints.getPoints();
+                lblScore.setText(scoreYour.toString());
 
                 //add found words to pane
-                _vBox.getChildren().add(new Label(_currentWord));
-                _listOfCheckedWords.add(_currentWord);
+                vBoxFoundWords.getChildren().add(new Label(currentWord));
+                listOfCheckedWords.add(currentWord);
 
-                if (CLIENT && !player_2_listOfCheckedWords.contains(_currentWord)){
-                    player_2_listOfCheckedWords.add(_currentWord);
-                    gameClient.setPlayer_2_checked_words(player_2_listOfCheckedWords);
-                } else if (SERVER  && !player_1_listOfCheckedWords.contains(_currentWord)) {
-                    player_1_listOfCheckedWords.add(_currentWord);
-                    gameServer.setPlayer_1_checked_words(player_1_listOfCheckedWords);
+                if (CLIENT && !listOfCheckedWordsPlayer2.contains(currentWord)) {
+                    listOfCheckedWordsPlayer2.add(currentWord);
+                    gameClient.setCheckedWordsPlayer2(listOfCheckedWordsPlayer2);
+                } else if (SERVER && !listOfCheckedWordsPlayer1.contains(currentWord)) {
+                    listOfCheckedWordsPlayer1.add(currentWord);
+                    gameServer.setCheckedWordsPlayer1(listOfCheckedWordsPlayer1);
 
 
                 }
 
 
                 //reset labels
-                _currentWord = "";
-                _currentWordLabel.setText("Current word: ");
+                currentWord = "";
+                lblCurrentWordLabel.setText("Current word: ");
 
             }
         } else {
-            _notAWord.setText("NOT A WORD! - " + _currentWord);
+            lblNotAWord.setText("NOT A WORD! - " + currentWord);
 
             //reset labels
-            _currentWord = "";
-            _currentWordLabel.setText("Current word: ");
+            currentWord = "";
+            lblCurrentWordLabel.setText("Current word: ");
         }
 
-        if (_listOfCheckedWords.contains(_currentWord) )
-        {
-            _currentWord = "";
-            _currentWordLabel.setText("Current word: ");
+        if (listOfCheckedWords.contains(currentWord)) {
+            currentWord = "";
+            lblCurrentWordLabel.setText("Current word: ");
         }
     }
 
     private void reset_states() {
 
-        _currentWord = "";
-        _lbScore.setText("");
+        currentWord = "";
+        lblScore.setText("");
 
-        _addPoints.setPoints();
+        addPoints.setPoints();
 
-        _currentWordLabel.setText("Current word: ");
-        _vBox.getChildren().clear();
+        lblCurrentWordLabel.setText("Current word: ");
+        vBoxFoundWords.getChildren().clear();
 
         scoreYour = 0;
     }

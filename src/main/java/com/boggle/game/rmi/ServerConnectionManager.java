@@ -1,16 +1,14 @@
 package com.boggle.game.rmi;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 public class ServerConnectionManager {
 
-private SetupJNDI setupJNDI;
-private RmiRegistry rmiRegistry;
+    private final SetupJNDI setupJNDI;
+    private final RmiRegistry rmiRegistry;
 
     public ServerConnectionManager(GameServerImpl gameServer) {
 
-        this.rmiRegistry= new RmiRegistry(gameServer);
-        this.setupJNDI= new SetupJNDI(gameServer);
+        this.rmiRegistry = new RmiRegistry(gameServer);
+        this.setupJNDI = new SetupJNDI(gameServer);
     }
 
     public RmiRegistry getRMIService() {

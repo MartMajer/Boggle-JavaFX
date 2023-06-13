@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="250.0" prefWidth="150.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.boggle.game.boggle.HighscoreController">
+<AnchorPane prefHeight="250.0" prefWidth="150.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ImageView fitHeight="250.0" fitWidth="150.0">
          <image>

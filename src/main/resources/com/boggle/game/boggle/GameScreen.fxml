@@ -230,7 +230,7 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label fx:id="_currentWordLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="138.0" text="Current word:" textFill="WHITE" GridPane.rowIndex="1">
+                              <Label fx:id="lblCurrentWordLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="138.0" text="Current word:" textFill="WHITE" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="11.0" />
                                  </font>
@@ -239,17 +239,17 @@
                                 <content>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="394.0" prefWidth="91.0">
                                        <children>
-                                          <VBox fx:id="_vBox" layoutX="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="468.0" prefWidth="100.0" />
+                                          <VBox fx:id="vBoxFoundWords" layoutX="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="468.0" prefWidth="100.0" />
                                        </children>
                                     </AnchorPane>
                                 </content>
                               </ScrollPane>
-                              <Label fx:id="_notAWord" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="138.0" textFill="#ff3f3f" GridPane.rowIndex="2">
+                              <Label fx:id="lblNotAWord" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="138.0" textFill="#ff3f3f" GridPane.rowIndex="2">
                                  <font>
                                     <Font name="System Bold" size="10.0" />
                                  </font>
                               </Label>
-                              <Button fx:id="buttonCheckWord_btn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#buttonCheckWord" prefHeight="30.0" prefWidth="138.0" text="Check!" GridPane.rowIndex="3" />
+                              <Button fx:id="btnButtonCheckWord" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#buttonCheckWord" prefHeight="30.0" prefWidth="138.0" text="Check!" GridPane.rowIndex="3" />
                            </children>
                            <padding>
                               <Insets bottom="20.0" left="20.0" />
@@ -257,7 +257,7 @@
                         </GridPane>
                      </children>
                   </AnchorPane>
-                  <Label fx:id="_timeLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="62.0" prefWidth="267.0" text="Time remaining: 140 seconds" textFill="WHITE" wrapText="true" GridPane.rowIndex="2">
+                  <Label fx:id="lblTime" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="62.0" prefWidth="267.0" text="Time remaining: 140 seconds" textFill="WHITE" wrapText="true" GridPane.rowIndex="2">
                      <font>
                         <Font name="System Bold" size="19.0" />
                      </font>
@@ -311,12 +311,12 @@
                                     <Shadow />
                                  </effect>
                               </Label>
-                              <Label fx:id="_lbScore" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="42.0" text="0" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              <Label fx:id="lblScore" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="42.0" text="0" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <font>
                                     <Font name="System Bold" size="21.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="_lbOpponent2" alignment="CENTER_RIGHT" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="78.0" prefWidth="85.0" text="Opponent:" textFill="WHITE">
+                              <Label fx:id="lblOpponentPlayer2" alignment="CENTER_RIGHT" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="78.0" prefWidth="85.0" text="Opponent:" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="22.0" />
                                  </font>
@@ -324,12 +324,12 @@
                                     <Shadow />
                                  </effect>
                               </Label>
-                              <Label fx:id="_lbOpponent" alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="31.0" prefWidth="122.0" text="Opponent:" textFill="WHITE">
+                              <Label fx:id="lblOpponentPlayer1" alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="31.0" prefWidth="122.0" text="Opponent:" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="21.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="_lbScore22" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="42.0" text="40" textFill="WHITE" GridPane.columnIndex="1">
+                              <Label fx:id="lblScorePlayer2" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="42.0" text="40" textFill="WHITE" GridPane.columnIndex="1">
                                  <font>
                                     <Font name="System Bold" size="23.0" />
                                  </font>
@@ -337,7 +337,7 @@
                                     <Shadow />
                                  </effect>
                               </Label>
-                              <Label fx:id="_lbScore2" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="31.0" prefWidth="47.0" text="0" textFill="WHITE" GridPane.columnIndex="1">
+                              <Label fx:id="lblScorePlayer1" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="31.0" prefWidth="47.0" text="0" textFill="WHITE" GridPane.columnIndex="1">
                                  <font>
                                     <Font name="System Bold" size="21.0" />
                                  </font>
@@ -363,14 +363,14 @@
                               <Insets left="20.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label fx:id="_player_nickname" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="19.0" prefWidth="82.0" textFill="WHITE" GridPane.columnIndex="1">
+                        <Label fx:id="lblPlayerNickname" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="19.0" prefWidth="82.0" textFill="WHITE" GridPane.columnIndex="1">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Label>
                      </children>
                   </GridPane>
-                  <Button fx:id="_endRound" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#buttonPressed_end_round" prefHeight="25.0" prefWidth="137.0" text="End round" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <Button fx:id="btnEndRound" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#buttonPressed_end_round" prefHeight="25.0" prefWidth="137.0" text="End round" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets left="20.0" />
                      </GridPane.margin>

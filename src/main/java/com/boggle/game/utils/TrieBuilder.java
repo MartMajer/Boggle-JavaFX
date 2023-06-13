@@ -1,6 +1,7 @@
 package com.boggle.game.utils;
 
 import com.boggle.game.model.TrieNodeModel;
+
 import java.util.ArrayList;
 
 public class TrieBuilder {
@@ -21,12 +22,12 @@ public class TrieBuilder {
         for (int i = 0; i < s.length(); i++) {
             Character c = s.charAt(i);
 
-            if (trie.getChild(c) == null ) {
+            if (trie.getChild(c) == null) {
                 trie.setChild(c, new TrieNodeModel());
             }
             trie = trie.getChild(c);
         }
-        //once each letter is added, the isLeaf boolean is set to true to indicate a full complete word.
+        //once each letter is added, the isLeaf boolean is set to true to indicate a full
         trie.setLeaf(true);
     }
 }

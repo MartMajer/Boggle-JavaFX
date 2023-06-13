@@ -1,6 +1,7 @@
 package com.boggle.game.boggle;
 
 import com.boggle.game.model.HighscoreModel;
+import com.boggle.game.model.PlayerDetailsModel;
 import com.boggle.game.model.StoredDetailsModel;
 import com.boggle.game.model.XmlManager;
 import com.boggle.game.rmi.ClientConnectionManager;
@@ -40,248 +41,227 @@ import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
-import static com.boggle.game.boggle.GameScreenController.player_1_listOfCheckedWords;
-import static com.boggle.game.boggle.GameScreenController.player_2_listOfCheckedWords;
+import static com.boggle.game.boggle.GameScreenController.listOfCheckedWordsPlayer1;
+import static com.boggle.game.boggle.GameScreenController.listOfCheckedWordsPlayer2;
 import static com.boggle.game.boggle.HelloController.*;
-import static com.boggle.game.boggle.HighscoreController.arrayList_Highscore;
-import static com.boggle.game.model.StoredDetailsModel.overall_P1;
-import static com.boggle.game.boggle.HelloApplication.NEW_ROUND_MULTIPLAYER;
-
+import static com.boggle.game.model.StoredDetailsModel.overallScorePlayer1;
 
 
 public class EndRoundController implements Initializable {
 
     @FXML
-    private Button _board;
-
+    private Button btnBoard;
     @FXML
-    private Button _highscore;
+    private Button btnHighscore;
     @FXML
-    private Button _startNewRound;
+    private Button btnStartNewRoundSingle;
     @FXML
-    private Button _startNewRound2;
-
+    private Button btnStartNewRoundMulti;
     @FXML
-    private Label _singleplayer_name;
+    private Label btnSingleplayerName;
     @FXML
-    private Label _player_1_name;
+    private Label lblNamePlayer1;
     @FXML
-    private Label _player_2_name;
-
+    private Label lblnamePlayer2;
     @FXML
-    private Label _singleplayer_RoundScore;
-
+    private Label lblroundScoreSingleplayer;
     @FXML
-    private Label _player_1_RoundScore;
+    private Label lblroundScorePlayer1;
     @FXML
-    private Label _player_2_RoundScore;
-
+    private Label lblroundScorePlayer2;
     @FXML
-    private Label _singleplayer_Overall;
+    private Label lblsingleplayerOverall;
     @FXML
-    private Label _player_1_Overall;
+    private Label lbloverallPlayer1;
     @FXML
-    private Label _player_2_Overall;
-
+    private Label lbloverallPlayer2;
     @FXML
-    private VBox __singleplayer_Pane_Found;
+    private VBox vboxSingleplayerWordsFound;
     @FXML
-    private VBox __multiplayer_Pane_Found;
+    private VBox vboxMultiplayerWordsFound;
     @FXML
-    private VBox __player_2_Pane_Found;
+    private VBox vboxWordsFoundPlayer1;
     @FXML
-    private VBox __player_1_Pane_Found;
+    private VBox vboxWordsFoundPlayer2;
     @FXML
-    private VBox __player_Pane_Possible;
+    private VBox vboxSingleplayerWordsPossible;
     @FXML
-    private VBox __multiplayer_Pane_Possible;
+    private VBox vboxMultiplayerWordsPossible;
     @FXML
-    private VBox __player_2_Pane_Possible;
-
+    private Label lblRoundNumberSingle;
     @FXML
-    private Label _roundNumber;
+    private Label lblRoundNumberMulti;
     @FXML
-    private Label _roundNumber2;
-
+    private AnchorPane apSingleplayer;
     @FXML
-    private AnchorPane ap_singleplayer;
-
-    @FXML
-    private AnchorPane ap_multiplayer_2;
-
-    @FXML
-    private AnchorPane ap_multiplayer_3;
-
-    @FXML
-    private AnchorPane ap_multiplayer_4;
-
+    private AnchorPane apMultiplayer_2;
     @FXML
     private MenuItem mi_mainmenu;
-    private HighscoreController highscoreController = new HighscoreController();
-
-    private StoredDetailsModel store;
-
-    private static Stage stage;
-    public static Integer static_overall_player_1;
-    public static Integer static_overall_player_2;
-
+    private final HighScoreController highscoreController = new HighScoreController();
+    private StoredDetailsModel storedDetailsModel;
+    public static Integer staticOverallPlayer1;
     private ServerConnectionManager serverConnectionManager;
     private ClientConnectionManager clientConnectionManager;
     private GameServer gameClient;
     private GameServerImpl gameServer;
-    private String testString;
-
-    public Integer temp2 = 0;
     private int _time;
-    private Timeline _timeline;
+    private Timeline timeline;
     @FXML
-    private Label _timeLabel;
-
+    private Label lblTime;
     @FXML
-    private AnchorPane ap_about;
+    private AnchorPane apAbout;
     @FXML
-    private Menu xml_menubar;
-
+    private Menu xmlMenubar;
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        _singleplayer_name.setText(getPlayerDetails().getPlayerName());
+        btnSingleplayerName.setText(getPlayerDetails().getPlayerName());
 
-        _singleplayer_RoundScore.setText(getPlayerDetails().get_score());
 
-        if (GAME_LOADED == true){
+        PlayerDetailsModel details = getPlayerDetails();
+        if (details != null && details.getScore() != null) {
+            lblroundScoreSingleplayer.setText(details.getScore().toString());
+        }
 
-            _board.setDisable(true);
-            _highscore.setDisable(true);
+
+        if (GAME_LOADED) {
+
+            btnBoard.setDisable(true);
+            btnHighscore.setDisable(true);
 
         }
 
         Integer temp = roundCounter - 1;
-        _roundNumber.setText(temp.toString());
-        _roundNumber2.setText(temp.toString());
+        lblRoundNumberSingle.setText(temp.toString());
+        lblRoundNumberMulti.setText(temp.toString());
 
-        arrayList_Highscore.add(new HighscoreModel(getPlayerDetails().get_score_int(), getPlayerDetails().getPlayerName()));
+        arrayListHighscore.add(new HighscoreModel(getPlayerDetails().getScoreInt(), getPlayerDetails().getPlayerName()));
 
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("highscore.ser"))) {
+        String userHome = System.getProperty("user.home");
+        String filePath = userHome + File.separator + "Documents" + File.separator + "highscore.ser";
+        File file = new File(filePath);
 
-                oos.writeObject(arrayList_Highscore);
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+
+            oos.writeObject(arrayListHighscore);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        for (var word : getPlayerDetails().get_listOfCheckedWords()) {
+        for (var word : getPlayerDetails().getListOfCheckedWords()) {
             //add found words to pane
-            __singleplayer_Pane_Found.getChildren().add(new Label(word));
-            if (CLIENT || SERVER){
-                __player_1_Pane_Found.getChildren().add(new Label(word));
+            vboxSingleplayerWordsFound.getChildren().add(new Label(word));
+            if (CLIENT || SERVER) {
+                vboxWordsFoundPlayer2.getChildren().add(new Label(word));
             }
 
         }
 
-        for (var word : getPlayerDetails().get_PossibleWords()) {
+        for (var word : getPlayerDetails().getPossibleWords()) {
             //add found words to pane
-            __player_Pane_Possible.getChildren().add(new Label(word));
-            __multiplayer_Pane_Possible.getChildren().add(new Label(word));
+            vboxSingleplayerWordsPossible.getChildren().add(new Label(word));
+            vboxMultiplayerWordsPossible.getChildren().add(new Label(word));
         }
 
-      if (CLIENT){
+        if (CLIENT) {
 
 
+            for (var word : listOfCheckedWordsPlayer1) {
 
-            for (var word : player_1_listOfCheckedWords) {
 
-
-                __player_2_Pane_Found.getChildren().add(new Label(word));
+                vboxWordsFoundPlayer1.getChildren().add(new Label(word));
 
             }
         } else if (SERVER) {
 
-            for (var word : player_2_listOfCheckedWords) {
+            for (var word : listOfCheckedWordsPlayer2) {
 
-                __player_2_Pane_Found.getChildren().add(new Label(word));
+                vboxWordsFoundPlayer1.getChildren().add(new Label(word));
 
             }
         }
 
         Integer temp1 = 0;
 
-        if (GAME_LOADED){
-             temp1 = getPlayerDetails().get_score_int();
-        }else {
-             temp1 = getPlayerDetails().get_score_int() + overall_P1;
+        if (GAME_LOADED) {
+            temp1 = getPlayerDetails().getScoreInt();
+        } else {
+            temp1 = getPlayerDetails().getScoreInt() + overallScorePlayer1;
 
         }
 
-        static_overall_player_1 = temp1;
-        playerDetails.set_overall(static_overall_player_1);
 
-        _singleplayer_Overall.setText(static_overall_player_1.toString());
+        staticOverallPlayer1 = temp1;
+        playerDetails.setOverall(staticOverallPlayer1);
+
+        lblsingleplayerOverall.setText(staticOverallPlayer1.toString());
 
 
-        if (SINGLE_PLAYER == true && SERVER == false) {
-            ap_singleplayer.setVisible(true);
-            xml_menubar.setVisible(false);
-        }else {
+        if (SINGLE_PLAYER && !SERVER) {
+            apSingleplayer.setVisible(true);
+            xmlMenubar.setVisible(false);
+        } else {
 
             NEW_ROUND_MULTIPLAYER = true;
 
             setUpTimeline();
 
-            ap_multiplayer_2.setVisible(true);
+            apMultiplayer_2.setVisible(true);
 
-            _player_1_name.setText(getPlayerDetails().getPlayerName());
-            _player_1_RoundScore.setText(getPlayerDetails().get_score());
-            _player_1_Overall.setText(static_overall_player_1.toString());
+            lblNamePlayer1.setText(getPlayerDetails().getPlayerName());
+            lblroundScorePlayer1.setText(getPlayerDetails().getScore().toString());
+            lbloverallPlayer1.setText(staticOverallPlayer1.toString());
         }
 
 
     }
-
 
 
     public void savegame_menuitem(ActionEvent actionEvent) throws RuntimeException {
 
         roundCounter += 1;
 
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("playerdetails.ser"))) {
+        String userHome = System.getProperty("user.home");
+        String filePath = userHome + File.separator + "Documents" + File.separator + "playerdetails.ser";
+        File file = new File(filePath);
 
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
             oos.writeObject(playerDetails);
-            XmlManager xml = new XmlManager();
-            xml.xmlWrite(playerDetails);
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
     public void savegame_XML_menuitem(ActionEvent actionEvent) throws RuntimeException {
 
         roundCounter += 1;
 
-            XmlManager xml = new XmlManager();
-            xml.xmlWrite(playerDetails);
+        XmlManager xml = new XmlManager();
+        xml.xmlWrite(playerDetails);
 
     }
 
     @FXML
     public void show_about(ActionEvent actionEvent) throws RuntimeException {
 
-        ap_about.setVisible(true);
+        apAbout.setVisible(true);
 
     }
 
     public void btn_about_back(ActionEvent actionEvent) throws RuntimeException {
 
-        ap_about.setVisible(false);;
+        apAbout.setVisible(false);
 
     }
 
     public void saveXml_menuitem(ActionEvent actionEvent) throws RuntimeException {
 
-       gameServer.writeXml();
+        gameServer.writeXml();
     }
+
     public void readXml_menuitem(ActionEvent actionEvent) throws RuntimeException {
 
         XmlManager xmlReader = new XmlManager();
@@ -304,11 +284,10 @@ public class EndRoundController implements Initializable {
 
         Integer temp = roundCounter - 1;
 
-        store = new StoredDetailsModel(_singleplayer_name.getText(), getPlayerDetails().get_score_int(),temp.toString());
+        storedDetailsModel = new StoredDetailsModel(btnSingleplayerName.getText(), getPlayerDetails().getScoreInt(), temp.toString());
 
-        if (SINGLE_PLAYER || GAME_LOADED )
-        {
-            GAME_LOADED=false;
+        if (SINGLE_PLAYER || GAME_LOADED) {
+            GAME_LOADED = false;
             hello.startGame();
 
         } else if (SERVER) {
@@ -317,7 +296,6 @@ public class EndRoundController implements Initializable {
         }
 
     }
-
 
 
     public void highscore(ActionEvent actionEvent) {
@@ -342,7 +320,6 @@ public class EndRoundController implements Initializable {
             stage.show();
 
 
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -350,69 +327,64 @@ public class EndRoundController implements Initializable {
         Stage stage = HelloApplication.getMainStage();
 
 
-
     }
 
-    public void setGameData(GameServerImpl gameServer, GameServer gameClient,ServerConnectionManager serverConnectionManager, String test) {
-       this.gameServer = gameServer;
-       this.gameClient = gameClient;
-       this.serverConnectionManager=serverConnectionManager;
-       this.testString = test;
+    public void setGameData(GameServerImpl gameServer, GameServer gameClient, ServerConnectionManager serverConnectionManager) {
+        this.gameServer = gameServer;
+        this.gameClient = gameClient;
+        this.serverConnectionManager = serverConnectionManager;
 
         multiplayerSetup();
     }
 
-    private void multiplayerSetup(){
+    private void multiplayerSetup() {
 
         Platform.runLater(() -> {
-            if (CLIENT || SERVER )
-            {
+            if (CLIENT || SERVER) {
 
-                if (SERVER){
+                if (SERVER) {
                     try {
 
-                        _player_2_name.setText(gameServer.getPlayer_2_name());
-                        _player_2_RoundScore.setText(gameServer.getPlayer_2_score().toString());
+                        lblnamePlayer2.setText(gameServer.getNamePlayer2());
+                        lblroundScorePlayer2.setText(gameServer.getScorePlayer2().toString());
 
-                        gameServer.addOverallScorePlayer2(gameServer.getPlayer_2_score());
+                        gameServer.addOverallScorePlayer2(gameServer.getScorePlayer2());
 
-                        _player_2_Overall.setText(gameServer.getOverallScorePlayer2().toString());
+                        lbloverallPlayer2.setText(gameServer.getOverallScorePlayer2().toString());
 
-                        if (gameServer.getPlayer_2_checked_words() != null){
-                            player_2_listOfCheckedWords = new ArrayList<>(gameServer.getPlayer_2_checked_words());
+                        if (gameServer.getCheckedWordsPlayer2() != null) {
+                            listOfCheckedWordsPlayer2 = new ArrayList<>(gameServer.getCheckedWordsPlayer2());
                         }
 
-                        for (var word : player_2_listOfCheckedWords) {
+                        for (var word : listOfCheckedWordsPlayer2) {
 
-                            __player_2_Pane_Found.getChildren().add(new Label(word));
+                            vboxWordsFoundPlayer1.getChildren().add(new Label(word));
                         }
 
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
                     }
-                }
+                } else if (CLIENT) {
 
-                else if (CLIENT){
-
-                    _startNewRound2.setVisible(false);
+                    btnStartNewRoundMulti.setVisible(false);
 
                     try {
                         clientConnectionManager = new ClientConnectionManager();
 
-                        _player_2_name.setText(gameClient.getPlayer_1_name());
-                        _player_2_RoundScore.setText(gameClient.getPlayer_1_score().toString());
+                        lblnamePlayer2.setText(gameClient.getNamePlayer1());
+                        lblroundScorePlayer2.setText(gameClient.getScorePlayer1().toString());
 
-                        gameClient.addOverallScorePlayer1(gameClient.getPlayer_1_score());
+                        gameClient.addOverallScorePlayer1(gameClient.getScorePlayer1());
 
-                        _player_2_Overall.setText(gameClient.getOverallScorePlayer1().toString());
+                        lbloverallPlayer2.setText(gameClient.getOverallScorePlayer1().toString());
 
-                        if (gameClient.getPlayer_1_checked_words() != null){
-                            player_1_listOfCheckedWords = new ArrayList<>(gameClient.getPlayer_1_checked_words());
+                        if (gameClient.getCheckedWordsPlayer1() != null) {
+                            listOfCheckedWordsPlayer1 = new ArrayList<>(gameClient.getCheckedWordsPlayer1());
                         }
 
-                        for (var word : player_1_listOfCheckedWords) {
+                        for (var word : listOfCheckedWordsPlayer1) {
 
-                            __player_2_Pane_Found.getChildren().add(new Label(word));
+                            vboxWordsFoundPlayer1.getChildren().add(new Label(word));
                         }
 
                     } catch (NamingException e) {
@@ -424,11 +396,6 @@ public class EndRoundController implements Initializable {
             }
         });
     }
-
-
-
-
-
 
 
     public void generateDocumentation() throws ClassNotFoundException {
@@ -446,27 +413,26 @@ public class EndRoundController implements Initializable {
 
             List<String> fqnList = new ArrayList<>();
 
-            for(Path path : filesList) {
-                System.out.println(path.toFile().getAbsolutePath().toString());
-                StringTokenizer tokenizer = new StringTokenizer(path.toFile().getAbsolutePath().toString(), "\\");
+            for (Path path : filesList) {
+                System.out.println(path.toFile().getAbsolutePath());
+                StringTokenizer tokenizer = new StringTokenizer(path.toFile().getAbsolutePath(), "\\");
 
                 Boolean startJoining = false;
                 String fqn = "";
 
-                while(tokenizer.hasMoreTokens()) {
+                while (tokenizer.hasMoreTokens()) {
                     String newToken = tokenizer.nextToken();
 
-                    if("classes".equals(newToken)) {
+                    if ("classes".equals(newToken)) {
                         startJoining = true;
                         continue;
                     }
 
-                    if(startJoining) {
+                    if (startJoining) {
 
-                        if(newToken.contains(".class")) {
+                        if (newToken.contains(".class")) {
                             fqn += newToken.substring(0, newToken.lastIndexOf("."));
-                        }
-                        else {
+                        } else {
                             fqn += newToken + ".";
                         }
                     }
@@ -481,29 +447,29 @@ public class EndRoundController implements Initializable {
 
             StringBuilder classInfo = new StringBuilder();
 
-            for(String fqn : fqnList) {
+            for (String fqn : fqnList) {
                 Class clazz = Class.forName(fqn);
 
                 classInfo.append("<h2>" + clazz.getSimpleName() + "</h2><br />");
 
                 Field[] fields = clazz.getDeclaredFields();
 
-                for(Field field : fields) {
+                for (Field field : fields) {
                     classInfo.append("<h3>" + Modifier.toString(field.getModifiers()) + " " + field.getName() + "</h3>");
                 }
 
                 Constructor[] constructors = clazz.getConstructors();
 
-                for(Constructor constructor : constructors) {
+                for (Constructor constructor : constructors) {
 
                     String paramsString = "";
 
-                    for(int i = 0; i < constructor.getParameters().length; i++) {
+                    for (int i = 0; i < constructor.getParameters().length; i++) {
                         Parameter p = constructor.getParameters()[i];
                         paramsString += Modifier.toString(p.getModifiers()) + " " + p.getType().getSimpleName()
                                 + " " + p.getName();
 
-                        if(i < (constructor.getParameters().length - 1)) {
+                        if (i < (constructor.getParameters().length - 1)) {
                             paramsString += ", ";
                         }
                     }
@@ -516,16 +482,16 @@ public class EndRoundController implements Initializable {
 
                 Method[] methods = clazz.getDeclaredMethods();
 
-                for(Method method : methods) {
+                for (Method method : methods) {
 
                     String paramsString = "";
 
-                    for(int i = 0; i < method.getParameters().length; i++) {
+                    for (int i = 0; i < method.getParameters().length; i++) {
                         Parameter p = method.getParameters()[i];
                         paramsString += Modifier.toString(p.getModifiers()) + " " + p.getType().getSimpleName()
                                 + " " + p.getName();
 
-                        if(i < (method.getParameters().length - 1)) {
+                        if (i < (method.getParameters().length - 1)) {
                             paramsString += ", ";
                         }
                     }
@@ -556,14 +522,13 @@ public class EndRoundController implements Initializable {
     }
 
 
-
     public void setUpTimeline() {
         //Official boggle game time is set at 2 minutes
         _time = 20;
         KeyFrame kf = new KeyFrame(Duration.seconds(1), new EndRoundController.TimeHandler());
-        _timeline = new Timeline(kf);
-        _timeline.setCycleCount(Animation.INDEFINITE);
-        _timeline.play();
+        timeline = new Timeline(kf);
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
 
 
     }
@@ -571,7 +536,7 @@ public class EndRoundController implements Initializable {
     /*
      * This is the private inner class that is the timehandler.
      */
-    public class TimeHandler implements EventHandler<ActionEvent>{
+    public class TimeHandler implements EventHandler<ActionEvent> {
 
         @Override
         public void handle(ActionEvent event) {
@@ -582,15 +547,15 @@ public class EndRoundController implements Initializable {
 
                 Integer temp = roundCounter - 1;
 
-                store = new StoredDetailsModel(_singleplayer_name.getText(), getPlayerDetails().get_score_int(),temp.toString());
+                storedDetailsModel = new StoredDetailsModel(btnSingleplayerName.getText(), getPlayerDetails().getScoreInt(), temp.toString());
 
 
                 NEW_ROUND_MULTIPLAYER = true;
-                _timeline.stop();
+                timeline.stop();
 
-                if (_timeline != null) {
-                    _timeline.stop();
-                    _timeline = null;
+                if (timeline != null) {
+                    timeline.stop();
+                    timeline = null;
                 }
 
                 try {
@@ -602,7 +567,7 @@ public class EndRoundController implements Initializable {
             } else {
 
                 _time = _time - 1;
-                _timeLabel.setText("Next round in: " + _time);
+                lblTime.setText("Next round in: " + _time);
             }
             event.consume();
         }
@@ -614,9 +579,6 @@ public class EndRoundController implements Initializable {
         hello.startGame();
 
     }
-
-
-
 
 
 }
