@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
-    private HelloController controller;
+    private GameChooser controller;
     private static Stage mainStage;
 
 

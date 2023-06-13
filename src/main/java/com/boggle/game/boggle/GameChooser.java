@@ -37,12 +37,12 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-import static com.boggle.game.boggle.EndRoundController.staticOverallPlayer1;
-import static com.boggle.game.model.StoredDetailsModel.player1;
-import static com.boggle.game.model.StoredDetailsModel.overallScorePlayer1;
+import static com.boggle.game.boggle.EndRound.staticOverallPlayer1;
+import static com.boggle.game.model.StoredDetails.player1;
+import static com.boggle.game.model.StoredDetails.overallScorePlayer1;
 import static com.boggle.game.socket.ServerStream.privateIP;
 
-public class HelloController extends UnicastRemoteObject implements Initializable {
+public class GameChooser extends UnicastRemoteObject implements Initializable {
 
 
     public static boolean GAME_LOADED = false;
@@ -101,7 +101,7 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
     private ArrayList<Label> listNicknameC;
     private int connectedUsers;
     private IServer server;
-    public static PlayerDetailsModel playerDetails;
+    public static PlayerDetails playerDetails;
     public static Integer roundCounter = 1;
     private SimpleDateFormat timeformatter;
     private IClient client;
@@ -140,7 +140,7 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
     private boolean LOAD_XML = false;
 
 
-    public HelloController() throws RemoteException {
+    public GameChooser() throws RemoteException {
         super();
     }
 
@@ -227,7 +227,7 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
         String filePath = userHome + File.separator + "Documents" + File.separator + "playerdetails.ser";
         File file = new File(filePath);
 
-        PlayerDetailsModel player = new PlayerDetailsModel();
+        PlayerDetails player = new PlayerDetails();
 
         if (LOAD_XML) {
             XmlManager xml = new XmlManager();
@@ -235,7 +235,7 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
         } else {
 
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-                player = (PlayerDetailsModel) ois.readObject();
+                player = (PlayerDetails) ois.readObject();
             }
         }
 
@@ -246,7 +246,7 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
         staticOverallPlayer1 = player.getOverallInt();
         SINGLE_PLAYER = true;
 
-        new EndRoundModel(null, null, null);
+        new com.boggle.game.model.EndRound(null, null, null);
     }
 
     public void multiplayerBtn() {
@@ -361,7 +361,7 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
     }
 
     public void highScoreModal() {
-        HighScoreController m = new HighScoreController();
+        HighScoreView m = new HighScoreView();
         m.highScoreCont();
 
     }
@@ -402,12 +402,12 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
             playerName = player1;
         }
 
-        playerDetails = new PlayerDetailsModel(playerName);
+        playerDetails = new PlayerDetails(playerName);
 
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("gameScreen.fxml"));
         if (NEW_ROUND_MULTIPLAYER) {
             fxmlLoader.setControllerFactory(param -> {
-                GameScreenController gsc = new GameScreenController();
+                GameScreen gsc = new GameScreen();
                 gsc.setGameData(gameServer, gameClient, serverConnectionManager);
                 return gsc;
             });
@@ -431,12 +431,12 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
 
     }
 
-    public static PlayerDetailsModel getPlayerDetails() {
+    public static PlayerDetails getPlayerDetails() {
 
         return playerDetails;
     }
 
-    public static PlayerDetailsModel setPlayerDetails(PlayerDetailsModel d) {
+    public static PlayerDetails setPlayerDetails(PlayerDetails d) {
 
         return playerDetails = d;
     }
@@ -505,7 +505,7 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
         });
     }
 
-    public void addUser(PlayerModel u) {
+    public void addUser(Player u) {
         Platform.runLater(() -> {
             if (CLIENT) {
                 this.listNicknameC.get(this.connectedUsers).setText(u.getNickname());
@@ -537,11 +537,11 @@ public class HelloController extends UnicastRemoteObject implements Initializabl
         }
     }
 
-    public void updateUserList(List<PlayerModel> players) {
+    public void updateUserList(List<Player> players) {
         Platform.runLater(() -> {
             if (CLIENT) {
                 for (int i = 0; i < players.size(); i++) {
-                    PlayerModel u = players.get(i);
+                    Player u = players.get(i);
                     this.listNicknameC.get(i).setText(u.getNickname());
                     this.listViewUsersC.getItems().get(i).setVisible(true);
                 }

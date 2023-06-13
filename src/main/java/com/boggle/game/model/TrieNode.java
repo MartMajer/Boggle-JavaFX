@@ -2,11 +2,11 @@ package com.boggle.game.model;
 
 import java.util.HashMap;
 
-public class TrieNodeModel {
+public class TrieNode {
     private boolean isLeaf;
-    private final HashMap<Character, TrieNodeModel> child;
+    private final HashMap<Character, TrieNode> child;
 
-    public TrieNodeModel() {
+    public TrieNode() {
         isLeaf = false;
         child = new HashMap<>();
     }
@@ -19,11 +19,11 @@ public class TrieNodeModel {
         isLeaf = t;
     }
 
-    public TrieNodeModel getChild(Character c) {
+    public TrieNode getChild(Character c) {
         return child.get(c);
     }
 
-    public void setChild(Character c, TrieNodeModel node) {
+    public void setChild(Character c, TrieNode node) {
         child.put(c, node);
     }
 }

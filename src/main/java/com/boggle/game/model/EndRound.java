@@ -1,6 +1,5 @@
 package com.boggle.game.model;
 
-import com.boggle.game.boggle.EndRoundController;
 import com.boggle.game.boggle.HelloApplication;
 import com.boggle.game.rmi.GameServer;
 import com.boggle.game.rmi.GameServerImpl;
@@ -12,13 +11,13 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 
-public class EndRoundModel {
+public class EndRound {
 
     private final GameServerImpl gameServer;
     private final GameServer gameClient;
     private final ServerConnectionManager serverConnectionManager;
 
-    public EndRoundModel(GameServerImpl gameServer, GameServer gameClient, ServerConnectionManager serverConnectionManager) {
+    public EndRound(GameServerImpl gameServer, GameServer gameClient, ServerConnectionManager serverConnectionManager) {
 
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("EndRound.fxml"));
 
@@ -34,7 +33,7 @@ public class EndRoundModel {
             throw new RuntimeException(e);
         }
 
-        EndRoundController controller = fxmlLoader.getController();
+        com.boggle.game.boggle.EndRound controller = fxmlLoader.getController();
         controller.setGameData(this.gameServer, this.gameClient, serverConnectionManager);
 
         Stage stage = HelloApplication.getMainStage();

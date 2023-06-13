@@ -6,14 +6,14 @@ import com.boggle.game.utils.TrieBuilder;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class BoggleSolverModel implements Serializable {
+public class BoggleSolver implements Serializable {
 
     private final int size;
     private final ArrayList<String> wordsFound;
     private final boolean[][] isVisited;
     private final char[][] boggle;
 
-    public BoggleSolverModel(char[][] boggle, ArrayList<String> dictionary) {
+    public BoggleSolver(char[][] boggle, ArrayList<String> dictionary) {
         this.boggle = boggle;
         size = this.boggle.length;
         isVisited = new boolean[size][size];
@@ -23,7 +23,7 @@ public class BoggleSolverModel implements Serializable {
         TrieBuilder trieBuilder = new TrieBuilder();
 
         // Build trie with dictionary
-        TrieNodeModel root = trieBuilder.buildTrie(dictionary);
+        TrieNode root = trieBuilder.buildTrie(dictionary);
 
         // Call method that searches the boggle grid for all words using the words input into the trie as reference
         this.findWords(root);
@@ -33,7 +33,7 @@ public class BoggleSolverModel implements Serializable {
         return wordsFound;
     }
 
-    private void findWords(TrieNodeModel root) {
+    private void findWords(TrieNode root) {
         StringBuilder str = new StringBuilder();
 
         // loops through all elements in the 2d character array
@@ -46,7 +46,7 @@ public class BoggleSolverModel implements Serializable {
         }
     }
 
-    private void search(int i, int j, TrieNodeModel root, String string) {
+    private void search(int i, int j, TrieNode root, String string) {
         // if word is found in trie, and not already found: adds to list of found words
         if (root != null && root.getLeaf() && !wordsFound.contains(string)) {
             wordsFound.add(string);
@@ -59,7 +59,7 @@ public class BoggleSolverModel implements Serializable {
 
             // This loops through all childs of the current node
             for (char c = 'A'; c <= 'ž'; c++) {
-                TrieNodeModel childNode = root.getChild(c);
+                TrieNode childNode = root.getChild(c);
                 if (childNode != null) {
                     // This loop recursively searches reaming characters that are adjacent to the current character
                     for (int a = -1; a <= 1; a++) {

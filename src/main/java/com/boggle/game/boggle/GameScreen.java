@@ -1,8 +1,8 @@
 package com.boggle.game.boggle;
 
-import com.boggle.game.model.BoggleSolverModel;
-import com.boggle.game.model.EndRoundModel;
-import com.boggle.game.model.PointsModel;
+import com.boggle.game.model.BoggleSolver;
+import com.boggle.game.model.EndRound;
+import com.boggle.game.model.Points;
 import com.boggle.game.rmi.ClientConnectionManager;
 import com.boggle.game.rmi.GameServer;
 import com.boggle.game.rmi.GameServerImpl;
@@ -36,11 +36,11 @@ import java.util.Stack;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.boggle.game.boggle.EndRoundController.staticOverallPlayer1;
-import static com.boggle.game.boggle.HelloController.*;
+import static com.boggle.game.boggle.EndRound.staticOverallPlayer1;
+import static com.boggle.game.boggle.GameChooser.*;
 
 
-public class GameScreenController implements Initializable {
+public class GameScreen implements Initializable {
 
     @FXML
     private Button mat_0_0;
@@ -114,7 +114,7 @@ public class GameScreenController implements Initializable {
     public Button[][] gameBoard;
 
 
-    private BoggleSolverModel boggleSolver;
+    private BoggleSolver boggleSolver;
 
 
     private static final int GAME_BOARD_WIDTH = 4;
@@ -141,14 +141,14 @@ public class GameScreenController implements Initializable {
 
     private GameServerImpl gameServer;
     private GameServer gameClient;
-    private PointsModel addPoints;
+    private Points addPoints;
     private Integer scoreYour = 0;
     private Integer scoreOpponent = 0;
     private ArrayList<String> dictionary;
     private ServerConnectionManager serverConnectionManager;
 
 
-    public GameScreenController() {
+    public GameScreen() {
     }
 
     @Override
@@ -229,7 +229,7 @@ public class GameScreenController implements Initializable {
                     }
                 });
 
-                new PreviewBoardController();
+                new PreviewBoard();
 
                 setUpBoggleGrid();
 
@@ -317,8 +317,8 @@ public class GameScreenController implements Initializable {
             }
         });
         executorService.shutdown();
-        new PreviewBoardController();
-        boggleSolver = new BoggleSolverModel(charArray, dictionary);
+        new PreviewBoard();
+        boggleSolver = new BoggleSolver(charArray, dictionary);
     }
 
     public synchronized void setGameData(GameServerImpl gameServer, GameServer gameClient, ServerConnectionManager serverConnectionManager) {
@@ -337,7 +337,7 @@ public class GameScreenController implements Initializable {
         iStack = new Stack<>();
         jStack = new Stack<>();
         gpBoggleGrid.setFocusTraversable(true);
-        addPoints = new PointsModel();
+        addPoints = new Points();
         listOfCheckedWords = new ArrayList<>();
         listOfCheckedWords_temp = new ArrayList<>();
 
@@ -462,9 +462,9 @@ public class GameScreenController implements Initializable {
         timeline.stop();
 
         if (CLIENT || SERVER) {
-            new EndRoundModel(gameServer, gameClient, serverConnectionManager);
+            new EndRound(gameServer, gameClient, serverConnectionManager);
         } else {
-            new EndRoundModel(null, null, null);
+            new EndRound(null, null, null);
         }
 
     }

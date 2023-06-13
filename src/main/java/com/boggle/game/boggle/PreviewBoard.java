@@ -7,9 +7,9 @@ import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static com.boggle.game.boggle.GameScreenController.charArray;
+import static com.boggle.game.boggle.GameScreen.charArray;
 
-public class PreviewBoardController implements Initializable {
+public class PreviewBoard implements Initializable {
 
     @FXML
     private Label mat_0_01;

@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="250.0" prefWidth="150.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="250.0" prefWidth="150.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.boggle.game.boggle.HighScoreView">
    <children>
       <ImageView fitHeight="250.0" fitWidth="150.0">
          <image>
@@ -41,7 +41,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <VBox fx:id="_highScore_score" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" opacity="0.72" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;">
+                  <VBox fx:id="highScoreScore" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" opacity="0.72" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;">
                      <GridPane.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" />
                      </GridPane.margin>
