@@ -1,6 +1,10 @@
 # Boggle Game 
 
 Boggle is a word game that is played on a 4x4 board with 16 letter tiles. The goal is to find as many words as possible given a time constraint.
+    <p align="center">    ![image](https://github.com/CroTard/Boggle-JavaFX/assets/79861327/e9fc36e0-ee79-4434-bec7-a573708e2247) </p>
+
+
+
 
 ## Technologies
 
@@ -14,6 +18,8 @@ The project uses the following technologies:
 - XML Serialization for saving and loading game state
 - Java Object Serialization for maintaining highscores across sessions
 
+![image](https://github.com/CroTard/Boggle-JavaFX/assets/79861327/c0f80080-a62c-4303-8373-a32a75fa3c96)
+
 ## Features
 
 - Singleplayer and multiplayer *currently only 2
@@ -23,21 +29,15 @@ The project uses the following technologies:
 - The game includes a highscore feature that stores top scores between sessions
 - Ability to save and load game state at any time
 
+![image](https://github.com/CroTard/Boggle-JavaFX/assets/79861327/7d5a5544-6e81-4a28-a089-c23a9832a733)
+![image](https://github.com/CroTard/Boggle-JavaFX/assets/79861327/deb8ddd9-10fb-42d7-80ef-aff0e70e5ee7)
+
+
+
 ## Installation 
 
 To install the game, download the latest MSI installer from the releases page and run it. The installer will guide you through the steps needed to install the game on your computer.
 *This part I'm still trying to figure out, I am using template created by PerryCameron https://github.com/PerryCameron/maven-jpackage-template, but game jar can be played by installing Java Liberica JDK https://bell-sw.com/pages/downloads/#/java-18-current  
-
-## Usage 
-
-After installation, you can start the game from your Start menu or desktop. The game board will be immediately presented to you.
-
-To play the game:
-1. The timer starts as soon as the game board is presented after choosing game mode.
-2. Find words on the board by connecting adjacent letters. Words must be at least 3 letters long.
-3. Click the letters to form words you find into the text box and press Enter to submit them.
-4. The game ends when the timer runs out. Your score will be the total number of valid words you found.
-5. Game can be played idefinately because of New round function.
 
 ## Credits
 
