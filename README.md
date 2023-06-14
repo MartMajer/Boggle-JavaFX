@@ -31,18 +31,18 @@ The project uses the following technologies:
 
 ## Installation 
 
-~~To install the game, download the latest MSI installer from the releases page and run it. The installer will guide you through the steps needed to install the game on your computer.
+~~To install the game, download the latest MSI installer from the releases page and run it. The installer will guide you through the steps needed to install the game on your computer.~~ 
 
-~~*This part I'm still trying to figure out, I am using template created by PerryCameron https://github.com/PerryCameron/maven-jpackage-template, but game jar can be played by installing Java Liberica JDK https://bell-sw.com/pages/downloads/#/java-18-current  
+~~*This part I'm still trying to figure out, I am using template created by PerryCameron https://github.com/PerryCameron/maven-jpackage-template, but game jar can be played by installing Java Liberica JDK https://bell-sw.com/pages/downloads/#/java-18-current~~
 
 Exe file was created with launch4j
 
 ## To-do
 
-- ~~Build and add Jar to repo
-- ~~Fix msi installer
+- ~~Build and add Jar to repo~~
+- ~~Fix msi installer~~
 - Add more than 2 player multiplayer games
-- ~~Add logger
+- ~~Add logger~~
 - Refactor some classes and tidy up code - much needed
 
 ## Credits
