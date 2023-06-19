@@ -25,6 +25,9 @@ The project uses the following technologies:
 - Players can find words by connecting adjacent letters on the board 
 - The game includes a highscore feature that stores top scores between sessions
 - Ability to save and load game state at any time
+- Dictionary with over 400k Croatian words
+
+*Dictionary used is from gigaly, but was adapted to fit the game needs https://github.com/gigaly/rjecnik-hrvatskih-jezika
 
 ![image](https://github.com/CroTard/Boggle-JavaFX/assets/79861327/7d5a5544-6e81-4a28-a089-c23a9832a733)
 ![image](https://github.com/CroTard/Boggle-JavaFX/assets/79861327/deb8ddd9-10fb-42d7-80ef-aff0e70e5ee7)
@@ -35,7 +38,7 @@ The project uses the following technologies:
 
 ~~*This part I'm still trying to figure out, I am using template created by PerryCameron https://github.com/PerryCameron/maven-jpackage-template, but game jar can be played by installing Java Liberica JDK https://bell-sw.com/pages/downloads/#/java-18-current~~
 
-Exe file was created with launch4j
+Exe file was created with launch4j but JRE is still needed, and is included in release. Or download it by yourself
 
 ## To-do
 
